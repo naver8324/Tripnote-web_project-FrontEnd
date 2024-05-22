@@ -9,7 +9,7 @@ const Tabs = ({ tabCount, tabLabels }) => {
   };
 
   return (
-    <div className="flex justify-center space-x-4 mb-4">
+    <div className="flex justify-center space-x-8 mb-4">
       {Array.from(Array(tabCount).keys()).map((index) => (
         <Tab
           key={index}
