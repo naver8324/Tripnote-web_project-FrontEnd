@@ -4,6 +4,7 @@ import ErrorPage from '../pages/Error/ErrorPage';
 import MainPage from '../pages/Home/MainPage';
 // import Layout from '../pages/Layout/Layout';
 import App from '../App';
+import MyPage from '../pages/MyPage/MyPage';
 
 const router = createBrowserRouter([
   {
@@ -12,7 +13,8 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       { index: true, element: <MainPage /> },
-      { path: '/board', element: <Board /> },
+      { path: 'board', element: <Board /> },
+      { path: 'mypage', element: <MyPage /> },
     ],
   },
 ]);
