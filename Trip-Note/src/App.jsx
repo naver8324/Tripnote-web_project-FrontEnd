@@ -1,4 +1,5 @@
 import './App.css';
+import Footer from './components/ui/Footer';
 import Header from './components/ui/Header';
 import './index.css';
 import { Outlet, RouterProvider } from 'react-router-dom';
@@ -6,9 +7,9 @@ import { Outlet, RouterProvider } from 'react-router-dom';
 function App() {
   return (
     <div>
-      {/* <Header />
-      <Footer /> */}
+      <Header />
       <Outlet />
+      <Footer />
     </div>
   );
 }
