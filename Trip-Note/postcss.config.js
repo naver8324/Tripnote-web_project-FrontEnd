@@ -1,10 +1,14 @@
-module.exports = {
+import tailwindcss from 'tailwindcss';
+import autoprefixer from 'autoprefixer';
+import postcssPurgecss from '@fullhuman/postcss-purgecss';
+
+export default {
   plugins: [
-    require('tailwindcss'),
-    require('autoprefixer'),
+    tailwindcss,
+    autoprefixer,
     ...(process.env.NODE_ENV === 'production'
       ? [
-          require('@fullhuman/postcss-purgecss')({
+          postcssPurgecss({
             content: ['./src/**/*.html', './src/**/*.js'],
             defaultExtractor: (content) =>
               content.match(/[\w-/:]+(?<!:)/g) || [],
