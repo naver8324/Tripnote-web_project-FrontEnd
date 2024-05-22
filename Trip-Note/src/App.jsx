@@ -7,6 +7,7 @@ function App() {
   return (
     <div>
       <Header />
+      <Footer />
       <Outlet />
     </div>
   );
