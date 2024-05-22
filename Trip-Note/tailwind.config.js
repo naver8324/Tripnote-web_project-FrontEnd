@@ -2,7 +2,14 @@
 export default {
   content: ['./src/**/*.{js,jsx}'],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        prime: '#1DC078',
+        title: '#333B3D',
+        subTitle: '#B6BBC1',
+        subBackground: '#FAFAFA'
+      },
+    },
   },
   plugins: [],
 };

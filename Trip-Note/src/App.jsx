@@ -6,8 +6,8 @@ import { Outlet, RouterProvider } from 'react-router-dom';
 function App() {
   return (
     <div>
-      {/* <Header />
-      <Footer /> */}
+      <Header />
+      {/* <Footer /> */}
       <Outlet />
     </div>
   );
