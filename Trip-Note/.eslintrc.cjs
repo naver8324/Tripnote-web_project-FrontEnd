@@ -18,11 +18,5 @@ module.exports = {
       { allowConstantExport: true },
     ],
   },
-  {
-    "plugins": ["prettier"],
-    "extends": ["plugin:prettier/recommended"],
-    "rules": {
-      "prettier/prettier": "error"
-    }
-  }
+  
 }
