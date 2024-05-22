@@ -1,5 +1,4 @@
 import React from 'react';
-import Profile from '../../components/Profile';
 import ProfileSet from '../../components/ProfileSet';
 
 const ProfilePage = () => {

@@ -1,12 +1,13 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import Tabs from '../../components/Tabs/Tabs';
-import { GoGear } from 'react-icons/go';
-import MyRoot from '../../components/Tabs/MyRoot';
-import LoverRoot from '../../components/Tabs/LoverRoot';
-import MyReview from '../../components/Tabs/MyReview';
-import LoverReview from '../../components/Tabs/LoverReview';
+import MyRoot from '../../components/Mypage/MyRoot';
+import LoverRoot from '../../components/Mypage/LoverRoot';
+import MyReview from '../../components/Mypage/MyReview';
+import LoverReview from '../../components/Mypage/LoverReview';
 import Profile from '../../components/Profile';
+
+import { useNavigate } from 'react-router-dom';
+import { GoGear } from 'react-icons/go';
 
 const MyPage = () => {
   const navigate = useNavigate();
