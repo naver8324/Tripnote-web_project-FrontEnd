@@ -9,7 +9,7 @@ import Profile from '../../components/Profile';
 import { useNavigate } from 'react-router-dom';
 import { GoGear } from 'react-icons/go';
 
-const MyPage = () => {
+export default function MyPage() {
   const navigate = useNavigate();
 
   const handleProfileClick = () => {
@@ -17,7 +17,7 @@ const MyPage = () => {
   };
   return (
     <>
-      <div className="bg-white rounded-lg p-6 flex flex-col items-center">
+      <div className="min-h-[1200px] bg-white rounded-lg p-6 flex flex-col items-center">
         <Profile />
         <button
           className="text-lg mb-4 flex items-center"
@@ -43,6 +43,4 @@ const MyPage = () => {
       </div>
     </>
   );
-};
-
-export default MyPage;
+}
