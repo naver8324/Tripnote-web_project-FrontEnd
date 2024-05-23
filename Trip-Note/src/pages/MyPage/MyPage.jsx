@@ -17,7 +17,7 @@ export default function MyPage() {
   };
   return (
     <>
-      <div className="min-h-[1200px] bg-white rounded-lg p-6 flex flex-col items-center">
+      <div className="m-40 min-h-[1200px] bg-white rounded-lg p-6 flex flex-col items-center">
         <Profile />
         <button
           className="text-lg mb-4 flex items-center"

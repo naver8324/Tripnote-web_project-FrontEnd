@@ -5,9 +5,11 @@ import RootArea from '../components/root/RootArea';
 
 export default function RootRecommendationPage() {
   return (
-    <Tabs tabCount={2} tabLabels={['스팟중심추천', '지역추천Best5']}>
-      <RootSpot />
-      <RootArea />
-    </Tabs>
+    <div className="m-40 ">
+      <Tabs tabCount={2} tabLabels={['스팟중심추천', '지역추천Best5']}>
+        <RootSpot />
+        <RootArea />
+      </Tabs>
+    </div>
   );
 }

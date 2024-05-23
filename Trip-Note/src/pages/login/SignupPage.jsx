@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 
 export default function SignupPage() {
   return (
-    <div className="flex items-center justify-center h-screen">
-      <div className="w-1/2 p-8 border border-gray-300 rounded-lg">
+    <div className="m-40 w-[480px]">
+      <div className="">
         <p className="text-3xl mb-8">회원가입</p>
         <label htmlFor="email" className="text-subTitle block mb-1">
           이메일

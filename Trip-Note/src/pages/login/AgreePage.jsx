@@ -33,7 +33,7 @@ export default function AgreePage() {
   }, []); // 빈 배열은 이 효과가 컴포넌트가 마운트될 때 한 번만 실행되도록 합니다.
 
   return (
-    <div className="flex flex-col justify-center items-center h-screen">
+    <div className="m-20 flex flex-col justify-center items-center h-screen">
       <div className="w-1/2 p-8 border border-gray-300 rounded-lg ">
         <p className="text-3xl mb-8">트립 노트 회원 약관 동의</p>
         <div className="mb-4 border-b">

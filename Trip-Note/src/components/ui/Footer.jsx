@@ -1,6 +1,5 @@
 import React from 'react';
 import logoWhite from '../../assets/logo-white.png';
-import { Link } from 'react-router-dom';
 import { FaFigma } from 'react-icons/fa';
 import { IoLogoGitlab } from 'react-icons/io5';
 import { SiNotion } from 'react-icons/si';
