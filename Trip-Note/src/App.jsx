@@ -6,9 +6,11 @@ import { Outlet, RouterProvider } from 'react-router-dom';
 
 function App() {
   return (
-    <div>
+    <div className='flex flex-col min-h-screen w-full'>
       <Header />
+      <main className='container mt-36 mb-8 flex mx-auto'>
       <Outlet />
+      </main>
       <Footer />
     </div>
   );

@@ -1,13 +1,12 @@
 import React from 'react';
 import logoWhite from '../../assets/logo-white.png'
-import { Link } from 'react-router-dom';
 import { FaFigma } from "react-icons/fa";
 import { IoLogoGitlab } from "react-icons/io5";
 import { SiNotion } from "react-icons/si";
 
 export default function Footer() {
   return (
-    <footer className='bg-title text-gray-200 flex justify-between py-20 px-20 fixed bottom-0 left-0 w-full'>
+    <footer className='bg-title text-gray-200 flex justify-between py-12 px-20 left-0 w-full mt-auto'>
     <div className='text-xs font-light'>
       <img className='w-28 pb-10' src={logoWhite} alt="Elice" />
       <div className='font-medium'>
