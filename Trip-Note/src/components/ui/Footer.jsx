@@ -7,7 +7,7 @@ import { SiNotion } from 'react-icons/si';
 
 export default function Footer() {
   return (
-    <footer className="bg-title text-gray-200 flex justify-between py-20 px-20 fixed left-0 w-full">
+    <footer className="bg-title text-gray-200 flex justify-between py-20 px-20 mt-auto left-0 w-full">
       <div className="text-xs font-light">
         <img className="w-28 pb-10" src={logoWhite} alt="Elice" />
         <div className="font-medium">

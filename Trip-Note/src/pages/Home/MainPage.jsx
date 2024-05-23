@@ -1,9 +1,10 @@
 import React from 'react';
+import mainImg from '../../assets/travel.jpg'
 
 export default function MainPage() {
   return (
-    <div>
-      <p>home!</p>
+    <div className=''>
+      <img src={mainImg} alt="" />
     </div>
   );
 }
