@@ -1,5 +1,6 @@
 import React from 'react';
 import useProfileStore from '../store/store';
+import profile from '../assets/profile.png';
 
 const Profile = () => {
   const { nickname, setNickname, resetNicknameChanged } = useProfileStore();
@@ -10,7 +11,7 @@ const Profile = () => {
   return (
     <>
       <img
-        src="/profile.png"
+        src={profile}
         alt="기본 이미지"
         className="rounded-full w-20 h-20 object-cover mb-4"
       />
