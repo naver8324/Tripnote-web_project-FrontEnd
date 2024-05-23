@@ -27,25 +27,25 @@ const ProfileSet = () => {
   };
 
   return (
-    <div className="p-6 w-1/2 mx-auto bg-white rounded-lg space-y-6">
+    <div className="p-6 w-1/2 mx-auto border m-20 bg-white rounded-lg space-y-6">
       <h1 className="text-2xl mb-4">프로필 설정</h1>
       <form className="space-y-4">
         <div>
-          <label className="block text-gray-700">이메일</label>
+          <label className="block text-subTitle ">이메일</label>
           <input
             type="email"
             value={email}
             readOnly
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-500"
+            className="w-full h-14 px-3 py-2 border border-gray-300 rounded-lg text-xl bg-gray-100 mb-4 text-gray-500"
           />
         </div>
         <div>
-          <label className="block text-gray-700">닉네임</label>
+          <label className="block text-subTitle">닉네임</label>
           <input
             type="text"
             value={nickname}
             onChange={handleNicknameChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+            className="w-full h-14 px-3 py-2 border border-gray-300 mb-4 text-xl rounded-lg"
           />
         </div>
         <div className="space-y-4">
@@ -53,7 +53,7 @@ const ProfileSet = () => {
             type="button"
             onClick={handleSave}
             disabled={!isNicknameChanged}
-            className={`w-full px-4 py-2 rounded-lg text-white ${
+            className={`w-full h-14 px-4 py-2 rounded-lg text-white  ${
               isNicknameChanged ? 'bg-prime' : 'bg-gray-300'
             }`}
           >
@@ -63,13 +63,13 @@ const ProfileSet = () => {
             <button
               type="button"
               onClick={handleGoBack}
-              className="w-1/2 px-4 py-2 bg-gray-300 text-gray-700 rounded-lg"
+              className="w-1/2 h-14 px-4 py-2 bg-gray-300 text-gray-700 rounded-lg"
             >
               돌아가기
             </button>
             <button
               type="button"
-              className="w-1/2 px-4 py-2 bg-red-500 text-white rounded-lg"
+              className="w-1/2 h-14 px-4 py-2 bg-red-500 text-white rounded-lg"
             >
               회원탈퇴
             </button>
