@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import useCheckboxStore from '../../store/checkboxStore';
+import useCheckboxStore from '../../store/useCheckboxStore';
 import { useNavigate } from 'react-router-dom';
 
 export default function AgreePage() {

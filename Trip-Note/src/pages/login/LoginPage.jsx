@@ -18,7 +18,7 @@ export default function LoginPage() {
 
   return (
     <div className="">
-      <div className="w-[640px] m-32 p-16">
+      <div className="w-[640px] m-40 p-16">
         <Link
           to="/"
           className="flex flex-col items-center justify-center text-l mb-12"

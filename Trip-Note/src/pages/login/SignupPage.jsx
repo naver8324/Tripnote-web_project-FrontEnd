@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 export default function SignupPage() {
   return (
-    <div className="m-40 w-[480px]">
+    <div className="m-56 w-[480px]">
       <div className="">
         <p className="text-3xl mb-8">회원가입</p>
         <label htmlFor="email" className="text-subTitle block mb-1">

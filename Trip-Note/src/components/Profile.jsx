@@ -1,5 +1,5 @@
 import React from 'react';
-import useProfileStore from '../store/store';
+import useProfileStore from '../store/useProfileStore';
 import profile from '../assets/profile.png';
 
 const Profile = () => {

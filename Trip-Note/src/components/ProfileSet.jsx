@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import useProfileStore from '../store/store';
+import useProfileStore from '../store/useProfileStore';
 
 const ProfileSet = () => {
   const navigate = useNavigate();
