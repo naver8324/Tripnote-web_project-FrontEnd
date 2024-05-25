@@ -1,5 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import InfoInput from '../../components/commons/InfoInput';
+import GhostButton from '../../components/commons/GhostButton';
 
 export default function SignupPage() {
   return (
@@ -37,28 +39,12 @@ export default function SignupPage() {
           </button>
         </div>
         <div className="mb-4">
-          <label htmlFor="password" className="text-subTitle block mb-1">
-            비밀번호
-          </label>
-          <input
-            id="password"
-            type="password"
-            className="w-full h-14 p-2 border border-gray-300 rounded-lg"
-          />
+          <InfoInput title="비밀번호" type="password" className="mb-0" />
         </div>
-        <div className="mb-16">
-          <label htmlFor="confirmPassword" className="text-subTitle block mb-1">
-            비밀번호 확인
-          </label>
-          <input
-            id="confirmPassword"
-            type="password"
-            className="w-full h-14 p-2 border border-gray-300 rounded-lg"
-          />
+        <div className="mb-12">
+          <InfoInput title="비밀번호 확인" type="password" />
         </div>
-        <button className="text-lg w-full h-14 bg-prime text-white p-2 rounded-lg mb-5">
-          가입하기
-        </button>
+        <GhostButton title="가입하기" />
         <div className="text-center">
           <Link
             to="/login"

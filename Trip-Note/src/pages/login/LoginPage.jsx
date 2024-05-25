@@ -4,6 +4,8 @@ import logo from '../../assets/logo-green.png';
 import kakao from '../../assets/kakao.png';
 import naver from '../../assets/naver.png';
 import google from '../../assets/google.png';
+import GhostButton from '../../components/commons/GhostButton';
+import InfoInput from '../../components/commons/InfoInput';
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -26,26 +28,16 @@ export default function LoginPage() {
           <img className="w-52 h-auto mr-2" src={logo} alt="trip note logo" />
           <p className="text-lg">여행 경로 정할 땐, 트립 노트</p>
         </Link>
-        <p className="text-subTitle">이메일</p>
-        <input
-          type="email"
-          className="w-full h-14 mb-4 p-2 border border-gray-300 rounded-lg"
-        />
+        <InfoInput title="이메일" type="email" />
+        <InfoInput title="비밀번호" type="password" className="mb-2" />
 
-        <p className="text-subTitle">비밀번호</p>
-        <input
-          type="password"
-          className="w-full h-14 mb-1 p-2 border border-gray-300 rounded-lg"
-        />
         <p
           className="text-xs text-right text-prime cursor-pointer mb-8"
           onClick={handleFindPasswordClick}
         >
           비밀번호를 잊으셨나요?
         </p>
-        <button className="text-lg w-full h-14 bg-prime text-white p-2 rounded-lg mb-5">
-          로그인
-        </button>
+        <GhostButton title="로그인" />
         <p className="text-subTitle text-xs text-center mb-12">
           아직 회원이 아니세요?{' '}
           <span

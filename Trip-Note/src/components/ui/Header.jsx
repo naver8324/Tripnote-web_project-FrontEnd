@@ -7,6 +7,14 @@ export default function Header() {
   const setSearchQuery = useStore((state) => state.setSearchQuery);
   const navigate = useNavigate();
 
+  const handleLoginClick = () => {
+    navigate('/login');
+  };
+
+  const handleSignupClick = () => {
+    navigate('/agree');
+  };
+
   const handleSearchClick = () => {
     setSearchQuery('');
     navigate('/');
@@ -41,8 +49,16 @@ export default function Header() {
           <Link className=" hover:text-prime" to="/board">
             후기
           </Link>
-          <button className="border border-grey-300 p-1 rounded">로그인</button>
-          <button className="border border-grey-300 p-1 rounded bg-red-400 text-white">
+          <button
+            onClick={handleLoginClick}
+            className="border border-grey-300 p-1 rounded"
+          >
+            로그인
+          </button>
+          <button
+            onClick={handleSignupClick}
+            className="border border-grey-300 p-1 rounded bg-red-400 text-white"
+          >
             회원가입
           </button>
         </nav>

@@ -6,6 +6,7 @@ import Tabs from '../components/Tabs/Tabs';
 import RootSpot from '../components/root/RootSpot';
 import RootArea from '../components/root/RootArea';
 import AccordionButton from '../components/Sidebar/AccordionButton';
+import RootCreate from '../components/root/RootCreate';
 
 export default function RootCreatePage() {
   const { isAccordionOpen } = useAccordionStore();
@@ -13,8 +14,9 @@ export default function RootCreatePage() {
   return (
     <div className="mt-[118px] w-[1920px] max-w-[1920px] bg-subTitle flex mx-auto">
       <div className="w-[400px] bg-white">
-        <div className="p-4 flex justify-between items-center"></div>
-        <AccordionButton />
+        <div className="p-4 flex justify-between items-center">
+          <RootCreate />
+        </div>
       </div>
 
       {isAccordionOpen && <Accordion />}
