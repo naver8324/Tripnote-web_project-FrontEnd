@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Tab from './Tab';
 
-const Tabs = ({ tabCount, tabLabels, children }) => {
+const Tabs = ({ tabLabels, children }) => {
   const [activeTab, setActiveTab] = useState(0);
 
   const handleTabClick = (index) => {
@@ -11,10 +11,10 @@ const Tabs = ({ tabCount, tabLabels, children }) => {
   return (
     <div className="w-80%">
       <div className="flex space-x-8 mb-4">
-        {Array.from(Array(tabCount).keys()).map((index) => (
+        {tabLabels.map((label, index) => (
           <Tab
             key={index}
-            label={tabLabels[index]}
+            label={label}
             onClick={() => handleTabClick(index)}
             isActive={activeTab === index}
           />

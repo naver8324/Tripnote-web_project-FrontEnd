@@ -27,7 +27,6 @@ export default function MyPage() {
           프로필 관리
         </button>
         <Tabs
-          tabCount={4}
           tabLabels={[
             '나의 여행 루트',
             '찜한 여행 루트',

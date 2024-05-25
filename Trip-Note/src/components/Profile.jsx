@@ -3,7 +3,7 @@ import useProfileStore from '../store/useProfileStore';
 import profile from '../assets/profile.png';
 
 const Profile = () => {
-  const { nickname, setNickname, resetNicknameChanged } = useProfileStore();
+  const { nickname } = useProfileStore();
 
   // userId 값을 nickname으로 설정
   const userId = nickname;
