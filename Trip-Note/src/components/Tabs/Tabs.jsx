@@ -10,7 +10,7 @@ const Tabs = ({ tabLabels, children }) => {
 
   return (
     <div className="w-80%">
-      <div className="flex space-x-8 mb-4">
+      <div className="flex space-x-16 mb-4">
         {tabLabels.map((label, index) => (
           <Tab
             key={index}

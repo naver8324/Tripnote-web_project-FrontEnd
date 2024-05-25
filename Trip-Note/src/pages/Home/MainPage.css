@@ -1,0 +1,22 @@
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.outer {
+  min-height: 100vh;
+  overflow-y: auto;
+}
+
+.outer::-webkit-scrollbar {
+  display: none; /* 스크롤바 숨기기 */
+} 
+
+.inner {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

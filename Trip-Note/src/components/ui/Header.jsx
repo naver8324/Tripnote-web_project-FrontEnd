@@ -1,16 +1,20 @@
-import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useRef } from 'react';
 import logo from '../../assets/logo-green.png';
+import { Link, useNavigate } from 'react-router-dom';
+import useStore from '../../hooks/store';
 
 export default function Header() {
+  const setSearchQuery = useStore((state) => state.setSearchQuery);
   const navigate = useNavigate();
 
-  const handleLoginClick = () => {
-    navigate('/login');
-  };
+  const handleSearchClick = () => {
+    setSearchQuery('');
+    navigate('/');
 
-  const handleSignupClick = () => {
-    navigate('/agree');
+    const searchElement = document.getElementById('search');
+    if (searchElement) {
+      searchElement.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   return (
@@ -20,28 +24,25 @@ export default function Header() {
           <img className="w-36 h-auto" src={logo} alt="trip note logo" />
         </Link>
         <nav className="flex items-center gap-4 font-medium">
-          <Link className="hover:text-prime" to="/root/recommend">
+          {/* @Todo : Link constans로 뺄 예정 */}
+          <Link
+            onClick={handleSearchClick}
+            className=" hover:text-prime"
+            to="/root/recommend"
+          >
             경로 검색
           </Link>
-          <Link className="hover:text-prime" to="/root/create">
+          <Link className=" hover:text-prime" to="/root/create">
             경로 생성
           </Link>
-          <Link className="hover:text-prime" to="/mypage">
+          <Link className=" hover:text-prime" to="/mypage">
             마이페이지
           </Link>
-          <Link className="hover:text-prime" to="/board">
+          <Link className=" hover:text-prime" to="/board">
             후기
           </Link>
-          <button
-            className="border border-grey-300 p-1 rounded"
-            onClick={handleLoginClick}
-          >
-            로그인
-          </button>
-          <button
-            className="border border-grey-300 p-1 rounded bg-red-400 text-white"
-            onClick={handleSignupClick}
-          >
+          <button className="border border-grey-300 p-1 rounded">로그인</button>
+          <button className="border border-grey-300 p-1 rounded bg-red-400 text-white">
             회원가입
           </button>
         </nav>
