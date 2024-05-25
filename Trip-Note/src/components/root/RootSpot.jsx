@@ -1,6 +1,4 @@
 import React, { useEffect } from 'react';
-import NaverMap from '../Map/NaverMap';
-import Sidebar from '../Sidebar/Sidebar';
 
 export default function RootSpot() {
   return (

@@ -1,12 +1,10 @@
 import React from 'react';
-import Accordion from '../components/Sidebar/Accordion';
+import Accordion from '../components/Accordion/Accordion';
 import NaverMap from '../components/Map/NaverMap';
 import useAccordionStore from '../store/useAccordionStore';
-import Tabs from '../components/Tabs/Tabs';
-import RootSpot from '../components/root/RootSpot';
-import RootArea from '../components/root/RootArea';
-import AccordionButton from '../components/Sidebar/AccordionButton';
+import AccordionButton from '../components/Accordion/AccordionButton';
 import RootCreate from '../components/root/RootCreate';
+import AccordionRootCreate from '../components/root/AccordionRootCreate';
 
 export default function RootCreatePage() {
   const { isAccordionOpen } = useAccordionStore();
@@ -17,10 +15,15 @@ export default function RootCreatePage() {
         <div className="p-4 flex justify-between items-center">
           <RootCreate />
         </div>
+        <AccordionButton />
       </div>
 
-      {isAccordionOpen && <Accordion />}
-      <NaverMap />
+      {isAccordionOpen && (
+        <Accordion>
+          <AccordionRootCreate />
+        </Accordion>
+      )}
+      <NaverMap className={isAccordionOpen ? 'w-[1120px]' : 'w-[1520px]'} />
     </div>
   );
 }

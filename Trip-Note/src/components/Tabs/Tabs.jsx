@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import Tab from './Tab';
+import useTabStore from '../../store/useTabStore';
 
 const Tabs = ({ tabLabels, children }) => {
-  const [activeTab, setActiveTab] = useState(0);
+  const { activeTab, setActiveTab } = useTabStore();
 
   const handleTabClick = (index) => {
     setActiveTab(index);
