@@ -8,8 +8,8 @@ import daejeon from '../../assets/daejeon.jpg';
 import './MainPage.css';
 import { GoSearch } from 'react-icons/go';
 import ImageCard from '../../components/Home/ImageCard';
-import useStore from '../../hooks/store';
-import Button from '../../components/ui/Button';
+import useStore from '../../store/store';
+import Button from '../../components/commons/Button';
 
 const regions = [
   { imgSrc: seoul, name: '서울' },
