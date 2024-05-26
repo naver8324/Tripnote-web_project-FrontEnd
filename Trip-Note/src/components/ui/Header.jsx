@@ -1,8 +1,8 @@
 import React, { useRef } from 'react';
 import logo from '../../assets/logo-green.png';
 import { Link, useNavigate } from 'react-router-dom';
-import useStore from '../../hooks/store';
-import Button from './Button';
+import useStore from '../../store/store';
+import Button from '../commons/Button';
 
 export default function Header() {
   const setSearchQuery = useStore((state) => state.setSearchQuery);
