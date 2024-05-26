@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import logo from '../../assets/logo-green.png';
 import { Link, useNavigate } from 'react-router-dom';
 import useStore from '../../hooks/store';
+import Button from './Button';
 
 export default function Header() {
   const setSearchQuery = useStore((state) => state.setSearchQuery);
@@ -49,18 +50,15 @@ export default function Header() {
           <Link className=" hover:text-prime" to="/board">
             후기
           </Link>
-          <button
-            onClick={handleLoginClick}
-            className="border border-grey-300 p-1 rounded"
-          >
+          <Button onClick={handleLoginClick} className="border-grey-300">
             로그인
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={handleSignupClick}
-            className="border border-grey-300 p-1 rounded bg-red-400 text-white"
+            className="border-grey-300 bg-red-400 text-white"
           >
             회원가입
-          </button>
+          </Button>
         </nav>
       </div>
     </header>

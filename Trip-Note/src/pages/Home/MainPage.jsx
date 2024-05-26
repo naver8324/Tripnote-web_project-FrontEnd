@@ -9,6 +9,7 @@ import './MainPage.css';
 import { GoSearch } from 'react-icons/go';
 import ImageCard from '../../components/Home/ImageCard';
 import useStore from '../../hooks/store';
+import Button from '../../components/ui/Button';
 
 const regions = [
   { imgSrc: seoul, name: '서울' },
@@ -18,12 +19,6 @@ const regions = [
 ];
 
 export default function MainPage() {
-  // const searchRef = useRef();
-  // const handleButtonClick = () => {
-  //   if(searchRef.current) {
-  //     searchRef.current.scrollIntoView({ behavior: 'smooth' });
-  //   }
-  // }
   const searchRef = useRef();
   const searchQuery = useStore((state) => state.searchQuery);
 
@@ -57,9 +52,14 @@ export default function MainPage() {
           즉흥적인 여행을 위한
           <br /> 빠른 여행 플래너
           <div className="flex justify-start">
-            <button onClick={handleButtonClick} className="bg-white hover:bg-prime text-title hover:text-white text-lg font-semibold px-6 py-2 rounded-full border-2 border-grey-300 hover:border-prime transition-all duration-300">
+            <Button
+              onClick={handleButtonClick}
+              variant="roundButton"
+              size="large"
+              className="bg-white hover:bg-prime text-title hover:text-white text-lg font-semibold px-6 py-2 rounded-full border-2 border-grey-300 hover:border-prime transition-all duration-300"
+            >
               경로 검색
-            </button>
+            </Button>
           </div>
         </div>
         <div className="">
