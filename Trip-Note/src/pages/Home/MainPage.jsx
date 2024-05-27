@@ -10,6 +10,7 @@ import { GoSearch } from 'react-icons/go';
 import ImageCard from '../../components/Home/ImageCard';
 import useStore from '../../store/store';
 import Button from '../../components/commons/Button';
+import Input from '../../components/commons/Input';
 
 const regions = [
   { imgSrc: seoul, name: '서울' },
@@ -22,16 +23,20 @@ export default function MainPage() {
   const searchRef = useRef();
   const searchQuery = useStore((state) => state.searchQuery);
 
+  const setScrollSmooth = () => {
+    if(searchRef) {
+      searchRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   useEffect(() => {
     if (searchQuery) {
-      searchRef.current.scrollIntoView({ behavior: 'smooth' });
+      setScrollSmooth();
     }
   }, [searchQuery]);
 
   const handleButtonClick = () => {
-    if (searchRef.current) {
-      searchRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
+    setScrollSmooth();
   };
 
   return (
@@ -71,14 +76,7 @@ export default function MainPage() {
       </div>
       <div id="search" ref={searchRef} className="inner flex flex-col gap-8">
         <form className="relative mt-4 flex">
-          <input
-            type="text"
-            placeholder="여행지를 검색해보세요!"
-            className="w-full px-8 py-1 border border-gray-300 rounded-full focus:outline-none focus:ring-1 focus:ring-prime"
-          />
-          <button type="submit" className="absolute top-0 bottom-0 right-4">
-            <GoSearch />
-          </button>
+          <Input variant="searchInput" placeholder="여행지를 검색해보세요!" />
         </form>
         <p className="text-title text-xl font-semibold mt-4">
           지금 뜨는 여행지
