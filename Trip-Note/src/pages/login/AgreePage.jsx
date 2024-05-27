@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import useCheckboxStore from '../../store/useCheckboxStore';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,6 +13,10 @@ export default function AgreePage() {
     toggleAllChecked,
     resetAllChecked, // 모든 체크박스를 초기화하는 새로운 메서드
   } = useCheckboxStore();
+  const allChecked = useMemo(
+    () => ageChecked && privacyChecked && termsChecked,
+    [ageChecked, privacyChecked, termsChecked],
+  );
 
   const navigate = useNavigate();
 
@@ -39,7 +43,7 @@ export default function AgreePage() {
         <div className="mb-4 border-b">
           <input
             type="checkbox"
-            checked={ageChecked && privacyChecked && termsChecked}
+            checked={allChecked}
             onChange={(e) => toggleAllChecked(e.target.checked)}
             className="h-5 w-5 mr-2 mb-8"
           />

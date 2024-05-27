@@ -1,80 +1,91 @@
-import axios from 'axios';
+import axios, { Axios, HttpStatusCode, isAxiosError } from 'axios';
 import { useEffect, useState } from 'react';
 
-const useAxios = (opts, axiosInstance = axios.create({ timeout: 5000 })) => {
-  const [state, setState] = useState({
-    loading: true,
-    error: null,
-    data: null,
-  });
-  const [trigger, setTrigger] = useState(0);
+axios.defaults.headers.common['Content-Type'] = 'application/json';
+axios.defaults.timeout = 5000;
 
-  if (!opts.url) {
-    return { ...state, refetch: () => {} };
-  }
+export const api1 = axios.create({ baseURL: 'http://localhost:4001' });
 
-  const refetch = () => {
-    setState((prev) => ({
-      ...prev,
-      loading: true,
-    }));
-    setTrigger(Date.now());
-  };
-
-  const handleError = (error) => {
-    let errorMessage;
-
-    if (error.response) {
-      // 서버가 상태 코드로 응답한 경우
-      switch (error.response.status) {
-        case 400:
-          errorMessage = 'Bad Request';
-          break;
-        case 403:
-          errorMessage = 'Forbidden';
-          break;
-        case 404:
-          errorMessage = 'Not Found';
-          break;
-        default:
-          errorMessage = `Error: ${error.response.status}`;
-      }
-    } else if (error.request) {
-      // 요청이 이루어졌으나 응답이 없었음
-      if (error.message === 'timeout of 5000ms exceeded') {
-        errorMessage = 'Request Timed Out'; //타임아웃 메세지
-      }
-      errorMessage = 'No response from server';
-    } else {
-      errorMessage = error.message;
+api1.interceptors.request.use(
+  (req) => {
+    if (req.data && req.data instanceof FormData) {
+      req.headers['Content-Type'] = 'multipart/form-data';
     }
+    return req;
+  },
+  (err) => Promise.reject(err),
+);
 
-    return errorMessage;
+api1.interceptors.response.use(
+  (response) => response,
+  (err) => {
+    if (isAxiosError(err)) {
+      if (err.response) {
+        const { status } = err.response;
+        switch (status) {
+          case HttpStatusCode.BadRequest:
+            err.message = 'This is BadRequest';
+            break;
+          case HttpStatusCode.Unauthorized:
+            err.message = 'This is Unauthorized';
+            break;
+          case HttpStatusCode.Forbidden:
+            err.message = 'This is Forbidden';
+            break;
+          case HttpStatusCode.NotFound:
+            err.message = 'This is NotFound';
+            break;
+          case HttpStatusCode.MethodNotAllowed:
+            err.message = 'This is MethodNotAllowed';
+            break;
+          case HttpStatusCode.RequestTimeout:
+            err.message = 'This is RequestTimeout';
+            break;
+          default:
+            err.message = `Unexpected Error: ${status}`;
+        }
+      } else if (err.request) {
+        err.message = 'No response received'; // 요청이 이루어졌으나 응답이 없음
+      } else {
+        err.message = 'An error occurred'; // 요청 설정 중 오류 발생
+      }
+    } else {
+      err.message = 'Network Error'; // 네트워크 오류
+    }
+    return Promise.reject(err);
+  },
+);
+
+const useAxios = ({ method, url, data, shouldFetch }) => {
+  const [responseData, setResponseData] = useState(null);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const response = await api1.request({
+        method,
+        url,
+        data,
+      });
+      setResponseData(response.data);
+      setError(null);
+    } catch (err) {
+      setError(err.message);
+      setResponseData(null);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axiosInstance(opts);
-        setState({
-          loading: false,
-          data: response.data,
-          error: null,
-        });
-      } catch (error) {
-        const errorMessage = handleError(error);
-        setState({
-          loading: false,
-          error: errorMessage,
-          data: null,
-        });
-      }
-    };
+    if (shouldFetch) {
+      fetchData();
+    }
+  }, [shouldFetch]);
 
-    fetchData();
-  }, [trigger, opts]);
-
-  return { ...state, refetch };
+  return { responseData, error, loading, fetchData };
 };
 
 export default useAxios;

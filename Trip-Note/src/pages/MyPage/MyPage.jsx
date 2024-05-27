@@ -26,18 +26,24 @@ export default function MyPage() {
           <GoGear className="mr-2" />
           프로필 관리
         </button>
-        <Tabs
-          tabLabels={[
-            '나의 여행 루트',
-            '찜한 여행 루트',
-            '나의 여행 후기',
-            '찜한 여행 후기',
-          ]}
-        >
-          <MyRoot />
-          <LoverRoot />
-          <MyReview />
-          <LoverReview />
+        <Tabs>
+          <Tabs.Tab index={0}>나의 여행 루트</Tabs.Tab>
+          <Tabs.Tab index={1}>찜한 여행 루트</Tabs.Tab>
+          <Tabs.Tab index={2}>나의 여행 후기</Tabs.Tab>
+          <Tabs.Tab index={3}>찜한 여행 후기</Tabs.Tab>
+
+          <Tabs.TabContent index={0}>
+            <MyRoot />
+          </Tabs.TabContent>
+          <Tabs.TabContent index={1}>
+            <LoverRoot />
+          </Tabs.TabContent>
+          <Tabs.TabContent index={2}>
+            <MyReview />
+          </Tabs.TabContent>
+          <Tabs.TabContent index={3}>
+            <LoverReview />
+          </Tabs.TabContent>
         </Tabs>
       </div>
     </>

@@ -1,33 +1,40 @@
-import React, { useState } from 'react';
-import Tab from './Tab';
+import React from 'react';
 import useTabStore from '../../store/useTabStore';
 
-const Tabs = ({ tabLabels, children }) => {
-  const { activeTab, setActiveTab } = useTabStore();
+// Zustand 스토어 생성
 
-  const handleTabClick = (index) => {
-    setActiveTab(index);
-  };
+const Tabs = ({ children }) => {
+  const validChildren = React.Children.toArray(children).filter((child) => {
+    return child.type === Tab || child.type === TabContent;
+  });
+
+  return <div className="tabs">{validChildren}</div>;
+};
+
+const Tab = ({ index, children }) => {
+  const { activeIndex, setActiveIndex } = useTabStore();
 
   return (
-    <div className="w-80%">
-      <div className="flex space-x-16 mb-4">
-        {tabLabels.map((label, index) => (
-          <Tab
-            key={index}
-            label={label}
-            onClick={() => handleTabClick(index)}
-            isActive={activeTab === index}
-          />
-        ))}
-      </div>
-      <div className="w-full">
-        {React.Children.map(children, (child, index) => {
-          return index === activeTab ? child : null;
-        })}
-      </div>
-    </div>
+    <button
+      className={`text-lg font-medium py-3 px-4 text-gray-600 hover:text-gray-900 ${
+        activeIndex === index ? 'border-b-2 border-prime' : ''
+      }`}
+      onClick={() => setActiveIndex(index)}
+    >
+      {children}
+    </button>
   );
 };
+
+const TabContent = ({ index, children }) => {
+  const { activeIndex } = useTabStore();
+
+  return activeIndex === index ? (
+    <div className="tab-content">{children}</div>
+  ) : null;
+};
+
+Tabs.Tab = Tab;
+Tabs.TabContent = TabContent;
 
 export default Tabs;

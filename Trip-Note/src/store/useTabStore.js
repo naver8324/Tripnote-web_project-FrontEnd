@@ -1,8 +1,8 @@
 import create from 'zustand';
 
 const useTabStore = create((set) => ({
-  activeTab: 0,
-  setActiveTab: (index) => set({ activeTab: index }),
+  activeIndex: 0,
+  setActiveIndex: (index) => set({ activeIndex: index }),
 }));
 
 export default useTabStore;
