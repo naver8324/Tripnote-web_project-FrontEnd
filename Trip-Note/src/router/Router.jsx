@@ -11,6 +11,7 @@ import SignupPage from '../pages/login/SignupPage';
 import FindPasswordPage from '../pages/login/FindPasswordPage';
 import AgreePage from '../pages/login/AgreePage';
 import LoginPage from '../pages/login/LoginPage';
+import EditBoardPage from '../pages/Board/EditBoardPage';
 
 const router = createBrowserRouter([
   {
@@ -28,6 +29,7 @@ const router = createBrowserRouter([
       { path: 'mypage/profile', element: <ProfilePage /> },
       { path: 'root/recommend', element: <RootRecommendationPage /> },
       { path: 'root/create', element: <RootCreatePage /> },
+      { path: 'editBoard', element: <EditBoardPage />}
     ],
   },
 ]);

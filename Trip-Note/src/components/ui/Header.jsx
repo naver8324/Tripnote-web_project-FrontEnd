@@ -37,7 +37,6 @@ export default function Header() {
           <Link
             onClick={handleSearchClick}
             className=" hover:text-prime"
-            to="/root/recommend"
           >
             경로 검색
           </Link>
