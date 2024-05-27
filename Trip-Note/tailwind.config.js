@@ -7,7 +7,7 @@ export default {
         prime: '#1DC078',
         title: '#333B3D',
         subTitle: '#B6BBC1',
-        subBackground: '#FAFAFA'
+        subBackground: '#FAFAFA',
       },
     },
   },

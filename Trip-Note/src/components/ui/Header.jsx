@@ -8,6 +8,14 @@ export default function Header() {
   const setSearchQuery = useStore((state) => state.setSearchQuery);
   const navigate = useNavigate();
 
+  const handleLoginClick = () => {
+    navigate('/login');
+  };
+
+  const handleSignupClick = () => {
+    navigate('/agree');
+  };
+
   const handleSearchClick = () => {
     setSearchQuery('');
     navigate('/');
@@ -26,20 +34,29 @@ export default function Header() {
         </Link>
         <nav className="flex items-center gap-4 font-medium">
           {/* @Todo : Link constans로 뺄 예정 */}
-          <Link onClick={handleSearchClick} className=" hover:text-prime" to="">
+          <Link
+            onClick={handleSearchClick}
+            className=" hover:text-prime"
+            to="/root/recommend"
+          >
             경로 검색
           </Link>
-          <Link className=" hover:text-prime" to="">
+          <Link className=" hover:text-prime" to="/root/create">
             경로 생성
           </Link>
-          <Link className=" hover:text-prime" to="">
+          <Link className=" hover:text-prime" to="/mypage">
             마이페이지
           </Link>
           <Link className=" hover:text-prime" to="/board">
             후기
           </Link>
-          <Button className="border-grey-300">로그인</Button>
-          <Button className="border-grey-300 bg-red-400 text-white">
+          <Button onClick={handleLoginClick} className="border-grey-300">
+            로그인
+          </Button>
+          <Button
+            onClick={handleSignupClick}
+            className="border-grey-300 bg-red-400 text-white"
+          >
             회원가입
           </Button>
         </nav>
