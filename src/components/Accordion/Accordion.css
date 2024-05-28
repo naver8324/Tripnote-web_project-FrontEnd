@@ -1,0 +1,17 @@
+.accordion-content {
+  @apply overflow-hidden transition-all duration-300 ease-in-out max-h-0;
+}
+
+.accordion-content.open {
+  @apply max-h-[500px]; /* 콘텐츠 높이에 맞게 조정 */
+}
+
+.accordion-content {
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out;
+  max-height: 0;
+}
+
+.accordion-content.open {
+  max-height: 500px; /* 콘텐츠 높이에 맞게 조정 */
+}
