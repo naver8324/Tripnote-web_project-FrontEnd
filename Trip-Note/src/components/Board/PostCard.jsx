@@ -2,14 +2,17 @@ import React from 'react';
 import profile from '../../assets/profile.png';
 import { formmateDate } from '../../utils/date';
 import { Link } from 'react-router-dom';
-import mockImg from '../../assets/busan.jpg'
+import mockImg from '../../assets/busan.jpg';
 
 const mockDate = new Date();
-const mockHashtag = ['#서울', '#혼자여행'];
+const mockHashtag = ['서울', '혼자여행'];
 
 export default function PostCard() {
   return (
-    <Link to={`/api/member/posts/`} className='flex gap-8 items-center border-b border-grey pb-5 mb-4'>
+    <Link
+      to={`/api/member/posts/`}
+      className="flex gap-8 items-center border-b border-grey pb-5 mb-4"
+    >
       <div className="w-full">
         <div className="flex gap-2 items-center mb-7">
           <img
@@ -22,7 +25,7 @@ export default function PostCard() {
           <p className="min-w-fit">{formmateDate(mockDate)}</p>
         </div>
         <h1 className="text-xl">What is Lorem Ipsum?</h1>
-        <p className="my-3 leading-7 line-clamp-3 max-sm:hidden md:max-[1100px]:hidden">
+        <p className="my-3 leading-6 line-clamp-3 max-sm:hidden md:max-[1100px]:hidden">
           Lorem Ipsum is simply dummy text of the printing and typesetting
           industry. Lorem Ipsum has been the industry's standard dummy text ever
           since the 1500s, when an unknown printer took a galley of type and
@@ -33,15 +36,21 @@ export default function PostCard() {
           more recently with desktop publishing software like Aldus PageMaker
           including versions of Lorem Ipsum.
         </p>
-        <div className='flex gap-4 mt-7'>
+        <div className="flex gap-4 mt-7">
           {mockHashtag.map((i) => (
-            <span className="py-1 px-4 rounded-full bg-gray-100">{i}</span>
+            <span className="text-sm py-1 px-4 rounded-full bg-gray-100">
+              #{i}
+            </span>
           ))}
         </div>
       </div>
-        <div className='h-28 aspect-square bg-gray-100'>
-          <img src={mockImg} alt="" className='w-full h-full aspect-square object-cover'/>
-        </div>
+      <div className="h-28 aspect-square bg-gray-100">
+        <img
+          src={mockImg}
+          alt=""
+          className="w-full h-full aspect-square object-cover"
+        />
+      </div>
     </Link>
   );
 }
