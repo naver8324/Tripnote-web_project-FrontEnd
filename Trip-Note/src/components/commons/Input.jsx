@@ -16,7 +16,6 @@ function InputComponent({
         break;
       case 'searchInput':
         classNames.push(
-          'w-full',
           'px-8',
           'py-1',
           'rounded-full',

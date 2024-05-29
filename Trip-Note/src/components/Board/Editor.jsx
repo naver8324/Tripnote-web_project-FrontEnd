@@ -33,12 +33,12 @@ export default function Editor() {
   return (
     <>
       <div className="flex-col justify-center items-center">
-        <Input
-          className="border-none outline-none text-3xl mt-4 "
+        <textarea
+          className="border-none outline-none resize-none w-full h-10 text-3xl mt-10 leading-tight placeholder:opacity-80"
           type="text"
           placeholder="제목을 입력하세요."
           onChange={handleTitleChange}
-        />
+        ></textarea>
         <ReactQuill
           className="mt-2 mb-24 h-[440px]"
           modules={modules}

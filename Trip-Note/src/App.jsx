@@ -11,7 +11,7 @@ function App() {
   return (
     <div className="flex flex-col min-h-screen w-full">
       <Header />
-      <main className="flex-grow mt-30 flex mx-auto">
+      <main className="flex-grow mt-30 flex mx-auto w-full justify-center">
         <Outlet />
       </main>
       {!hideFooter && <Footer />}

@@ -7,7 +7,7 @@ import Editor from './Editor';
 
 export default function BoardEditor() {
   return (
-    <div className='w-[840px]'>
+    <div className='w-[840px] flex-col justify-center items-center'>
       <nav className="navBar flex items-center justify-between">
         <Link to="/board">
           <GoArrowLeft className="text-xl"/>
