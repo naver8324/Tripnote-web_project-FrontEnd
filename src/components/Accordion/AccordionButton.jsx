@@ -1,9 +1,6 @@
 import React from 'react';
-import useAccordionStore from '../../store/useAccordionStore';
 
-export default function AccordionButton() {
-  const { isAccordionOpen, toggleAccordion } = useAccordionStore();
-
+export default function AccordionButton({ isAccordionOpen, toggleAccordion }) {
   return (
     <button
       onClick={toggleAccordion}

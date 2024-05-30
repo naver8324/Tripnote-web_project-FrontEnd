@@ -1,8 +1,6 @@
 import React, { useEffect, useRef } from 'react';
-import useAccordionStore from '../../store/useAccordionStore';
 
 export default function NaverMap({ className }) {
-  const { isAccordionOpen } = useAccordionStore();
   const mapRef = useRef(null);
 
   useEffect(() => {

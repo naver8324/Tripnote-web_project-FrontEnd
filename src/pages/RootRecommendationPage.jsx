@@ -1,18 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Accordion from '../components/Accordion/Accordion';
 import NaverMap from '../components/Map/NaverMap';
-import useAccordionStore from '../store/useAccordionStore';
 import Tabs from '../components/Tabs/Tabs';
 import RootSpot from '../components/root/RootSpot';
 import RootArea from '../components/root/RootArea';
 import AccordionButton from '../components/Accordion/AccordionButton';
 import AccordionRootSpot from '../components/root/AccordionRootSpot';
-import useTabStore from '../store/useTabStore';
 import AccordionRootArea from '../components/root/AccordionRootArea';
+import useTabStore from '../store/useTabStore';
 
 export default function RootRecommendationPage() {
-  const { isAccordionOpen } = useAccordionStore();
+  const [isAccordionOpen, setIsAccordionOpen] = useState(false);
   const { activeIndex } = useTabStore();
+
+  const toggleAccordion = () => {
+    setIsAccordionOpen((prev) => !prev);
+  };
 
   return (
     <div className="mt-[118px] w-full bg-subTitle flex mx-auto">
@@ -29,7 +32,10 @@ export default function RootRecommendationPage() {
             </Tabs.TabContent>
           </Tabs>
         </div>
-        <AccordionButton />
+        <AccordionButton
+          isAccordionOpen={isAccordionOpen}
+          toggleAccordion={toggleAccordion}
+        />
       </div>
 
       {isAccordionOpen && (
