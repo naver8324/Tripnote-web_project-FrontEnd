@@ -24,7 +24,8 @@ export default function PostPage() {
         <NaverMap className="aspect-video w-[800px] h-[200px]" />
         <div className="mt-12">
           <h1 className="text-xl font-semibold">
-            What is Lorem Ipsum? <hr className="border-b border-prime inline-block w-full" />
+            What is Lorem Ipsum?{' '}
+            <hr className="border-b border-prime inline-block w-full" />
           </h1>
           <div className="flex max-sm:flex-col justify-between my-8">
             <div className="flex gap-2 items-start">
@@ -32,12 +33,13 @@ export default function PostPage() {
               <p>
                 닉네임
                 <br />
-                <p className="text-sm mt-2 opacity-70">{formmateDate(mockDate)}</p>
+                <p className="text-sm mt-2 opacity-70">
+                  {formmateDate(mockDate)}
+                </p>
               </p>
             </div>
           </div>
         </div>
-        
       </div>
     </section>
   );
