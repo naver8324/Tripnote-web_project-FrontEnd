@@ -1,13 +1,11 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 
-export default function Button({
-  variant = 'nomalButton',
-  size = 'medium',
-  className = '',
-  ...props
-}) {
+function ButtonComponent(
+  { variant = 'nomalButton', size = 'medium', className = '', ...props },
+  ref,
+) {
   const getStyleClass = () => {
-    const classNames = ['border', 'p-1'];
+    const classNames = ['border', 'p-1', 'text-title'];
 
     switch (variant) {
       case 'roundButton':
@@ -38,8 +36,12 @@ export default function Button({
   };
 
   return (
-    <button className={getStyleClass()} {...props}>
+    <button ref={ref} className={getStyleClass()} {...props}>
       {props.children}
     </button>
   );
 }
+
+const Button = forwardRef(ButtonComponent);
+
+export default Button;

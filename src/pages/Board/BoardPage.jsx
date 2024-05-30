@@ -1,144 +1,108 @@
-import React from 'react';
+import React, { useState } from 'react';
+import Input from '../../components/commons/Input';
+import Button from '../../components/commons/Button';
+import Navigation from '../../components/Board/Navigation';
+import PostCard from '../../components/Board/PostCard';
+import { useNavigate } from 'react-router-dom';
 
-export default function Board() {
+const mockRegionsTags = [
+  '전체',
+  '서울',
+  '부산',
+  '대구',
+  '인천',
+  '광주',
+  '대전',
+  '울산',
+  '세종',
+  '경기',
+  '강원',
+  '충북',
+  '충남',
+  '경북',
+  '경남',
+  '전북',
+  '전남',
+  '제주',
+];
+
+const mockThemeTags = [
+  '혼자여행',
+  '가족과함께',
+  '맛집',
+  '자연',
+  '체험',
+  '트레킹',
+  '쇼핑',
+];
+
+export default function BoardPage() {
+  const [pageState, setPageState] = useState('#전체');
+
+  const navigate = useNavigate();
+  const handleButtonClick = () => {
+    navigate('/editBoard');
+  };
+
+  const loadPostByTag = (e) => {
+    const tag = e.target.innerText;
+    if (pageState === tag) {
+      setPageState('#전체');
+    } else {
+      setPageState(tag);
+    }
+  };
+
   return (
-    <div>
-      <p>
-        board!What is Lorem Ipsum? Lorem Ipsum is simply dummy text of the
-        printing and typesetting industry. Lorem Ipsum has been the industry's
-        standard dummy text ever since the 1500s, when an unknown printer took a
-        galley of type and scrambled it to make a type specimen book. It has
-        survived not only five centuries, but also the leap into electronic
-        typesetting, remaining essentially unchanged. It was popularised in the
-        1960s with the release of Letraset sheets containing Lorem Ipsum
-        passages, and more recently with desktop publishing software like Aldus
-        PageMaker including versions of Lorem Ipsum. Why do we use it? It is a
-        long established fact that a reader will be distracted by the readable
-        content of a page when looking at its layout. The point of using Lorem
-        Ipsum is that it has a more-or-less normal distribution of letters, as
-        opposed to using 'Content here, content here', making it look like
-        readable English. Many desktop publishing packages and web page editors
-        now use Lorem Ipsum as their default model text, and a search for 'lorem
-        ipsum' will uncover many web sites still in their infancy. Various
-        versions have evolved over the years, sometimes by accident, sometimes
-        on purpose (injected humour and the like). Where does it come from?
-        Contrary to popular belief, Lorem Ipsum is not simply random text. It
-        has roots in a piece of classical Latin literature from 45 BC, making it
-        over 2000 years old. Richard McClintock, a Latin professor at
-        Hampden-Sydney College in Virginia, looked up one of the more obscure
-        Latin words, consectetur, from a Lorem Ipsum passage, and going through
-        the cites of the word in classical literature, discovered the
-        undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33
-        of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by
-        Cicero, written in 45 BC. This book is a treatise on the theory of
-        ethics, very popular during the Renaissance. The first line of Lorem
-        Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section
-        1.10.32. The standard chunk of Lorem Ipsum used since the 1500s is
-        reproduced below for those interested. Sections 1.10.32 and 1.10.33 from
-        "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their
-        exact original form, accompanied by English versions from the 1914
-        translation by H. Rackham. Where can I get some? There are many
-        variations of passages of Lorem Ipsum available, but the majority have
-        suffered alteration in some form, by injected humour, or randomised
-        words which don't look even slightly believable. If you are going to use
-        a passage of Lorem Ipsum, you need to be sure there isn't anything
-        embarrassing hidden in the middle of text. All the Lorem Ipsum
-        generators on the Internet tend to repeat predefined chunks as
-        necessary, making this the first true generator on the Internet. It uses
-        a dictionary of over 200 Latin words, combined with a handful of model
-        sentence structures, to generate Lorem Ipsum which looks reasonable. The
-        generated Lorem Ipsum is therefore always free from repetition, injected
-        humour, or non-characteristic words etc.
-        board!What is Lorem Ipsum? Lorem Ipsum is simply dummy text of the
-        printing and typesetting industry. Lorem Ipsum has been the industry's
-        standard dummy text ever since the 1500s, when an unknown printer took a
-        galley of type and scrambled it to make a type specimen book. It has
-        survived not only five centuries, but also the leap into electronic
-        typesetting, remaining essentially unchanged. It was popularised in the
-        1960s with the release of Letraset sheets containing Lorem Ipsum
-        passages, and more recently with desktop publishing software like Aldus
-        PageMaker including versions of Lorem Ipsum. Why do we use it? It is a
-        long established fact that a reader will be distracted by the readable
-        content of a page when looking at its layout. The point of using Lorem
-        Ipsum is that it has a more-or-less normal distribution of letters, as
-        opposed to using 'Content here, content here', making it look like
-        readable English. Many desktop publishing packages and web page editors
-        now use Lorem Ipsum as their default model text, and a search for 'lorem
-        ipsum' will uncover many web sites still in their infancy. Various
-        versions have evolved over the years, sometimes by accident, sometimes
-        on purpose (injected humour and the like). Where does it come from?
-        Contrary to popular belief, Lorem Ipsum is not simply random text. It
-        has roots in a piece of classical Latin literature from 45 BC, making it
-        over 2000 years old. Richard McClintock, a Latin professor at
-        Hampden-Sydney College in Virginia, looked up one of the more obscure
-        Latin words, consectetur, from a Lorem Ipsum passage, and going through
-        the cites of the word in classical literature, discovered the
-        undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33
-        of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by
-        Cicero, written in 45 BC. This book is a treatise on the theory of
-        ethics, very popular during the Renaissance. The first line of Lorem
-        Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section
-        1.10.32. The standard chunk of Lorem Ipsum used since the 1500s is
-        reproduced below for those interested. Sections 1.10.32 and 1.10.33 from
-        "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their
-        exact original form, accompanied by English versions from the 1914
-        translation by H. Rackham. Where can I get some? There are many
-        variations of passages of Lorem Ipsum available, but the majority have
-        suffered alteration in some form, by injected humour, or randomised
-        words which don't look even slightly believable. If you are going to use
-        a passage of Lorem Ipsum, you need to be sure there isn't anything
-        embarrassing hidden in the middle of text. All the Lorem Ipsum
-        generators on the Internet tend to repeat predefined chunks as
-        necessary, making this the first true generator on the Internet. It uses
-        a dictionary of over 200 Latin words, combined with a handful of model
-        sentence structures, to generate Lorem Ipsum which looks reasonable. The
-        generated Lorem Ipsum is therefore always free from repetition, injected
-        humour, or non-characteristic words etc.board!What is Lorem Ipsum? Lorem Ipsum is simply dummy text of the
-        printing and typesetting industry. Lorem Ipsum has been the industry's
-        standard dummy text ever since the 1500s, when an unknown printer took a
-        galley of type and scrambled it to make a type specimen book. It has
-        survived not only five centuries, but also the leap into electronic
-        typesetting, remaining essentially unchanged. It was popularised in the
-        1960s with the release of Letraset sheets containing Lorem Ipsum
-        passages, and more recently with desktop publishing software like Aldus
-        PageMaker including versions of Lorem Ipsum. Why do we use it? It is a
-        long established fact that a reader will be distracted by the readable
-        content of a page when looking at its layout. The point of using Lorem
-        Ipsum is that it has a more-or-less normal distribution of letters, as
-        opposed to using 'Content here, content here', making it look like
-        readable English. Many desktop publishing packages and web page editors
-        now use Lorem Ipsum as their default model text, and a search for 'lorem
-        ipsum' will uncover many web sites still in their infancy. Various
-        versions have evolved over the years, sometimes by accident, sometimes
-        on purpose (injected humour and the like). Where does it come from?
-        Contrary to popular belief, Lorem Ipsum is not simply random text. It
-        has roots in a piece of classical Latin literature from 45 BC, making it
-        over 2000 years old. Richard McClintock, a Latin professor at
-        Hampden-Sydney College in Virginia, looked up one of the more obscure
-        Latin words, consectetur, from a Lorem Ipsum passage, and going through
-        the cites of the word in classical literature, discovered the
-        undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33
-        of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by
-        Cicero, written in 45 BC. This book is a treatise on the theory of
-        ethics, very popular during the Renaissance. The first line of Lorem
-        Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section
-        1.10.32. The standard chunk of Lorem Ipsum used since the 1500s is
-        reproduced below for those interested. Sections 1.10.32 and 1.10.33 from
-        "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their
-        exact original form, accompanied by English versions from the 1914
-        translation by H. Rackham. Where can I get some? There are many
-        variations of passages of Lorem Ipsum available, but the majority have
-        suffered alteration in some form, by injected humour, or randomised
-        words which don't look even slightly believable. If you are going to use
-        a passage of Lorem Ipsum, you need to be sure there isn't anything
-        embarrassing hidden in the middle of text. All the Lorem Ipsum
-        generators on the Internet tend to repeat predefined chunks as
-        necessary, making this the first true generator on the Internet. It uses
-        a dictionary of over 200 Latin words, combined with a handful of model
-        sentence structures, to generate Lorem Ipsum which looks reasonable. The
-        generated Lorem Ipsum is therefore always free from repetition, injected
-        humour, or non-characteristic words etc.
-      </p>
-    </div>
+    <section className="min-h-screen mt-40 w-[840px] mx-auto flex flex-col text-title">
+      <nav className="flex items-center justify-between w-full mb-8">
+        <h1 className="searchResult text-3xl font-semibold">{pageState}</h1>
+        <Input variant="searchInput" />
+      </nav>
+      <div className="flex flex-1 w-full mb-16">
+        <div className="flex-1 pr-4">
+          <Navigation routes={['최신순', '인기순']}>
+            <PostCard />
+            <p>인기글입니다.</p>
+          </Navigation>
+        </div>
+        <div className="min-w-[40%] lg:min-w-[255px] max-w-min border-l border-t border-grey pl-8 pt-8 mt-[87px] max-md:hidden">
+          <div className="flex flex-col gap-10">
+            <div>
+              <h1 className="font-medium text-m mb-6">지역별 후기</h1>
+              <div className="flex gap-3 flex-wrap">
+                {mockRegionsTags.map((region, i) => (
+                  <Button
+                    variant="roundButton"
+                    size="small"
+                    key={i}
+                    className={`text-xs px-2 ${pageState === region ? 'bg-title text-white' : ''}`}
+                    onClick={loadPostByTag}
+                  >
+                    #{region}
+                  </Button>
+                ))}
+              </div>
+            </div>
+            <div>
+              <h1 className="font-medium text-m mb-6">테마별 후기</h1>
+              <div className="flex gap-3 flex-wrap">
+                {mockThemeTags.map((theme, i) => (
+                  <Button
+                    variant="roundButton"
+                    size="small"
+                    key={i}
+                    className={`text-xs px-2 ${pageState === theme ? 'bg-title text-white' : ''}`}
+                    onClick={loadPostByTag}
+                  >
+                    #{theme}
+                  </Button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
