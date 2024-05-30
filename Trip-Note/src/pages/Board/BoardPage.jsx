@@ -51,26 +51,14 @@ export default function BoardPage() {
     } else {
       setPageState(tag);
     }
-  }
+  };
 
   return (
     <section className="min-h-screen mt-40 w-[840px] mx-auto flex flex-col text-title">
       <nav className="flex items-center justify-between w-full mb-8">
-        <div>
-          <Input variant="searchInput" />
-        </div>
-        <Button
-          variant="roundButton"
-          size="medium"
-          className="bg-prime text-white border-none"
-          onClick={handleButtonClick}
-        >
-          작성
-        </Button>
+        <h1 className="searchResult text-3xl font-semibold">{pageState}</h1>
+        <Input variant="searchInput" />
       </nav>
-      <div>
-        <h1 className='searchResult text-3xl font-semibold'>{pageState}</h1>
-      </div>
       <div className="flex flex-1 w-full mb-16">
         <div className="flex-1 pr-4">
           <Navigation routes={['최신순', '인기순']}>
@@ -81,7 +69,7 @@ export default function BoardPage() {
         <div className="min-w-[40%] lg:min-w-[255px] max-w-min border-l border-t border-grey pl-8 pt-8 mt-[87px] max-md:hidden">
           <div className="flex flex-col gap-10">
             <div>
-              <h1 className='font-medium text-m mb-6'>지역별 후기</h1>
+              <h1 className="font-medium text-m mb-6">지역별 후기</h1>
               <div className="flex gap-3 flex-wrap">
                 {mockRegionsTags.map((region, i) => (
                   <Button
@@ -97,7 +85,7 @@ export default function BoardPage() {
               </div>
             </div>
             <div>
-              <h1 className='font-medium text-m mb-6'>테마별 후기</h1>
+              <h1 className="font-medium text-m mb-6">테마별 후기</h1>
               <div className="flex gap-3 flex-wrap">
                 {mockThemeTags.map((theme, i) => (
                   <Button

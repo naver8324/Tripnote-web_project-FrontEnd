@@ -10,7 +10,7 @@ const mockHashtag = ['서울', '혼자여행'];
 export default function PostCard() {
   return (
     <Link
-      to={`/api/member/posts/`}
+      to={`/post/:postId`}
       className="flex gap-8 items-center border-b border-grey pb-5 mb-4"
     >
       <div className="w-full">
