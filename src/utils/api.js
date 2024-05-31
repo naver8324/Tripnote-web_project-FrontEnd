@@ -1,12 +1,11 @@
-import axios, { Axios, HttpStatusCode, isAxiosError } from 'axios';
-import { useEffect, useState } from 'react';
+import axios, { isAxiosError } from 'axios';
 
 axios.defaults.headers.common['Content-Type'] = 'application/json';
 axios.defaults.timeout = 5000;
 
-export const api1 = axios.create({ baseURL: 'http://localhost:4001' });
+const api = axios.create({ baseURL: 'http://34.64.39.102:8080' });
 
-api1.interceptors.request.use(
+api.interceptors.request.use(
   (req) => {
     if (req.data && req.data instanceof FormData) {
       req.headers['Content-Type'] = 'multipart/form-data';
@@ -16,76 +15,44 @@ api1.interceptors.request.use(
   (err) => Promise.reject(err),
 );
 
-api1.interceptors.response.use(
+api.interceptors.response.use(
   (response) => response,
   (err) => {
     if (isAxiosError(err)) {
       if (err.response) {
         const { status } = err.response;
         switch (status) {
-          case HttpStatusCode.BadRequest:
-            err.message = 'This is BadRequest';
+          case 400:
+            err.message = '잘못된 요청입니다 (BadRequest)';
             break;
-          case HttpStatusCode.Unauthorized:
-            err.message = 'This is Unauthorized';
+          case 401:
+            err.message = '인증되지 않았습니다 (Unauthorized)';
             break;
-          case HttpStatusCode.Forbidden:
-            err.message = 'This is Forbidden';
+          case 403:
+            err.message = '금지된 요청입니다 (Forbidden)';
             break;
-          case HttpStatusCode.NotFound:
-            err.message = 'This is NotFound';
+          case 404:
+            err.message = '찾을 수 없습니다 (NotFound)';
             break;
-          case HttpStatusCode.MethodNotAllowed:
-            err.message = 'This is MethodNotAllowed';
+          case 405:
+            err.message = '허용되지 않는 메서드입니다 (MethodNotAllowed)';
             break;
-          case HttpStatusCode.RequestTimeout:
-            err.message = 'This is RequestTimeout';
+          case 408:
+            err.message = '요청 시간이 초과되었습니다 (RequestTimeout)';
             break;
           default:
-            err.message = `Unexpected Error: ${status}`;
+            err.message = `예기치 않은 오류: ${status}`;
         }
       } else if (err.request) {
-        err.message = 'No response received'; // 요청이 이루어졌으나 응답이 없음
+        err.message = '응답이 없습니다'; // 요청이 이루어졌으나 응답이 없음
       } else {
-        err.message = 'An error occurred'; // 요청 설정 중 오류 발생
+        err.message = '오류가 발생했습니다'; // 요청 설정 중 오류 발생
       }
     } else {
-      err.message = 'Network Error'; // 네트워크 오류
+      err.message = '네트워크 오류'; // 네트워크 오류
     }
     return Promise.reject(err);
   },
 );
 
-const useAxios = ({ method, url, data, shouldFetch }) => {
-  const [responseData, setResponseData] = useState(null);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
-
-  const fetchData = async () => {
-    setLoading(true);
-    try {
-      const response = await api1.request({
-        method,
-        url,
-        data,
-      });
-      setResponseData(response.data);
-      setError(null);
-    } catch (err) {
-      setError(err.message);
-      setResponseData(null);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (shouldFetch) {
-      fetchData();
-    }
-  }, [shouldFetch]);
-
-  return { responseData, error, loading, fetchData };
-};
-
-export default useAxios;
+export default api;

@@ -1,9 +1,16 @@
 import React from 'react';
+import TestApi from './TestApi';
+import TestComponent from './TestCom';
+import TestLogin from './TestLogin';
+import TestuseLogin from './TestuseLogin';
 
 export default function AccordionRootSpot() {
   return (
     <>
-      <p>스팟추천 아코디언 컴포넌트</p>
+      <TestApi />
+      {/* <TestComponent /> */}
+      {/* <TestLogin /> */}
+      <TestuseLogin />
     </>
   );
 }
