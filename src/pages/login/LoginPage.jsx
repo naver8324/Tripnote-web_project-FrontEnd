@@ -7,12 +7,14 @@ import naver from '../../assets/naver.png';
 import google from '../../assets/google.png';
 import GhostButton from '../../components/commons/GhostButton';
 import InfoInput from '../../components/commons/InfoInput';
+import Oauth from './Oauth'; // Oauth 컴포넌트 import
 
 export default function LoginPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { login, loading: loginLoading, error: loginError } = useLogin();
+  const { kakaoLogin } = Oauth(); // Oauth 훅 사용
 
   const handleFindPasswordClick = () => {
     navigate('/findPassword');
@@ -23,15 +25,15 @@ export default function LoginPage() {
   };
 
   const handleLoginClick = async () => {
-    console.log('Login button clicked'); // 추가
+    console.log('Login button clicked');
     console.log(email, password);
 
     try {
       await login(email, password);
-      console.log('Login successful, navigating to main'); // 추가
+      console.log('Login successful, navigating to main');
       navigate('/');
     } catch (err) {
-      console.error('Login failed:', err); // 에러 메시지 출력
+      console.error('Login failed:', err);
     }
   };
 
@@ -87,7 +89,7 @@ export default function LoginPage() {
           SNS간편 로그인
         </p>
         <div className="flex justify-center space-x-12">
-          <Link to="/">
+          <Link onClick={kakaoLogin}>
             <img
               className="w-14 h-auto rounded-lg "
               src={kakao}

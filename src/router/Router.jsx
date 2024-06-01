@@ -13,6 +13,8 @@ import AgreePage from '../pages/login/AgreePage';
 import LoginPage from '../pages/login/LoginPage';
 import EditBoardPage from '../pages/Board/EditBoardPage';
 import PostPage from '../pages/Board/PostPage';
+import Oauth from '../pages/login/Oauth';
+// import OauthCallback from '../pages/login/OauthCallback';
 
 const router = createBrowserRouter([
   {
@@ -30,8 +32,10 @@ const router = createBrowserRouter([
       { path: 'mypage/profile', element: <ProfilePage /> },
       { path: 'root/recommend', element: <RootRecommendationPage /> },
       { path: 'root/create', element: <RootCreatePage /> },
-      { path: 'editBoard', element: <EditBoardPage />},
-      { path: 'post/:postId', element: <PostPage />}
+      { path: 'editBoard', element: <EditBoardPage /> },
+      { path: 'post/:postId', element: <PostPage /> },
+      { path: 'oauth', element: <Oauth /> },
+      // { path: 'oauth/kakao/callback', element: <OauthCallback /> },
     ],
   },
 ]);
