@@ -16,5 +16,5 @@ const months = [
 export const formmateDate = (timestamp) => {
   const date = new Date(timestamp);
 
-  return `${date.getDate()} ${months[date.getMonth()]}`;
+  return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
 };

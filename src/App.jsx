@@ -4,6 +4,7 @@ import Header from './components/ui/Header';
 import './index.css';
 import { Outlet, useLocation, Navigate } from 'react-router-dom';
 import useAuth from './Hooks/useAuth'; // useAuth 훅 import
+import ScrollToTop from './components/ScrollToTop';
 
 function App() {
   const location = useLocation();
@@ -21,13 +22,16 @@ function App() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen w-full">
-      <Header />
-      <main className="flex-grow mt-30 flex mx-auto w-full justify-center">
-        <Outlet />
-      </main>
-      {!hideFooter && <Footer />}
-    </div>
+    <>
+      <ScrollToTop />
+      <div className="flex flex-col min-h-screen w-full">
+        <Header />
+        <main className="flex-grow mt-30 flex mx-auto w-full justify-center">
+          <Outlet />
+        </main>
+        {!hideFooter && <Footer />}
+      </div>
+    </>
   );
 }
 

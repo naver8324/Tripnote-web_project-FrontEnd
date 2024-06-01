@@ -76,7 +76,10 @@ export default function Header() {
             </>
           ) : (
             <>
-              <Button onClick={handleLoginClick} className="border-grey-300">
+              <Button
+                onClick={handleLoginClick}
+                className="space-x-2 border-grey-300"
+              >
                 로그인
               </Button>
               <Button
