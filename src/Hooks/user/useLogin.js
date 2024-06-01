@@ -1,9 +1,11 @@
 import { useState } from 'react';
-import api from '../utils/api'; // axios 인스턴스
+import api from '../../utils/api'; // axios 인스턴스
+import useAuthStore from '../../store/useAuthStore'; // Zustand authStore import
 
 const useLogin = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const setIsLoggedIn = useAuthStore((state) => state.setIsLoggedIn);
 
   const login = async (email, password) => {
     setLoading(true);
@@ -14,12 +16,14 @@ const useLogin = () => {
         email: email,
         password: password,
       });
-     
+
       const accessToken = response.headers.authorization;
       localStorage.setItem('accessToken', accessToken);
 
       console.log('Login successful');
       console.log(accessToken);
+
+      setIsLoggedIn(true); // Zustand 상태 업데이트
 
       return accessToken;
     } catch (err) {

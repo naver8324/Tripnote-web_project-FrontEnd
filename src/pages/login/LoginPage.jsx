@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import useLogin from '../../Hooks/useLogin';
-import useLogout from '../../Hooks/useLogout';
+import useLogin from '../../Hooks/user/useLogin';
 import logo from '../../assets/logo-green.png';
 import kakao from '../../assets/kakao.png';
 import naver from '../../assets/naver.png';
@@ -14,7 +13,6 @@ export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { login, loading: loginLoading, error: loginError } = useLogin();
-  const { logout, loading: logoutLoading, error: logoutError } = useLogout();
 
   const handleFindPasswordClick = () => {
     navigate('/findPassword');
@@ -34,15 +32,6 @@ export default function LoginPage() {
       navigate('/');
     } catch (err) {
       console.error('Login failed:', err); // 에러 메시지 출력
-    }
-  };
-  const handleLogoutClick = async () => {
-    try {
-      await logout();
-      // 로그아웃 후 필요한 작업 수행 (예: 메인 페이지로 리다이렉트)
-      window.location.href = '/'; // 메인 페이지로 리다이렉트
-    } catch (err) {
-      console.error('Logout failed:', err); // 로그아웃 실패 시 처리
     }
   };
 
@@ -93,7 +82,6 @@ export default function LoginPage() {
             회원가입
           </span>
         </p>
-        <button onClick={handleLogoutClick}>로그 아웃</button>
 
         <p className="text-lg text-subTitle flex justify-center mb-8">
           SNS간편 로그인

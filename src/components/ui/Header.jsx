@@ -1,12 +1,21 @@
-import React, { useRef } from 'react';
+import React, { useEffect } from 'react';
 import logo from '../../assets/logo-green.png';
 import { Link, useNavigate } from 'react-router-dom';
 import useStore from '../../store/store';
+import useAuthStore from '../../store/useAuthStore'; // Zustand authStore import
 import Button from '../commons/Button';
 
 export default function Header() {
   const setSearchQuery = useStore((state) => state.setSearchQuery);
   const navigate = useNavigate();
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn); // Zustand 상태 구독
+  const setIsLoggedIn = useAuthStore((state) => state.setIsLoggedIn);
+
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+    console.log('accessToken:', token); // 콘솔 로그로 토큰 확인
+    setIsLoggedIn(!!token);
+  }, [setIsLoggedIn]);
 
   const handleLoginClick = () => {
     navigate('/login');
@@ -14,6 +23,16 @@ export default function Header() {
 
   const handleSignupClick = () => {
     navigate('/agree');
+  };
+
+  const handleLogoutClick = () => {
+    if (window.confirm('로그아웃 하시겠습니까?')) {
+      alert('로그아웃 되었습니다.');
+
+      localStorage.removeItem('accessToken');
+      setIsLoggedIn(false);
+      navigate('/');
+    }
   };
 
   const handleSearchClick = () => {
@@ -33,32 +52,41 @@ export default function Header() {
           <img className="w-36 h-auto" src={logo} alt="trip note logo" />
         </Link>
         <nav className="flex items-center gap-4 font-medium">
-          {/* @Todo : Link constans로 뺄 예정 */}
           <Link
             onClick={handleSearchClick}
-            className=" hover:text-prime"
+            className="hover:text-prime"
             to="/root/recommend"
           >
             경로 검색
           </Link>
-          <Link className=" hover:text-prime" to="/root/create">
+          <Link className="hover:text-prime" to="/root/create">
             경로 생성
           </Link>
-          <Link className=" hover:text-prime" to="/mypage">
-            마이페이지
-          </Link>
-          <Link className=" hover:text-prime" to="/board">
+          <Link className="hover:text-prime" to="/board">
             후기
           </Link>
-          <Button onClick={handleLoginClick} className="border-grey-300">
-            로그인
-          </Button>
-          <Button
-            onClick={handleSignupClick}
-            className="border-grey-300 bg-red-400 text-white"
-          >
-            회원가입
-          </Button>
+          {isLoggedIn ? (
+            <>
+              <Link className="hover:text-prime" to="/mypage">
+                마이페이지
+              </Link>
+              <Button onClick={handleLogoutClick} className="border-grey-300">
+                로그아웃
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button onClick={handleLoginClick} className="border-grey-300">
+                로그인
+              </Button>
+              <Button
+                onClick={handleSignupClick}
+                className="border-grey-300 bg-red-400 text-white"
+              >
+                회원가입
+              </Button>
+            </>
+          )}
         </nav>
       </div>
     </header>
