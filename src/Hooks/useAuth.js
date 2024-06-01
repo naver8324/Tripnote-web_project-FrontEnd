@@ -1,17 +1,35 @@
-import { useContext } from 'react';
-import AuthContext from '../Context/AuthContext';
+import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import useAuthStore from '../store/useAuthStore'; // Zustand store import
+
+const privatePaths = ['/mypage', '/mypage/profile'];
+const publicPaths = ['/login', '/signup', '/agree'];
 
 const useAuth = () => {
-  const authContext = useContext(AuthContext);
+  const location = useLocation();
+  const [isAuth, setIsAuth] = useState(false);
+  const { setIsLoggedIn } = useAuthStore();
 
-  const { user, setUser, isAuthenticated, login, logout } = authContext;
+  const getAuthStatus = async () => {
+    const isTokenExist = !!localStorage.getItem('accessToken');
+    setIsAuth(isTokenExist);
+    setIsLoggedIn(isTokenExist); // Zustand store에 인증 상태 기록
+  };
+
+  useEffect(() => {
+    getAuthStatus();
+  }, []);
+
+  useEffect(() => {
+    if (privatePaths.includes(location.pathname)) {
+      getAuthStatus();
+    }
+  }, [location.pathname]);
 
   return {
-    user,
-    setUser,
-    isAuthenticated,
-    login,
-    logout,
+    isAuth,
+    privatePaths,
+    publicPaths,
   };
 };
 
