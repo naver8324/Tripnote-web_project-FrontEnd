@@ -50,6 +50,7 @@ export default function Header() {
           <Link className=" hover:text-prime" to="/board">
             후기
           </Link>
+          <div className='space-x-2'>
           <Button onClick={handleLoginClick} className="border-grey-300">
             로그인
           </Button>
@@ -59,6 +60,7 @@ export default function Header() {
           >
             회원가입
           </Button>
+          </div>
         </nav>
       </div>
     </header>

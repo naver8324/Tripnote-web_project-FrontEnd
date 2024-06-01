@@ -11,7 +11,7 @@ export default function Footer() {
         <img className="w-28 pb-10" src={logoWhite} alt="Elice" />
         <div className="font-medium">
           <h1 className="font-semibold">Team 01</h1>
-          <p>BE - 정유경 김수현 백지민 조부건 정주영</p>
+          <p>BE - 정유경 김수현 백지민 조부건 정주용</p>
           <p className="pb-5">FE - 김도현 오성현</p>
           <p>Elice, cloud track 02</p>
           <p>서울 성동구 아차산로17길 48 성수낙낙 2층 엘리스랩 성수점</p>
