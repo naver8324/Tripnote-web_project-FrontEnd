@@ -38,7 +38,7 @@ const useLogin = () => {
         setError({ message: '오류가 발생했습니다', error: err.message });
       }
 
-      throw err; // 필요한 경우, 이 줄을 유지하여 호출하는 쪽에서 에러를 잡을 수 있게 합니다.
+      throw err;
     } finally {
       setLoading(false);
     }

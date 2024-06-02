@@ -4,7 +4,7 @@ axios.defaults.headers.common['Content-Type'] = 'application/json';
 axios.defaults.timeout = 5000;
 
 const api = axios.create({
-  baseURL: 'baseURL: import.meta.env.VITE_API_BASE_URL',
+  baseURL: import.meta.env.VITE_API_BASE_URL,
 });
 
 api.interceptors.request.use(
