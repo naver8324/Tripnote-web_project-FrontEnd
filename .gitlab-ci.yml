@@ -24,7 +24,7 @@ deploy-to-s3:
   stage: deploy
   script:
     - pip install awscli
-    - aws s3 sync dist $S3_BUCKET
+    - aws s3 sync dist s3://trip-note
   only:
     - dev
   when: manual
