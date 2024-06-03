@@ -1,21 +1,24 @@
 import { useState } from 'react';
-import api from '../../utils/api'; // axios 인스턴스
+import useAxios from '../useAxios';
 import useAuthStore from '../../store/useAuthStore';
 
 const useLogin = () => {
+  const setIsLoggedIn = useAuthStore((state) => state.setIsLoggedIn);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const setIsLoggedIn = useAuthStore((state) => state.setIsLoggedIn);
+
+  const { fetchData } = useAxios({
+    method: 'POST',
+    url: '/login',
+    shouldFetch: false,
+  });
 
   const login = async (email, password) => {
     setLoading(true);
     setError(null);
 
     try {
-      const response = await api.post('/login', {
-        email: email,
-        password: password,
-      });
+      const response = await fetchData({ data: { email, password } });
 
       const accessToken = response.headers.authorization;
       localStorage.setItem('accessToken', accessToken);
