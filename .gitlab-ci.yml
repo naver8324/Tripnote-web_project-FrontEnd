@@ -24,7 +24,7 @@ deploy-to-s3:
   stage: deploy
   script:
     - pip install awscli
-    - aws s3 sync dist s3://trip-note
+    - aws s3 sync dist s3://tripnote.site
   only:
     - dev
   when: manual
