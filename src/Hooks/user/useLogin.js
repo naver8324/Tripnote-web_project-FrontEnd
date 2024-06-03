@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import api from '../../utils/api'; // axios 인스턴스
-import useAuthStore from '../../store/useAuthStore'; // Zustand authStore import
+import useAuthStore from '../../store/useAuthStore';
 
 const useLogin = () => {
   const [loading, setLoading] = useState(false);
