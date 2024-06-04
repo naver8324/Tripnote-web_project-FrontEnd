@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Input from '../../components/commons/Input';
 import Button from '../../components/commons/Button';
 import Navigation from '../../components/Board/Navigation';
 import PostCard from '../../components/Board/PostCard';
 import { useNavigate } from 'react-router-dom';
+import useMemberPosts from '../../Hooks/posts/useMemberPosts';
+import { ToastAlert } from '../../components/commons/ToastAlert';
 
 const mockRegionsTags = [
   '전체',
@@ -38,11 +40,16 @@ const mockThemeTags = [
 
 export default function BoardPage() {
   const [pageState, setPageState] = useState('#전체');
-
   const navigate = useNavigate();
-  const handleButtonClick = () => {
-    navigate('/editBoard');
-  };
+  const [sortOption, setSortOption] = useState('최신순');
+  const { posts, error, loading, refetch } = useMemberPosts(sortOption);
+  const [localPosts, setLocalPosts] = useState(null);
+
+  useEffect(() => {
+    if (posts && posts.content) {
+      setLocalPosts(posts.content);
+    }
+  }, [posts]);
 
   const loadPostByTag = (e) => {
     const tag = e.target.innerText;
@@ -61,9 +68,16 @@ export default function BoardPage() {
       </nav>
       <div className="flex flex-1 w-full mb-16">
         <div className="flex-1 pr-4">
-          <Navigation routes={['최신순', '인기순']}>
-            <PostCard />
-            <p>인기글입니다.</p>
+          <Navigation routes={['최신순', '인기순']} onTabChange={setSortOption}>
+            <>
+              {localPosts === null ? (
+                () => ToastAlert('Loading...', 'info')
+              ) : (
+                localPosts.map((localPost, i) => {
+                  return (<PostCard key={i} contents={localPost} />);
+                })
+              )}
+            </>
           </Navigation>
         </div>
         <div className="min-w-[40%] lg:min-w-[255px] max-w-min border-l border-t border-grey pl-8 pt-8 mt-[87px] max-md:hidden">

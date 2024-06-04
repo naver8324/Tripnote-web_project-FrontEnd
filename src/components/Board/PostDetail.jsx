@@ -8,14 +8,6 @@ import { GoHeartFill } from "react-icons/go";
 import { GoBookmark } from 'react-icons/go';
 import { GoBookmarkFill } from "react-icons/go";
 
-export const postStructure = {
-  title: '',
-  des: '',
-  content: [],
-  tags: [],
-  author: { personalInfo: {} },
-  time: '',
-};
 
 const mockDate = new Date();
 
