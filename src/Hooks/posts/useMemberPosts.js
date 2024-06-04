@@ -1,6 +1,7 @@
 import useAxios from '../useAxios';
 import { useEffect } from 'react';
 
+// 전체 후기 게시물 GET
 const useMemberPosts = (sortOption = 'order', page = 1, size = 6) => {
   const order = sortOption === '최신순' ? 'order' : 'likes';
   const { responseData, error, loading, fetchData } = useAxios({
@@ -10,10 +11,12 @@ const useMemberPosts = (sortOption = 'order', page = 1, size = 6) => {
   });
 
   useEffect(() => {
-    fetchData(); // sortOption이 변경될 때마다 fetchData 호출
+    fetchData();
   }, [sortOption, page, size]);
 
   return { posts: responseData, error, loading, refetch: fetchData };
 };
 
 export default useMemberPosts;
+
+

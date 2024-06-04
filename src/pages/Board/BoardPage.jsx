@@ -6,37 +6,7 @@ import PostCard from '../../components/Board/PostCard';
 import { useNavigate } from 'react-router-dom';
 import useMemberPosts from '../../Hooks/posts/useMemberPosts';
 import { ToastAlert } from '../../components/commons/ToastAlert';
-
-const mockRegionsTags = [
-  '전체',
-  '서울',
-  '부산',
-  '대구',
-  '인천',
-  '광주',
-  '대전',
-  '울산',
-  '세종',
-  '경기',
-  '강원',
-  '충북',
-  '충남',
-  '경북',
-  '경남',
-  '전북',
-  '전남',
-  '제주',
-];
-
-const mockThemeTags = [
-  '혼자여행',
-  '가족과함께',
-  '맛집',
-  '자연',
-  '체험',
-  '트레킹',
-  '쇼핑',
-];
+import useHashTag from '../../Hooks/posts/useHashTag';
 
 export default function BoardPage() {
   const [pageState, setPageState] = useState('#전체');
@@ -44,12 +14,20 @@ export default function BoardPage() {
   const [sortOption, setSortOption] = useState('최신순');
   const { posts, error, loading, refetch } = useMemberPosts(sortOption);
   const [localPosts, setLocalPosts] = useState(null);
+  const { Hashtags } = useHashTag();
+  const [localTags, setLocalTags] = useState([]);
 
   useEffect(() => {
     if (posts && posts.content) {
       setLocalPosts(posts.content);
     }
   }, [posts]);
+
+  useEffect(() => {
+    if (Hashtags) {
+      setLocalTags(Hashtags);
+    }
+  }, [Hashtags]);
 
   const loadPostByTag = (e) => {
     const tag = e.target.innerText;
@@ -59,6 +37,9 @@ export default function BoardPage() {
       setPageState(tag);
     }
   };
+
+  const regionTags = localTags ? localTags.filter(tag => tag.city) : [];
+  const themeTags = localTags ? localTags.filter(tag => !tag.city) : [];
 
   return (
     <section className="min-h-screen mt-40 w-[840px] mx-auto flex flex-col text-title">
@@ -70,13 +51,11 @@ export default function BoardPage() {
         <div className="flex-1 pr-4">
           <Navigation routes={['최신순', '인기순']} onTabChange={setSortOption}>
             <>
-              {localPosts === null ? (
-                () => ToastAlert('Loading...', 'info')
-              ) : (
-                localPosts.map((localPost, i) => {
-                  return (<PostCard key={i} contents={localPost} />);
-                })
-              )}
+              {localPosts === null
+                ? () => ToastAlert('Loading...', 'info')
+                : localPosts.map((localPost, i) => {
+                    return <PostCard key={i} contents={localPost} />;
+                  })}
             </>
           </Navigation>
         </div>
@@ -85,15 +64,15 @@ export default function BoardPage() {
             <div>
               <h1 className="font-medium text-m mb-6">지역별 후기</h1>
               <div className="flex gap-3 flex-wrap">
-                {mockRegionsTags.map((region, i) => (
+                {regionTags.map((region) => (
                   <Button
                     variant="roundButton"
                     size="small"
-                    key={i}
-                    className={`text-xs px-2 ${pageState === region ? 'bg-title text-white' : ''}`}
+                    key={region.id}
+                    className={`text-xs px-2 ${pageState === region.name ? 'bg-title text-white' : ''}`}
                     onClick={loadPostByTag}
                   >
-                    #{region}
+                    #{region.name}
                   </Button>
                 ))}
               </div>
@@ -101,15 +80,15 @@ export default function BoardPage() {
             <div>
               <h1 className="font-medium text-m mb-6">테마별 후기</h1>
               <div className="flex gap-3 flex-wrap">
-                {mockThemeTags.map((theme, i) => (
+                {themeTags.map((theme) => (
                   <Button
                     variant="roundButton"
                     size="small"
-                    key={i}
-                    className={`text-xs px-2 ${pageState === theme ? 'bg-title text-white' : ''}`}
+                    key={theme.id}
+                    className={`text-xs px-2 ${pageState === theme.name ? 'bg-title text-white' : ''}`}
                     onClick={loadPostByTag}
                   >
-                    #{theme}
+                    #{theme.name}
                   </Button>
                 ))}
               </div>
