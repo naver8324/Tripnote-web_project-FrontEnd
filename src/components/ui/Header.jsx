@@ -84,6 +84,7 @@ export default function Header() {
               <Button
                 onClick={handleSignupClick}
                 className="border-grey-300 bg-red-400 text-white"
+                
               >
                 회원가입
               </Button>

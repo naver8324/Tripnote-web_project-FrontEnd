@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import mainImg from '../../assets/travel.jpg';
 import elicelogo from '../../assets/elicelogo.png';
 import seoul from '../../assets/seoul.jpg';
@@ -12,6 +12,7 @@ import useStore from '../../store/store';
 import Button from '../../components/commons/Button';
 import Input from '../../components/commons/Input';
 import Selector from '../../components/Home/Selector';
+import { ToastAlert } from '../../components/commons/ToastAlert';
 
 const regions = [
   { imgSrc: seoul, name: '서울' },
@@ -38,6 +39,8 @@ export default function MainPage() {
 
   const handleButtonClick = () => {
     setScrollSmooth();
+    ToastAlert('test', 'info');
+
   };
 
   return (
