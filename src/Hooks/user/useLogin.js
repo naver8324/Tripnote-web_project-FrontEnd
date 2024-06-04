@@ -1,21 +1,25 @@
 import { useState } from 'react';
-import api from '../../utils/api'; // axios 인스턴스
-import useAuthStore from '../../store/useAuthStore'; // Zustand authStore import
+import useAxios from '../useAxios';
+import useAuthStore from '../../store/useAuthStore';
 
 const useLogin = () => {
+  const setIsLoggedIn = useAuthStore((state) => state.setIsLoggedIn);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const setIsLoggedIn = useAuthStore((state) => state.setIsLoggedIn);
+
+  const { fetchData } = useAxios({
+    method: 'POST',
+    url: '/login',
+    shouldFetch: false,
+  });
 
   const login = async (email, password) => {
     setLoading(true);
     setError(null);
 
     try {
-      const response = await api.post('/login', {
-        email: email,
-        password: password,
-      });
+      const response = await fetchData({ data: { email, password } });
+      console.log('response', response)
 
       const accessToken = response.headers.authorization;
       localStorage.setItem('accessToken', accessToken);
@@ -38,7 +42,7 @@ const useLogin = () => {
         setError({ message: '오류가 발생했습니다', error: err.message });
       }
 
-      throw err; // 필요한 경우, 이 줄을 유지하여 호출하는 쪽에서 에러를 잡을 수 있게 합니다.
+      throw err;
     } finally {
       setLoading(false);
     }

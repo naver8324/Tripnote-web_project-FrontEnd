@@ -10,19 +10,21 @@ const useAxios = ({ method, url, data, shouldFetch }) => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const fetchData = async () => {
+  const fetchData = async (params) => {
     setLoading(true);
     try {
       const response = await axios.request({
         method,
-        url: baseURL + url,
-        data,
+        url,
+        data: params.data,
       });
       setResponseData(response.data);
       setError(null);
+      return response;
     } catch (err) {
       setError(err.message);
       setResponseData(null);
+      throw err;
     } finally {
       setLoading(false);
     }

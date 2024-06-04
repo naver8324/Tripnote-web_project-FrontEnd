@@ -3,7 +3,9 @@ import axios, { isAxiosError } from 'axios';
 axios.defaults.headers.common['Content-Type'] = 'application/json';
 axios.defaults.timeout = 5000;
 
-const api = axios.create({ baseURL: 'http://34.64.39.102:8080' });
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL,
+});
 
 api.interceptors.request.use(
   (req) => {
