@@ -33,7 +33,7 @@ function PhotoMap() {
       ))}
       {selectedPhoto && (
         <NaverMap
-          className="w-[800px] h-screen" // 맵을 전체 화면으로 보여주기 위한 CSS 클래스
+          className="w-[1010px] h-screen" // 맵을 전체 화면으로 보여주기 위한 CSS 클래스
           markers={locationData[selectedPhoto]}
         />
       )}

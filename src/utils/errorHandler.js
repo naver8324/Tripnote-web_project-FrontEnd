@@ -1,38 +1,48 @@
 import { HttpStatusCode, isAxiosError } from 'axios';
+import { ToastAlert } from '../components/commons/ToastAlert';
 
 const errorHandler = (err) => {
   if (isAxiosError(err)) {
     if (err.response) {
       const { status } = err.response;
+      let message = '';
       switch (status) {
-        case 400:
-          err.message = '잘못된 요청입니다 (BadRequest)';
+        case HttpStatusCode.BadRequest:
+          message = '잘못된 요청입니다 (BadRequest)';
           break;
         case HttpStatusCode.Unauthorized:
-          err.message = '인증되지 않았습니다 (Unauthorized)';
+          message = '인증되지 않았습니다 (Unauthorized)';
           break;
-        case 403:
-          err.message = '금지된 요청입니다 (Forbidden)';
+        case HttpStatusCode.Forbidden:
+          message = '금지된 요청입니다 (Forbidden)';
           break;
-        case 404:
-          err.message = '찾을 수 없습니다 (NotFound)';
+        case HttpStatusCode.NotFound:
+          message = '찾을 수 없습니다 (NotFound)';
           break;
-        case 405:
-          err.message = '허용되지 않는 메서드입니다 (MethodNotAllowed)';
+        case HttpStatusCode.MethodNotAllowed:
+          message = '허용되지 않는 메서드입니다 (MethodNotAllowed)';
           break;
-        case 408:
-          err.message = '요청 시간이 초과되었습니다 (RequestTimeout)';
+        case HttpStatusCode.RequestTimeout:
+          message = '요청 시간이 초과되었습니다 (RequestTimeout)';
           break;
         default:
-          err.message = `예기치 않은 오류: ${status}`;
+          message = `예기치 않은 오류: ${status}`;
       }
+      err.message = message;
+      ToastAlert(message, 'error');
     } else if (err.request) {
-      err.message = '응답이 없습니다'; // 요청이 이루어졌으나 응답이 없음
+      const message = '응답이 없습니다'; // 요청이 이루어졌으나 응답이 없음
+      err.message = message;
+      ToastAlert(message, 'error');
     } else {
-      err.message = '오류가 발생했습니다'; // 요청 설정 중 오류 발생
+      const message = '오류가 발생했습니다'; // 요청 설정 중 오류 발생
+      err.message = message;
+      ToastAlert(message, 'error');
     }
   } else {
-    err.message = '네트워크 오류'; // 네트워크 오류
+    const message = '네트워크 오류'; // 네트워크 오류
+    err.message = message;
+    ToastAlert(message, 'error');
   }
   return Promise.reject(err);
 };

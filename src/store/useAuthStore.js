@@ -1,7 +1,7 @@
-import create from 'zustand';
+import { create } from 'zustand';
 
 const useAuthStore = create((set) => ({
-  isAuth: false,
+  isAuth: !!localStorage.getItem('accessToken'),
   setIsAuth: (isAuth) => set({ isAuth }),
   logout: () => {
     localStorage.removeItem('accessToken');

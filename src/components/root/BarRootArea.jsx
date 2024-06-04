@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PostModal from '../Modal/PostModal';
 
-export default function AccordionRootArea() {
+export default function BarRootArea() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const openModal = () => {
