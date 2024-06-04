@@ -2,24 +2,12 @@ import './App.css';
 import Footer from './components/ui/Footer';
 import Header from './components/ui/Header';
 import './index.css';
-import { Outlet, useLocation, Navigate } from 'react-router-dom';
-import useAuth from './Hooks/useAuth'; // useAuth 훅 import
+import { Outlet, useLocation } from 'react-router-dom';
 import ScrollToTop from './components/ScrollToTop';
 
 function App() {
   const location = useLocation();
   const hideFooter = location.pathname.startsWith('/root/');
-  const { isAuth, privatePaths, publicPaths } = useAuth();
-
-  // Private Routes
-  if (!isAuth && privatePaths.includes(location.pathname)) {
-    return <Navigate to="/login" />;
-  }
-
-  // Public Routes
-  if (isAuth && publicPaths.includes(location.pathname)) {
-    return <Navigate to="/" />;
-  }
 
   return (
     <>

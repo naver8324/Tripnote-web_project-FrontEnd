@@ -1,9 +1,12 @@
-import { create } from 'zustand';
+import create from 'zustand';
 
-// Zustand 스토어 생성
 const useAuthStore = create((set) => ({
-  isLoggedIn: !!localStorage.getItem('accessToken'),
-  setIsLoggedIn: (isLoggedIn) => set({ isLoggedIn }),
+  isAuth: false,
+  setIsAuth: (isAuth) => set({ isAuth }),
+  logout: () => {
+    localStorage.removeItem('accessToken');
+    set({ isAuth: false });
+  },
 }));
 
 export default useAuthStore;

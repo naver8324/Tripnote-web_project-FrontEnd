@@ -1,13 +1,7 @@
 import { useEffect, useState } from 'react';
 import api from '../utils/api';
 
-const useAxios = ({
-  method,
-  url,
-  data = {},
-  shouldFetch = false,
-  headers = {},
-}) => {
+const useAxios = ({ method, url, data = {}, shouldFetch = false }) => {
   const [responseData, setResponseData] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -16,13 +10,11 @@ const useAxios = ({
     setLoading(true);
     try {
       console.log('Requesting:', method, url);
-      console.log('Headers:', headers);
       console.log('Data:', data);
       const response = await api.request({
         method,
         url,
         data: params.data || data,
-        headers: params.headers || headers,
       });
       setResponseData(response.data);
       setError(null);

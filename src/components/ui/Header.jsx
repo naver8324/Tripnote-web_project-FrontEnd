@@ -1,21 +1,16 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import logo from '../../assets/logo-green.png';
 import { Link, useNavigate } from 'react-router-dom';
 import useStore from '../../store/store';
 import useAuthStore from '../../store/useAuthStore'; // Zustand authStore import
+import useLogout from '../../Hooks/user/useLogout';
 import Button from '../commons/Button';
 
 export default function Header() {
   const setSearchQuery = useStore((state) => state.setSearchQuery);
   const navigate = useNavigate();
-  const isLoggedIn = useAuthStore((state) => state.isLoggedIn); // Zustand 상태 구독
-  const setIsLoggedIn = useAuthStore((state) => state.setIsLoggedIn);
-
-  useEffect(() => {
-    const token = localStorage.getItem('accessToken');
-    console.log('accessToken:', token); // 콘솔 로그로 토큰 확인
-    setIsLoggedIn(!!token);
-  }, [setIsLoggedIn]);
+  const isAuth = useAuthStore((state) => state.isAuth);
+  const { logout, loading } = useLogout();
 
   const handleLoginClick = () => {
     navigate('/login');
@@ -25,13 +20,13 @@ export default function Header() {
     navigate('/agree');
   };
 
-  const handleLogoutClick = () => {
+  const handleLogoutClick = async () => {
     if (window.confirm('로그아웃 하시겠습니까?')) {
-      alert('로그아웃 되었습니다.');
-
-      localStorage.removeItem('accessToken');
-      setIsLoggedIn(false);
-      navigate('/');
+      const success = await logout();
+      if (success) {
+        alert('로그아웃 되었습니다.');
+        navigate('/');
+      }
     }
   };
 
@@ -65,12 +60,16 @@ export default function Header() {
           <Link className="hover:text-prime" to="/board">
             후기
           </Link>
-          {isLoggedIn ? (
+          {isAuth ? (
             <>
               <Link className="hover:text-prime" to="/mypage">
                 마이페이지
               </Link>
-              <Button onClick={handleLogoutClick} className="border-grey-300">
+              <Button
+                onClick={handleLogoutClick}
+                className="border-grey-300"
+                disabled={loading}
+              >
                 로그아웃
               </Button>
             </>
