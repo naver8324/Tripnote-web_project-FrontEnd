@@ -2,6 +2,8 @@ import React, { useMemo, useState, useRef } from 'react';
 import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import ImageResize from 'quill-image-resize';
+import axios from 'axios'; // axios 임포트
+
 Quill.register('modules/ImageResize', ImageResize);
 
 export default function Editor() {
@@ -10,45 +12,50 @@ export default function Editor() {
 
   const handleImageUpload = async (file) => {
     try {
-      const presignedUrlResponse = await fetch('http://34.64.39.102:8080/api/member/images', {
-        method: 'PUT',
-        body: JSON.stringify({
+      const token = localStorage.getItem('accessToken');
+      console.log(token);
+  
+      const presignedUrlResponse = await axios.put(
+        'http://34.64.39.102:8080/api/member/images',
+        {
           fileName: file.name,
           contentType: file.type,
           contentLength: file.size,
-        }),
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization:
-            'Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3QxMjNAdGVzdC5jb20iLCJyb2xlIjoiUk9MRV9NRU1CRVIiLCJpYXQiOjE3MTcxNTkyMDksImV4cCI6MTcxNzE5NTIwOX0.pruR0omvgPX40zzNT_Ye2oaQrnPcdUJwcdK5Gf1C5Zw',
         },
-      });
-
-      if (!presignedUrlResponse.ok) {
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `${token}`,
+          },
+        },
+      );
+  
+      if (presignedUrlResponse.status !== 200) {
         throw new Error('Failed to get presigned URL');
       }
-
-      const presignedUrl = await presignedUrlResponse.text();
-
-      const uploadResponse = await fetch(presignedUrl, {
-        method: 'PUT',
-        body: file,
+  
+      const presignedUrlData = presignedUrlResponse.data;
+      const { presignedUrl, key } = presignedUrlData;
+      console.log(presignedUrl);
+  
+      // axios로 presigned URL에 PUT 요청
+      const uploadResponse = await axios.put(presignedUrl, file, {
         headers: {
           'Content-Type': file.type,
         },
       });
-
-      if (!uploadResponse.ok) {
+  
+      if (uploadResponse.status !== 200) {
         throw new Error('Failed to upload image');
       }
-
-      return presignedUrl;
+  
+      return presignedUrl.split('?')[0]; // 업로드된 이미지 URL 반환
     } catch (error) {
       console.error('Error uploading image:', error);
       return null;
     }
   };
-
+  
   const imageHandler = async () => {
     const input = document.createElement('input');
     input.setAttribute('type', 'file');
@@ -75,10 +82,9 @@ export default function Editor() {
             if (range !== null && range !== undefined) {
               const quill = QuillRef.current?.getEditor();
               urls.forEach((url) => {
-                const imageUrlString = JSON.stringify(url);
                 quill?.clipboard.dangerouslyPasteHTML(
                   range,
-                  `<img src=${imageUrlString.slice(1, -1)} alt="이미지 태그가 삽입됩니다." />`,
+                  `<img src="${url}" alt="이미지" />`,
                 );
               });
             }
