@@ -20,7 +20,7 @@ const Oauth = () => {
   const kakaoLogin = () => {
     if (window.Kakao && window.Kakao.Auth) {
       window.Kakao.Auth.authorize({
-        redirectUri: 'http://localhost:3000/oauth/kakao/callback', // 리다이렉트 URI 설정
+        redirectUri: 'http://127.0.0.1:5137/oauth/kakao/callback', // 리다이렉트 URI 설정
         scope: 'profile_nickname',
       });
     } else {

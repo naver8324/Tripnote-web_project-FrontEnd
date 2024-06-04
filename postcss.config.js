@@ -9,7 +9,7 @@ export default {
     ...(process.env.NODE_ENV === 'production'
       ? [
           postcssPurgecss({
-            content: ['./src/**/*.html', './src/**/*.js'],
+            content: ['./src/**/*.{html,js,jsx,ts,tsx}'],
             defaultExtractor: (content) =>
               content.match(/[\w-/:]+(?<!:)/g) || [],
           }),

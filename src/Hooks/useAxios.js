@@ -1,30 +1,37 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
+import api from '../utils/api';
 
-axios.defaults.baseURL = 'http://34.64.39.102:8080';
-axios.defaults.headers.common['Content-Type'] = 'application/json';
-axios.defaults.timeout = 5000;
-
-const useAxios = ({ method, url, data, shouldFetch }) => {
+const useAxios = ({
+  method,
+  url,
+  data = {},
+  shouldFetch = false,
+  headers = {},
+}) => {
   const [responseData, setResponseData] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const fetchData = async (params) => {
+  const fetchData = async (params = {}) => {
     setLoading(true);
     try {
-      const response = await axios.request({
+      console.log('Requesting:', method, url);
+      console.log('Headers:', headers);
+      console.log('Data:', data);
+      const response = await api.request({
         method,
         url,
-        data: params.data,
+        data: params.data || data,
+        headers: params.headers || headers,
       });
       setResponseData(response.data);
       setError(null);
       return response;
     } catch (err) {
+      console.error('Request error:', err);
       setError(err.message);
       setResponseData(null);
-      throw err;
+      throw err; // 필요한 경우 호출자에게 에러 전파
     } finally {
       setLoading(false);
     }
