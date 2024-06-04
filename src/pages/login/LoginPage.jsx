@@ -8,6 +8,7 @@ import google from '../../assets/google.png';
 import GhostButton from '../../components/commons/GhostButton';
 import InfoInput from '../../components/commons/InfoInput';
 import Oauth from './Oauth'; // Oauth 컴포넌트 import
+import { ToastAlert } from '../../components/commons/ToastAlert';
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -31,6 +32,8 @@ export default function LoginPage() {
     try {
       await login(email, password);
       console.log('Login successful, navigating to main');
+      ToastAlert('로그인 되었습니다.', 'success');
+
       navigate('/');
     } catch (err) {
       console.error('Login failed:', err);

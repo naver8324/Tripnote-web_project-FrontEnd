@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useProfileStore from '../store/useProfileStore';
 
@@ -12,13 +12,49 @@ const ProfileSet = () => {
     resetNicknameChanged,
   } = useProfileStore();
 
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [errors, setErrors] = useState({ nickname: '', password: '' });
+
   const handleNicknameChange = (e) => {
     setNickname(e.target.value);
+    if (e.target.value.length < 2) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        nickname: '닉네임은 2글자 이상이어야 합니다.',
+      }));
+    } else {
+      setErrors((prevErrors) => ({ ...prevErrors, nickname: '' }));
+    }
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+    if (e.target.value.length < 6) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        password: '비밀번호는 영문과 숫자를 포함하여 8~20자여야 합니다..',
+      }));
+    } else {
+      setErrors((prevErrors) => ({ ...prevErrors, password: '' }));
+    }
+  };
+
+  const handleConfirmPasswordChange = (e) => {
+    setConfirmPassword(e.target.value);
+    if (e.target.value !== password) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        password: '비밀번호가 일치하지 않습니다.',
+      }));
+    } else {
+      setErrors((prevErrors) => ({ ...prevErrors, password: '' }));
+    }
   };
 
   const handleSave = () => {
     // 저장 로직을 여기에 추가
-    console.log('Profile saved:', { email, nickname });
+    console.log('Profile saved:', { email, nickname, password });
     resetNicknameChanged();
   };
 
@@ -26,12 +62,20 @@ const ProfileSet = () => {
     navigate('/mypage');
   };
 
+  const isFormValid = () => {
+    return (
+      nickname.length >= 2 &&
+      password.length >= 6 &&
+      password === confirmPassword
+    );
+  };
+
   return (
     <div className="p-6 w-1/2 mx-auto border m-20 bg-white rounded-lg space-y-6">
       <h1 className="text-2xl mb-4">프로필 설정</h1>
       <form className="space-y-4">
         <div>
-          <label className="block text-subTitle ">이메일</label>
+          <label className="block text-subTitle">이메일</label>
           <input
             type="email"
             value={email}
@@ -47,15 +91,33 @@ const ProfileSet = () => {
             onChange={handleNicknameChange}
             className="w-full h-14 px-3 py-2 border border-gray-300 mb-4 text-xl rounded-lg"
           />
+          {errors.nickname && <p className="text-red-500">{errors.nickname}</p>}
+        </div>
+        <div>
+          <label className="block text-subTitle">비밀번호</label>
+          <input
+            type="password"
+            value={password}
+            onChange={handlePasswordChange}
+            className="w-full h-14 px-3 py-2 border border-gray-300 mb-4 text-xl rounded-lg"
+          />
+        </div>
+        <div>
+          <label className="block text-subTitle">비밀번호 확인</label>
+          <input
+            type="password"
+            value={confirmPassword}
+            onChange={handleConfirmPasswordChange}
+            className="w-full h-14 px-3 py-2 border border-gray-300 mb-4 text-xl rounded-lg"
+          />
+          {errors.password && <p className="text-red-500">{errors.password}</p>}
         </div>
         <div className="space-y-4">
           <button
             type="button"
             onClick={handleSave}
-            disabled={!isNicknameChanged}
-            className={`w-full h-14 px-4 py-2 rounded-lg text-white  ${
-              isNicknameChanged ? 'bg-prime' : 'bg-gray-300'
-            }`}
+            disabled={!isFormValid()}
+            className={`w-full h-14 px-4 py-2 rounded-lg text-white ${isFormValid() ? 'bg-prime' : 'bg-gray-300'}`}
           >
             저장
           </button>

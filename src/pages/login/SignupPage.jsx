@@ -5,6 +5,7 @@ import useSignup from '../../Hooks/user/useSignup';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { ToastAlert } from '../../components/commons/ToastAlert';
 
 export default function SignupPage() {
   const navigate = useNavigate();
@@ -116,6 +117,8 @@ export default function SignupPage() {
     try {
       // 회원가입 요청
       await signup(email, password, nickname);
+      ToastAlert('회원가입이 완료되었습니다.', 'success');
+
       console.log('Signup successful, navigating to login');
       navigate('/login');
     } catch (error) {

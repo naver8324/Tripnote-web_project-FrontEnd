@@ -5,6 +5,7 @@ import useStore from '../../store/store';
 import useAuthStore from '../../store/useAuthStore'; // Zustand authStore import
 import useLogout from '../../Hooks/user/useLogout';
 import Button from '../commons/Button';
+import { ToastAlert } from '../commons/ToastAlert';
 
 export default function Header() {
   const setSearchQuery = useStore((state) => state.setSearchQuery);
@@ -24,7 +25,7 @@ export default function Header() {
     if (window.confirm('로그아웃 하시겠습니까?')) {
       const success = await logout();
       if (success) {
-        alert('로그아웃 되었습니다.');
+        ToastAlert('로그아웃 되었습니다.', 'success');
         navigate('/');
       }
     }
@@ -84,7 +85,6 @@ export default function Header() {
               <Button
                 onClick={handleSignupClick}
                 className="border-grey-300 bg-red-400 text-white"
-                
               >
                 회원가입
               </Button>
