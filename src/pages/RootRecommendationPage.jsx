@@ -8,6 +8,7 @@ import AccordionButton from '../components/Accordion/AccordionButton';
 import AccordionRootSpot from '../components/root/AccordionRootSpot';
 import AccordionRootArea from '../components/root/AccordionRootArea';
 import useTabStore from '../store/useTabStore';
+import PhotoMap from '../components/Map/PhotoMap';
 
 export default function RootRecommendationPage() {
   const [isAccordionOpen, setIsAccordionOpen] = useState(false);
@@ -43,7 +44,8 @@ export default function RootRecommendationPage() {
           {activeIndex === 0 ? <AccordionRootSpot /> : <AccordionRootArea />}
         </Accordion>
       )}
-      <NaverMap className={isAccordionOpen ? 'w-3/5' : 'w-4/5'} />
+
+      <PhotoMap />
     </div>
   );
 }

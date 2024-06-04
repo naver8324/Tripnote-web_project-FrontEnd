@@ -8,7 +8,7 @@ import ProfilePage from '../pages/MyPage/ProfilePage';
 import RootRecommendationPage from '../pages/RootRecommendationPage';
 import RootCreatePage from '../pages/RootCreatePage';
 import SignupPage from '../pages/login/SignupPage';
-import FindPasswordPage from '../pages/login/FindPasswordPage';
+import CheckedPasswordPage from '../pages/login/CheckedPasswordPage';
 import AgreePage from '../pages/login/AgreePage';
 import LoginPage from '../pages/login/LoginPage';
 import EditBoardPage from '../pages/Board/EditBoardPage';
@@ -37,9 +37,10 @@ const router = createBrowserRouter([
         children: [
           { path: 'mypage', element: <MyPage /> },
           { path: 'mypage/profile', element: <ProfilePage /> },
+          { path: 'mypage/checkedpassword', element: <CheckedPasswordPage /> },
         ],
       },
-      { path: 'findPassword', element: <FindPasswordPage /> },
+
       { path: 'board', element: <Board /> },
       { path: 'root/recommend', element: <RootRecommendationPage /> },
       { path: 'root/create', element: <RootCreatePage /> },

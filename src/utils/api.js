@@ -1,4 +1,4 @@
-import axios, { isAxiosError } from 'axios';
+import axios, { isAxiosError, HttpStatusCode } from 'axios';
 import useAuthStore from '../store/useAuthStore';
 import errorHandler from './errorHandler';
 
@@ -35,7 +35,7 @@ api.interceptors.response.use(
     if (
       isAxiosError(error) &&
       error.response &&
-      error.response.status === 401
+      error.response.status === HttpStatusCode.Unauthorized
     ) {
       useAuthStore.getState().logout(); // Zustand store의 로그아웃 함수 호출
     }

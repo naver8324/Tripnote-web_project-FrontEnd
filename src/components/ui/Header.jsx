@@ -52,7 +52,7 @@ export default function Header() {
             className="hover:text-prime"
             to="/root/recommend"
           >
-            경로 검색
+            경로 추천
           </Link>
           <Link className="hover:text-prime" to="/root/create">
             경로 생성

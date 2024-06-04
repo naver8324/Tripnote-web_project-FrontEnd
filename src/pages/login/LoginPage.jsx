@@ -63,9 +63,7 @@ export default function LoginPage() {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        {loginError && (
-          <p className="text-red-500">로그인 오류: {loginError.message}</p>
-        )}
+        {loginError && <p className="text-red-500">로그인에 실패하였습니다.</p>}
         {loginLoading && <p>로그인 중...</p>}
 
         <p

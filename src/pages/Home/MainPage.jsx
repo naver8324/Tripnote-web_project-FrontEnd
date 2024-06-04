@@ -24,7 +24,7 @@ export default function MainPage() {
   const searchQuery = useStore((state) => state.searchQuery);
 
   const setScrollSmooth = () => {
-    if(searchRef) {
+    if (searchRef) {
       searchRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   };
@@ -63,7 +63,7 @@ export default function MainPage() {
               size="large"
               className="bg-white hover:bg-prime text-title hover:text-white text-lg font-semibold px-6 py-2 rounded-full border-2 border-grey-300 hover:border-prime transition-all duration-300"
             >
-              경로 검색
+              경로 추천
             </Button>
           </div>
         </div>

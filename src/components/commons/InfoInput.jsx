@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 export default function InfoInput({ title, type, className, value, onChange }) {
+  useEffect(() => {
+    throw Error('custom error');
+  }, []);
   return (
     <>
       <p className="text-subTitle">{title}</p>

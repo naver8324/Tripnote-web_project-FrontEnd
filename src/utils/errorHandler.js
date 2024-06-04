@@ -1,4 +1,4 @@
-import { isAxiosError } from 'axios';
+import { HttpStatusCode, isAxiosError } from 'axios';
 
 const errorHandler = (err) => {
   if (isAxiosError(err)) {
@@ -8,7 +8,7 @@ const errorHandler = (err) => {
         case 400:
           err.message = '잘못된 요청입니다 (BadRequest)';
           break;
-        case 401:
+        case HttpStatusCode.Unauthorized:
           err.message = '인증되지 않았습니다 (Unauthorized)';
           break;
         case 403:
