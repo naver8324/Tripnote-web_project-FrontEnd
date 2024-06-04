@@ -1,10 +1,25 @@
 import React from 'react';
+import useMemberPosts from '../../Hooks/posts/useMemberPosts';
 
 const MyReview = () => {
+  const { posts, error, loading, refetch } = useMemberPosts(1, 6);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>{error}</p>;
+
   return (
     <div>
-      <h2 className="text-2xl font-bold">나의 여행후기 컴포넌트</h2>
-      {/* 추가적인 내용이나 UI 요소들을 여기에 추가하세요 */}
+      <h1>Member Posts</h1>
+      <button onClick={refetch}>Refresh</button>
+      {posts && posts.length > 0 ? (
+        <ul>
+          {posts.map((post) => (
+            <li key={post.id}>{post.title}</li>
+          ))}
+        </ul>
+      ) : (
+        <p>No posts available.</p>
+      )}
     </div>
   );
 };
