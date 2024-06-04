@@ -2,8 +2,8 @@ import useAxios from '../useAxios';
 import useAuthStore from '../../store/useAuthStore';
 
 const useLogin = () => {
-  const setIsLoggedIn = useAuthStore((state) => state.setIsLoggedIn);
-  const { fetchData, responseData, error, loading } = useAxios({
+  const setIsAuth = useAuthStore((state) => state.setIsAuth);
+  const { fetchData, error, loading } = useAxios({
     method: 'POST',
     url: '/login',
     shouldFetch: false,
@@ -19,7 +19,7 @@ const useLogin = () => {
       console.log('Login successful');
       console.log(accessToken);
 
-      setIsLoggedIn(true); // Zustand 상태 업데이트
+      setIsAuth(true); // Zustand 상태 업데이트
 
       return accessToken;
     } catch (err) {

@@ -14,6 +14,7 @@ import LoginPage from '../pages/login/LoginPage';
 import EditBoardPage from '../pages/Board/EditBoardPage';
 import PostPage from '../pages/Board/PostPage';
 import Oauth from '../pages/login/Oauth';
+import useAuth, { PrivateRoute, PublicRoute } from '../Hooks/useAuth';
 // import OauthCallback from '../pages/login/OauthCallback'; // OauthCallback 컴포넌트 import
 
 const router = createBrowserRouter([
@@ -23,13 +24,23 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       { index: true, element: <MainPage /> },
-      { path: 'login', element: <LoginPage /> },
-      { path: 'agree', element: <AgreePage /> },
-      { path: 'signup', element: <SignupPage /> },
+      {
+        element: <PublicRoute />,
+        children: [
+          { path: 'login', element: <LoginPage /> },
+          { path: 'agree', element: <AgreePage /> },
+          { path: 'signup', element: <SignupPage /> },
+        ],
+      },
+      {
+        element: <PrivateRoute />,
+        children: [
+          { path: 'mypage', element: <MyPage /> },
+          { path: 'mypage/profile', element: <ProfilePage /> },
+        ],
+      },
       { path: 'findPassword', element: <FindPasswordPage /> },
       { path: 'board', element: <Board /> },
-      { path: 'mypage', element: <MyPage /> },
-      { path: 'mypage/profile', element: <ProfilePage /> },
       { path: 'root/recommend', element: <RootRecommendationPage /> },
       { path: 'root/create', element: <RootCreatePage /> },
       { path: 'editBoard', element: <EditBoardPage /> },
