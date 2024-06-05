@@ -5,7 +5,7 @@ const useMemberInfo = () => {
   const { fetchData, loading, error } = useAxios({
     method: 'GET',
     url: '/api/member',
-    shouldFetch: true,
+    shouldFetch: false,
   });
   const setEmail = useUserStore((state) => state.setEmail);
   const setNickname = useUserStore((state) => state.setNickname);

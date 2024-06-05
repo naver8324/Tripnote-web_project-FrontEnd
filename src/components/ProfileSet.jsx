@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useUserStore from '../store/useUserStore';
 import useMemberInfo from '../Hooks/user/useMemberInfo';
+import useInfoUpdate from '../Hooks/user/useInfoUpdate'; // 새로운 훅 임포트
+import { toast } from 'react-toastify';
+import { ToastAlert } from './commons/ToastAlert';
 
 const ProfileSet = () => {
   const navigate = useNavigate();
@@ -14,6 +17,7 @@ const ProfileSet = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errors, setErrors] = useState({ nickname: '', password: '' });
   const { memberInfo } = useMemberInfo();
+  const { updateInfo } = useInfoUpdate(); // 새로운 훅 사용
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,7 +31,7 @@ const ProfileSet = () => {
     };
 
     fetchData();
-  }, [memberInfo, setEmail, setNickname]);
+  }, [setEmail, setNickname]);
 
   const handleNicknameChange = (e) => {
     setNickname(e.target.value);
@@ -65,10 +69,22 @@ const ProfileSet = () => {
     }
   };
 
-  const handleSave = () => {
-    // 저장 로직을 여기에 추가
-    console.log('Profile saved:', { email, nickname, password });
-    resetUser();
+  const handleSave = async () => {
+    const data = {
+      nickname,
+    };
+    if (password.length >= 8) {
+      data.password = password;
+    }
+    try {
+      await updateInfo(data);
+      ToastAlert('정보 수정이 완료되었습니다.', 'success');
+      console.log('Profile saved:', data);
+      resetUser();
+      navigate('/mypage');
+    } catch (err) {
+      console.error('Error saving profile:', err);
+    }
   };
 
   const handleGoBack = () => {
@@ -78,8 +94,8 @@ const ProfileSet = () => {
   const isFormValid = () => {
     return (
       nickname.length >= 2 &&
-      password.length >= 8 &&
-      password === confirmPassword
+      (password.length === 0 || password.length >= 8) &&
+      (password.length === 0 || password === confirmPassword)
     );
   };
 
