@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import useMemberPosts from '../../Hooks/posts/useMemberPosts';
 import { ToastAlert } from '../../components/commons/ToastAlert';
 import useHashTag from '../../Hooks/posts/useHashTag';
+import Spinner from '../../components/commons/Spinner';
 
 export default function BoardPage() {
   const [pageState, setPageState] = useState('#전체');
@@ -55,7 +56,7 @@ export default function BoardPage() {
           <Navigation routes={['최신순', '인기순']} onTabChange={setSortOption}>
             <>
               {localPosts === null
-                ? <div>Loading...</div>
+                ? <Spinner />
                 : localPosts.map((localPost, index) => {
                     return <PostCard key={`${localPost.id}-${index}`} contents={localPost} />;
                   })}
