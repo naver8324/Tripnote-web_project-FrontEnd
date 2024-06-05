@@ -15,6 +15,7 @@ import EditBoardPage from '../pages/Board/EditBoardPage';
 import PostPage from '../pages/Board/PostPage';
 import Oauth from '../pages/login/Oauth';
 import useAuth, { PrivateRoute, PublicRoute } from '../Hooks/useAuth';
+import FindPassword from '../pages/login/FindPasswordPage';
 // import OauthCallback from '../pages/login/OauthCallback'; // OauthCallback 컴포넌트 import
 
 const router = createBrowserRouter([
@@ -40,7 +41,7 @@ const router = createBrowserRouter([
           { path: 'mypage/checkedpassword', element: <CheckedPasswordPage /> },
         ],
       },
-
+      { path: 'findpassword', element: <FindPassword /> },
       { path: 'board', element: <Board /> },
       { path: 'root/recommend', element: <RootRecommendationPage /> },
       { path: 'root/create', element: <RootCreatePage /> },
