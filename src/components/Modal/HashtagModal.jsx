@@ -9,16 +9,10 @@ const HashtagModal = ({
   onRequestClose,
   submitInput,
   hashtagName,
+  setHashtagName,
   hashtagCity,
+  setHashtagCity,
 }) => {
-  const [newHashtagName, setNewHashtagName] = useState('');
-  const [newHashtagCity, setNewHashtagCity] = useState(null);
-
-  useEffect(() => {
-    setNewHashtagName(hashtagName);
-    setNewHashtagCity(hashtagCity);
-  }, [hashtagName, hashtagCity]);
-
   return (
     <Modal
       isOpen={isOpen}
@@ -35,7 +29,7 @@ const HashtagModal = ({
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              submitInput(newHashtagName, newHashtagCity);
+              submitInput(hashtagName, hashtagCity);
               onRequestClose();
             }}
           >
@@ -43,16 +37,16 @@ const HashtagModal = ({
             <InfoInput
               title="해시태그 이름"
               type="text"
-              value={newHashtagName}
+              value={hashtagName}
               onChange={(e) => {
-                setNewHashtagName(e.target.value);
+                setHashtagName(e.target.value);
               }}
             />
             <label htmlFor="selectOption">옵션 선택:</label>
             <select
               id="selectOption"
-              value={newHashtagCity}
-              onChange={(e) => setNewHashtagCity(e.target.value)}
+              value={hashtagCity}
+              onChange={(e) => setHashtagCity(e.target.value)}
             >
               <option value={true}>지역</option>
               <option value={false}>지역 외</option>
