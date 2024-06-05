@@ -1,22 +1,28 @@
-import React from 'react';
 import useAxios from '../useAxios';
+import useUserStore from '../../store/useUserStore';
 
-const useMemberInfe = () => {
+const useMemberInfo = () => {
   const { fetchData, loading, error } = useAxios({
     method: 'GET',
     url: '/api/member',
     shouldFetch: true,
   });
+  const setEmail = useUserStore((state) => state.setEmail);
+  const setNickname = useUserStore((state) => state.setNickname);
 
   const memberInfo = async () => {
     try {
       const response = await fetchData();
-      console.log(response.data);
+      setEmail(response.data.email);
+      setNickname(response.data.nickname);
+      return response.data;
     } catch (err) {
       console.error(err);
       throw err;
     }
   };
+
   return { memberInfo, loading, error };
 };
-export default useMemberInfe;
+
+export default useMemberInfo;

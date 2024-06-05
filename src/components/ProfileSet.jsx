@@ -1,20 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useProfileStore from '../store/useProfileStore';
+import useUserStore from '../store/useUserStore';
+import useMemberInfo from '../Hooks/user/useMemberInfo';
 
 const ProfileSet = () => {
   const navigate = useNavigate();
-  const {
-    email,
-    nickname,
-    isNicknameChanged,
-    setNickname,
-    resetNicknameChanged,
-  } = useProfileStore();
-
+  const email = useUserStore((state) => state.email);
+  const nickname = useUserStore((state) => state.nickname);
+  const setEmail = useUserStore((state) => state.setEmail);
+  const setNickname = useUserStore((state) => state.setNickname);
+  const resetUser = useUserStore((state) => state.resetUser);
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errors, setErrors] = useState({ nickname: '', password: '' });
+  const { memberInfo } = useMemberInfo();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await memberInfo();
+        setEmail(data.email);
+        setNickname(data.nickname);
+      } catch (err) {
+        console.error('Error fetching member info:', err);
+      }
+    };
+
+    fetchData();
+  }, [memberInfo, setEmail, setNickname]);
 
   const handleNicknameChange = (e) => {
     setNickname(e.target.value);
@@ -30,10 +43,10 @@ const ProfileSet = () => {
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
-    if (e.target.value.length < 6) {
+    if (e.target.value.length < 8) {
       setErrors((prevErrors) => ({
         ...prevErrors,
-        password: '비밀번호는 영문과 숫자를 포함하여 8~20자여야 합니다..',
+        password: '비밀번호는 영문과 숫자를 포함하여 8~20자여야 합니다.',
       }));
     } else {
       setErrors((prevErrors) => ({ ...prevErrors, password: '' }));
@@ -55,7 +68,7 @@ const ProfileSet = () => {
   const handleSave = () => {
     // 저장 로직을 여기에 추가
     console.log('Profile saved:', { email, nickname, password });
-    resetNicknameChanged();
+    resetUser();
   };
 
   const handleGoBack = () => {
@@ -65,7 +78,7 @@ const ProfileSet = () => {
   const isFormValid = () => {
     return (
       nickname.length >= 2 &&
-      password.length >= 6 &&
+      password.length >= 8 &&
       password === confirmPassword
     );
   };
