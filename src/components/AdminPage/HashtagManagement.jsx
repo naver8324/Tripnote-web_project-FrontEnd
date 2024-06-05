@@ -68,12 +68,17 @@ const HashtagManagement = () => {
       setHashtags((prevHashtags) =>
         prevHashtags.map((hashtag) =>
           hashtag.id === hashtagIndex
-            ? { ...hashtag, name: newHashtagName, city: newHashtagCity }
+            ? {
+                ...hashtag,
+                name: newHashtagName,
+                city: newHashtagCity === 'true',
+              }
             : hashtag,
         ),
       );
       setHashtagName('');
       setHashtagCity(null);
+      setHashtagIndex(null);
       return;
     }
 
@@ -98,12 +103,18 @@ const HashtagManagement = () => {
 
     setHashtags((prevHashtags) => [
       ...prevHashtags,
-      { id: newHashtag.id, name: newHashtagName, city: newHashtagCity },
+      {
+        id: newHashtag.id,
+        name: newHashtagName,
+        city: newHashtagCity === 'true',
+      },
     ]);
 
     console.log(newHashtag);
+
     setHashtagName('');
     setHashtagCity(null);
+    setHashtagIndex(null);
   };
 
   const handleDeleteHashtag = (deletedHashtagIndex) => {
@@ -125,11 +136,54 @@ const HashtagManagement = () => {
     deleteHashtag();
 
     setHashtags((prevHashtags) =>
-      prevHashtags.filter((hashtag) => hashtag.id !== deletedHashtagIndex),
+      prevHashtags.map((hashtag) =>
+        hashtag.id === deletedHashtagIndex
+          ? {
+              ...hashtag,
+              delete: !hashtag.delete,
+            }
+          : hashtag,
+      ),
     );
 
     setHashtagName('');
     setHashtagCity(null);
+    setHashtagIndex(null);
+  };
+
+  const renderHashtags = () => {
+    return hashtags.map((hashtag) => (
+      <tr>
+        <th>{hashtag.name}</th>
+        <th>{hashtag.city ? 'Yes' : 'No'} </th>
+        <th>{hashtag.delete ? 'Yes' : 'No'}</th>
+        <th>
+          <Button
+            variant={'nomalButton'}
+            size={'medium'}
+            onClick={(prev) => {
+              setHashtagName(hashtag.name);
+              setHashtagIndex(hashtag.id);
+              setHashtagCity(hashtag.city);
+              setHashtagModalIsOpen(true);
+            }}
+          >
+            수정
+          </Button>
+        </th>
+        <th>
+          <Button
+            variant={'nomalButton'}
+            size={'medium'}
+            onClick={(prev) => {
+              handleDeleteHashtag(hashtag.id);
+            }}
+          >
+            {!hashtag.delete ? '삭제' : '복원'}
+          </Button>
+        </th>
+      </tr>
+    ));
   };
 
   return (
@@ -149,38 +203,7 @@ const HashtagManagement = () => {
             </thead>
             <tbody>
               {hashtags !== null && hashtags.length > 0 ? (
-                hashtags.map((hashtag) => (
-                  <tr>
-                    <th>{hashtag.name}</th>
-                    <th>{hashtag.city ? 'Yes' : 'No'}</th>
-                    <th>{hashtag.delete ? 'Yes' : 'No'}</th>
-                    <th>
-                      <Button
-                        variant={'nomalButton'}
-                        size={'medium'}
-                        onClick={(prev) => {
-                          setHashtagName(hashtag.name);
-                          setHashtagIndex(hashtag.id);
-                          setHashtagCity(hashtag.city);
-                          setHashtagModalIsOpen(true);
-                        }}
-                      >
-                        수정
-                      </Button>
-                    </th>
-                    <th>
-                      <Button
-                        variant={'nomalButton'}
-                        size={'medium'}
-                        onClick={(prev) => {
-                          handleDeleteHashtag(hashtag.id);
-                        }}
-                      >
-                        삭제
-                      </Button>
-                    </th>
-                  </tr>
-                ))
+                renderHashtags()
               ) : (
                 <tr>No hashtags found.</tr>
               )}
@@ -198,11 +221,16 @@ const HashtagManagement = () => {
           <HashtagModal
             isOpen={hashtagModalIsOpen}
             onRequestClose={() => {
+              setHashtagName('');
+              setHashtagIndex(null);
+              setHashtagCity(null);
               setHashtagModalIsOpen(false);
             }}
             submitInput={submitInput}
             hashtagName={hashtagName}
+            setHashtagName={setHashtagName}
             hashtagCity={hashtagCity}
+            setHashtagCity={setHashtagCity}
           ></HashtagModal>
         </>
       }
