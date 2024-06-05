@@ -4,7 +4,6 @@ import { formmateDate } from '../../utils/date';
 import { Link } from 'react-router-dom';
 import mockImg from '../../assets/busan.jpg';
 
-const mockHashtag = ['서울', '혼자여행'];
 
 export default function PostCard({ contents }) {
   const { nickname, createdAt, title, content, hashtagResponseDTOList } = contents;
@@ -28,9 +27,9 @@ export default function PostCard({ contents }) {
         <p className="my-3 leading-6 line-clamp-3 max-sm:hidden md:max-[1100px]:hidden">
           {content}
         </p>
-        <div className="flex gap-4 mt-7">
-          {(hashtagResponseDTOList || []).map((hashtag) => (
-            <span key={hashtag.id} className="text-sm py-1 px-4 rounded-full bg-gray-100">
+        <div className="flex gap-4 mt-7 flex flex-wrap">
+          {(hashtagResponseDTOList || []).map((hashtag, index) => (
+            <span key={`${hashtag.id}-${index}`} className="text-sm py-1 px-4 rounded-full bg-gray-100">
               #{hashtag.name}
             </span>
           ))}

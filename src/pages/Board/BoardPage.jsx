@@ -31,8 +31,11 @@ export default function BoardPage() {
 
   const loadPostByTag = (e) => {
     const tag = e.target.innerText;
+    setLocalPosts(null);
+
     if (pageState === tag) {
       setPageState('#전체');
+      return;
     } else {
       setPageState(tag);
     }
@@ -52,9 +55,9 @@ export default function BoardPage() {
           <Navigation routes={['최신순', '인기순']} onTabChange={setSortOption}>
             <>
               {localPosts === null
-                ? () => ToastAlert('Loading...', 'info')
-                : localPosts.map((localPost, i) => {
-                    return <PostCard key={i} contents={localPost} />;
+                ? <div>Loading...</div>
+                : localPosts.map((localPost, index) => {
+                    return <PostCard key={`${localPost.id}-${index}`} contents={localPost} />;
                   })}
             </>
           </Navigation>
@@ -64,12 +67,12 @@ export default function BoardPage() {
             <div>
               <h1 className="font-medium text-m mb-6">지역별 후기</h1>
               <div className="flex gap-3 flex-wrap">
-                {regionTags.map((region) => (
+                {regionTags.map((region, index) => (
                   <Button
                     variant="roundButton"
                     size="small"
-                    key={region.id}
-                    className={`text-xs px-2 ${pageState === region.name ? 'bg-title text-white' : ''}`}
+                    key={`region-${region.id}-${index}`}
+                    className={`text-xs px-2 ${pageState === `#${region.name}` ? 'bg-title text-white' : ''}`}
                     onClick={loadPostByTag}
                   >
                     #{region.name}
@@ -80,12 +83,12 @@ export default function BoardPage() {
             <div>
               <h1 className="font-medium text-m mb-6">테마별 후기</h1>
               <div className="flex gap-3 flex-wrap">
-                {themeTags.map((theme) => (
+                {themeTags.map((theme, index) => (
                   <Button
                     variant="roundButton"
                     size="small"
-                    key={theme.id}
-                    className={`text-xs px-2 ${pageState === theme.name ? 'bg-title text-white' : ''}`}
+                    key={`theme-${theme.id}-${index}`}
+                    className={`text-xs px-2 ${pageState === `#${theme.name}` ? 'bg-title text-white' : ''}`}
                     onClick={loadPostByTag}
                   >
                     #{theme.name}

@@ -28,7 +28,7 @@ export default function Navigation({ routes, defaultIndex = 0, children, onTabCh
           return (
             <button
               ref={i === defaultIndex ? activeTab : null}
-              key={i}
+              key={`${route}-${i}`}
               className={
                 'p-4 px-5 ' +
                 (navIndex === i ? 'text-title' : 'text-gray-300')
