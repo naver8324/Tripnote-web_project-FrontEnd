@@ -6,6 +6,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { ToastAlert } from '../../components/commons/ToastAlert';
+import useSendEmail from '../../Hooks/email/useSendEmail';
+import useCheckedEmail from '../../Hooks/email/useCheckedEmail';
 
 export default function SignupPage() {
   const navigate = useNavigate();
@@ -21,7 +23,14 @@ export default function SignupPage() {
   const [verificationCode, setVerificationCode] = useState('');
   const [verificationSent, setVerificationSent] = useState(false);
   const [timer, setTimer] = useState(0);
+  const [isVerified, setIsVerified] = useState(false); // 이메일 인증 상태 추가
   const { signup, loading, error } = useSignup();
+  const { SendEmail, loading: sendLoading, error: sendError } = useSendEmail();
+  const {
+    checkEmail,
+    loading: checkLoading,
+    error: checkError,
+  } = useCheckedEmail();
 
   useEffect(() => {
     let countdown;
@@ -76,7 +85,11 @@ export default function SignupPage() {
       } else {
         setEmailError('사용 가능한 이메일입니다.');
         setEmailErrorColor('prime');
+
         // 인증번호 발송
+        ToastAlert('이메일 인증번호를 전송중입니다.', 'info');
+        await SendEmail(email);
+
         setVerificationSent(true);
         setTimer(180); // 3분 카운트다운
       }
@@ -87,20 +100,30 @@ export default function SignupPage() {
     }
   };
 
-  const handleVerifyCode = () => {
-    // 인증번호 확인 로직 추가
-    console.log('인증번호 확인:', verificationCode);
-    // 예: 서버에 인증번호 확인 요청
-    // 인증 성공 시:
-    // navigate('/next-step'); // 다음 단계로 이동
+  const handleVerifyCode = async () => {
+    try {
+      const result = await checkEmail(email, verificationCode);
+      if (result) {
+        ToastAlert('이메일 인증이 완료되었습니다.', 'success');
+        setEmailError('이메일 인증이 완료되었습니다.');
+        setEmailErrorColor('prime');
+        setTimer(0); // 타이머 멈추기
+        setIsVerified(true); // 인증 완료 상태 업데이트
+      } else {
+        setEmailError('인증번호가 올바르지 않습니다.');
+        setEmailErrorColor('red-500');
+      }
+    } catch (error) {
+      console.error('Error while verifying code:', error);
+      setEmailError('인증번호 확인 중 오류가 발생했습니다.');
+      setEmailErrorColor('red-500');
+    }
   };
 
   const handleSignup = async () => {
     console.log('가입하기 클릭됨');
     // 닉네임 중복 확인
     await handleCheckNickname();
-    // 이메일 중복 확인
-    await handleCheckEmail();
 
     // 비밀번호 확인
     if (password !== confirmPassword) {
@@ -111,6 +134,13 @@ export default function SignupPage() {
     const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$/;
     if (!passwordRegex.test(password)) {
       setPasswordError('비밀번호는 영문과 숫자를 포함하여 8~20자여야 합니다.');
+      return;
+    }
+
+    // 이메일 인증 확인
+    if (!isVerified) {
+      setEmailError('이메일 인증이 필요합니다.');
+      setEmailErrorColor('red-500');
       return;
     }
 
@@ -145,7 +175,12 @@ export default function SignupPage() {
             />
           </div>
           <button
-            className="w-1/4 h-14 bg-prime text-white p-2 rounded-lg"
+            className={`w-1/4 h-14 bg-prime text-white p-2 rounded-lg ${
+              isVerified === true
+                ? 'bg-gray-400 text-gray-600'
+                : 'bg-prime text-white'
+            }`}
+            disabled={isVerified === true}
             onClick={handleCheckEmail}
           >
             {verificationSent ? '재전송' : '인증번호 전송'}
@@ -243,6 +278,7 @@ export default function SignupPage() {
           title="가입하기"
           className={'mt-6'}
           onClick={handleSignup}
+          disabled={!isVerified} // 이메일 인증 완료되기 전까지 비활성화
         />
         <div className="text-center">
           <Link
