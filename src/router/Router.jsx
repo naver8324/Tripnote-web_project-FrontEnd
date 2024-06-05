@@ -16,7 +16,7 @@ import PostPage from '../pages/Board/PostPage';
 import Oauth from '../pages/login/Oauth';
 import useAuth, { PrivateRoute, PublicRoute } from '../Hooks/useAuth';
 import FindPassword from '../pages/login/FindPasswordPage';
-// import OauthCallback from '../pages/login/OauthCallback'; // OauthCallback 컴포넌트 import
+// import KakaoCallback from '../Hooks/user/KakaoCallback';
 
 const router = createBrowserRouter([
   {
@@ -48,7 +48,7 @@ const router = createBrowserRouter([
       { path: 'editBoard', element: <EditBoardPage /> },
       { path: 'post/:postId', element: <PostPage /> },
       { path: 'oauth', element: <Oauth /> },
-      // { path: 'oauth/kakao/callback', element: <OauthCallback /> }, // OauthCallback 경로 추가
+      // { path: 'oauth/kakao/callback', element: <KakaoCallback /> }, // OauthCallback 경로 추가
     ],
   },
 ]);

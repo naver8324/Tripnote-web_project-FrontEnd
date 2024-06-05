@@ -1,34 +1,21 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 const Oauth = () => {
-  useEffect(() => {
-    const script = document.createElement('script'); // 카카오 SDK 스크립트를 동적으로 추가합니다.
-    script.src = 'https://developers.kakao.com/sdk/js/kakao.js';
-    script.async = true;
-    script.onload = () => {
-      if (window.Kakao && !window.Kakao.isInitialized()) {
-        window.Kakao.init('7e90d9896faf841ce94bfd30af01b939'); // 카카오 SDK 초기화
-      }
-    };
-    document.head.appendChild(script);
-
-    return () => {
-      document.head.removeChild(script);
-    };
-  }, []);
-
   const kakaoLogin = () => {
-    if (window.Kakao && window.Kakao.Auth) {
-      window.Kakao.Auth.authorize({
-        redirectUri: 'http://127.0.0.1:5137/oauth/kakao/callback', // 리다이렉트 URI 설정
-        scope: 'profile_nickname',
-      });
-    } else {
-      console.error('Kakao SDK not loaded yet.');
-    }
+    const clientId = 'adf026fc50031769a1d948578419e6b3';
+    const redirectUri = encodeURIComponent(
+      'http://34.64.39.102:8080/api/member/kakao/callback',
+    ); // 백엔드에서 처리할 콜백 URI로 설정
+    const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}`;
+
+    window.location.href = kakaoAuthUrl;
   };
 
-  return { kakaoLogin }; // kakaoLogin 함수 반환
+  return (
+    <div>
+      <button onClick={kakaoLogin}>카카오 로그인</button>
+    </div>
+  );
 };
 
 export default Oauth;
