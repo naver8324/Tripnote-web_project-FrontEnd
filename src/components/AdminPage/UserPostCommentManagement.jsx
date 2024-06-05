@@ -1,6 +1,6 @@
 import React from 'react';
 
-const AllPosts = () => {
+const UserPostCommentManagement = () => {
   return (
     <div>
       <h2 className="text-2xl font-bold">내가 찜한 여행후기 컴포넌트</h2>
@@ -9,4 +9,4 @@ const AllPosts = () => {
   );
 };
 
-export default AllPosts;
+export default UserPostCommentManagement;
