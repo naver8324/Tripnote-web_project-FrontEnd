@@ -19,7 +19,7 @@ export default function NaverMap({ className, markers }) {
           markers[0].latitude,
           markers[0].longitude,
         ),
-        zoom: 13,
+        zoom: 14,
       };
       const map = new window.naver.maps.Map('map', mapOptions);
       setNaverMap(map); // 상태로 네이버 맵 인스턴스 저장
