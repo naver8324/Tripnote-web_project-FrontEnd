@@ -16,6 +16,8 @@ import PostPage from '../pages/Board/PostPage';
 import Oauth from '../pages/login/Oauth';
 // import OauthCallback from '../pages/login/OauthCallback'; // OauthCallback 컴포넌트 import
 import AdminPage from '../pages/AdminPage/AdminPage';
+import AdminLogin from "../pages/login/AdminLogin.jsx";
+import PrivateRoute from "./PrivateRoute.jsx";
 
 const router = createBrowserRouter([
   {
@@ -37,7 +39,8 @@ const router = createBrowserRouter([
       { path: 'post/:postId', element: <PostPage /> },
       { path: 'oauth', element: <Oauth /> },
       // { path: 'oauth/kakao/callback', element: <OauthCallback /> }, // OauthCallback 경로 추가
-      { path: 'admin', element: <AdminPage /> },
+      { path: 'admin', element: <PrivateRoute><AdminPage /></PrivateRoute> },
+      { path: 'admin/login', element: <AdminLogin /> },
     ],
   },
 ]);

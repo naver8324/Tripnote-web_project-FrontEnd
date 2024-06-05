@@ -8,7 +8,8 @@ import ScrollToTop from './components/ScrollToTop';
 
 function App() {
   const location = useLocation();
-  const hideFooter = location.pathname.startsWith('/root/');
+  const hideHeader = location.pathname.startsWith('/admin');
+  const hideFooter = ['/root/', '/admin'].some(prefix => location.pathname.startsWith(prefix));
   const { isAuth, privatePaths, publicPaths } = useAuth();
 
   // Private Routes
@@ -25,7 +26,7 @@ function App() {
     <>
       <ScrollToTop />
       <div className="flex flex-col min-h-screen w-full">
-        <Header />
+        {!hideHeader && <Header />}
         <main className="flex-grow mt-30 flex mx-auto w-full justify-center">
           <Outlet />
         </main>

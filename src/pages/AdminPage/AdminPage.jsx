@@ -8,12 +8,16 @@ import UserPostCommentManagement from '../../components/AdminPage/UserPostCommen
 export default function AdminPage() {
   return (
     <>
-      <div className="m-40 min-h-[1200px] bg-white rounded-lg p-6 flex flex-col items-center">
-        <Tabs>
-          <Tabs.Tab index={0}>유저 관리</Tabs.Tab>
-          <Tabs.Tab index={1}>해쉬태그 관리</Tabs.Tab>
-          <Tabs.Tab index={2}>전체 게시글/댓글 관리</Tabs.Tab>
-          <Tabs.Tab index={3}>유저 게시글/댓글 관리</Tabs.Tab>
+      <div className="m-50 min-w-[1200px] min-h-[1200px] bg-white rounded-lg p-6 flex flex-col items-center">
+        <div>
+          <Tabs className="w-full flex justify-center">
+            <Tabs.Tab index={0}>유저 관리</Tabs.Tab>
+            <Tabs.Tab index={1}>해쉬태그 관리</Tabs.Tab>
+            <Tabs.Tab index={2}>전체 게시글/댓글 관리</Tabs.Tab>
+            <Tabs.Tab index={3}>유저 게시글/댓글 관리</Tabs.Tab>
+          </Tabs>
+        </div>
+        <Tabs className="w-full">
           <Tabs.TabContent index={0}>
             <UserManagement />
           </Tabs.TabContent>
