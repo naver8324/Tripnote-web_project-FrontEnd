@@ -12,7 +12,8 @@ const useSendEmail = () => {
       const response = await fetchData({ data: { email } });
 
       console.log(email);
-      console.log('send Email');
+      console.log('Email sent:', response.data);
+      return response.data;
     } catch (err) {
       console.error('Error:', err);
       throw err;

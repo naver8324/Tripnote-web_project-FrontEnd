@@ -88,7 +88,8 @@ export default function SignupPage() {
 
         // 인증번호 발송
         ToastAlert('이메일 인증번호를 전송중입니다.', 'info');
-        await SendEmail(email);
+        const emailResponse = await SendEmail(email);
+
 
         setVerificationSent(true);
         setTimer(180); // 3분 카운트다운
