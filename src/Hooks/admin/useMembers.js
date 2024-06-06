@@ -5,7 +5,7 @@ import useAxios from "../useAxios.js";
 const useMembers = (page = 1, size = 10) => {
     const { responseData, error, loading, fetchData } = useAxios({
         method: 'GET',
-        url: `http://34.64.39.102:8080/api/admin/members?page=${page}&size=${size}&sort=id`,
+        url: `api/admin/members?page=${page}&size=${size}&sort=id`,
         shouldFetch: true,
     });
     console.log('api check', responseData )
