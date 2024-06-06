@@ -9,7 +9,7 @@ const useMemberPosts = (sortOption = 'order', page = 1, size = 30) => {
     url: `/api/posts?order=${order}&page=${page}&size=${size}`,
     shouldFetch: true,
   });
-
+  console.log('api check', responseData )
   useEffect(() => {
     fetchData();
   }, [sortOption, page, size]);

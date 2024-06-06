@@ -38,6 +38,7 @@ const router = createBrowserRouter([
           { path: 'mypage', element: <MyPage /> },
           { path: 'mypage/profile', element: <ProfilePage /> },
           { path: 'mypage/checkedpassword', element: <CheckedPasswordPage /> },
+          { path: 'post/:postId', element: <PostPage /> },
         ],
       },
 
@@ -45,7 +46,6 @@ const router = createBrowserRouter([
       { path: 'root/recommend', element: <RootRecommendationPage /> },
       { path: 'root/create', element: <RootCreatePage /> },
       { path: 'editBoard', element: <EditBoardPage /> },
-      { path: 'post/:postId', element: <PostPage /> },
       { path: 'oauth', element: <Oauth /> },
       // { path: 'oauth/kakao/callback', element: <OauthCallback /> }, // OauthCallback 경로 추가
     ],

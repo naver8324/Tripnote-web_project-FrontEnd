@@ -6,10 +6,13 @@ import mockImg from '../../assets/busan.jpg';
 
 
 export default function PostCard({ contents }) {
-  const { nickname, createdAt, title, content, hashtagResponseDTOList } = contents;
+  const { id, nickname, createdAt, title, content, hashtagResponseDTOList } = contents;
+    // 데이터 확인을 위한 로그
+    console.log('PostCard contents:', contents);
+    console.log('Hashtags:', hashtagResponseDTOList);
   return (
     <Link
-      to={`/post/:postId`}
+      to={`/post/${id}`}
       className="flex gap-8 items-center border-b border-grey pb-5 mb-4"
     >
       <div className="w-full">
@@ -19,7 +22,6 @@ export default function PostCard({ contents }) {
             alt="profile image"
             className="w-6 h-6 rounded-full"
           />
-          {/* 닉네임 한줄 표시 */}
           <p className="line-clamp-1">{nickname}</p>
           <p className="min-w-fit">{formmateDate(createdAt)}</p>
         </div>
@@ -27,9 +29,9 @@ export default function PostCard({ contents }) {
         <p className="my-3 leading-6 line-clamp-3 max-sm:hidden md:max-[1100px]:hidden">
           {content}
         </p>
-        <div className="flex gap-4 mt-7 flex flex-wrap">
-          {(hashtagResponseDTOList || []).map((hashtag, index) => (
-            <span key={`${hashtag.id}-${index}`} className="text-sm py-1 px-4 rounded-full bg-gray-100">
+        <div className="flex gap-2 mt-3 flex-wrap">
+          {(hashtagResponseDTOList || []).map((hashtag) => (
+            <span key={hashtag.id} className="text-sm py-1 px-3 rounded-full bg-gray-100">
               #{hashtag.name}
             </span>
           ))}
