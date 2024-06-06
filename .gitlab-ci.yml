@@ -11,6 +11,7 @@ build:
   stage: build
   script:
     - npm install
+    - echo "VITE_API_BASE_URL=$VITE_SERVER_ADDRESS">>.env
     - npm run build
   artifacts:
 # 만료 시간을 설정해 줍니다.
@@ -26,5 +27,5 @@ deploy-to-s3:
     - pip install awscli
     - aws s3 sync dist s3://tripnote.site
   only:
-    - dev
+    - adminPage
   when: manual
