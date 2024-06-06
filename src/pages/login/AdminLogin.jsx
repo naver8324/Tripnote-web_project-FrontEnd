@@ -1,23 +1,23 @@
 import React, {useState} from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import useLogin from '../../Hooks/user/useLogin';
 import logo from '../../assets/logo-green.png';
 import GhostButton from '../../components/commons/GhostButton';
 import InfoInput from '../../components/commons/InfoInput';
 import {ToastAlert} from "../../components/commons/ToastAlert.jsx";
+import useAdminLogin from "../../Hooks/admin/useAdminLogin.js";
 
 export default function AdminLogin() {
     const navigate = useNavigate();
     const [id, setId] = useState('');
     const [password, setPassword] = useState('');
-    const { login, loading: loginLoading, error: loginError } = useLogin();
+    const { adminLogin, loading: loginLoading, error: loginError } = useAdminLogin();
 
     const handleLoginClick = async () => {
         console.log('Login button clicked');
         console.log(id, password);
 
         try {
-            await login(id, password);
+            await adminLogin(id, password);
             console.log('Login successful, navigating to main');
             ToastAlert('로그인 되었습니다.', 'success');
 
