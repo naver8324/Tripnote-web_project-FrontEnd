@@ -1,19 +1,18 @@
 import React from 'react';
 import useAxios from '../useAxios';
 
-const useDeleteMember = (token) => {
+const useDeleteMember = () => {
     const { fetchData, error, loading } = useAxios({
         method: 'DELETE',
         url: `api/admin/delete-member`,
-        headers: {Authorization: token,},
         shouldFetch: false,
     });
 
-    const deleteMember = async (memberEmail) => {
+    const deleteMember = async (email) => {
 
-        console.log("memberEmail - use: ", memberEmail);
+        console.log("memberEmail - use: ", email);
         try{
-            const response = await fetchData({email: memberEmail});
+            const response = await fetchData( {params: {email}} );
             console.log(response);
         }catch (err) {
             console.log("use에서 에러발행", err);
