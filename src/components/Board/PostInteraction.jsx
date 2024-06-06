@@ -1,18 +1,26 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { GoHeart, GoHeartFill, GoBookmark, GoBookmarkFill } from 'react-icons/go';
 import useInteractionPost from '../../Hooks/posts/useInteractionPost';
 
 export default function PostInteraction({ id, likes, likedAt, markedAt, reportedAt }) {
   const [userLike, setUserLike] = useState(likedAt !== null);
   const [userBookmark, setUserBookmark] = useState(markedAt !== null);
-
-  const { interact: likeInteract } = useInteractionPost(id, 'like');
+  const prevUserLike = useRef({current: likedAt !== null}); //current가 상태가 업데이트된다고 초기화가되지않는다.(= 재선언의 상태변경의 영향을 받지않기위해 useRef사용)
+  const { interact: likeInteract, error: likeError } = useInteractionPost(id, 'like');
   const { interact: bookmarkInteract } = useInteractionPost(id, 'mark');
 
   const handleLike = async () => {
-    await likeInteract();
-    setUserLike((prev) => !prev);
+    const resultUserLike = !userLike;
+    likeInteract().then(() => prevUserLike.current = resultUserLike);
+    setUserLike(resultUserLike);
   };
+
+  useEffect(() => {
+    if(likeError){
+      setUserLike(prevUserLike.current); //초기값으로 원복시킨다.
+    }
+  }, [likeError])
+   // Optimistic (react-query에 옵션으로 할 수도 있다.) => useInteractionPost에서 추상화하면 좋을듯!
 
   const handleBookmark = async () => {
     await bookmarkInteract();

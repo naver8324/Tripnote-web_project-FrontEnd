@@ -1,7 +1,7 @@
 import useAxios from '../useAxios';
 
 const useInteractionPost = (postId, option) => {
-  const { fetchData } = useAxios({
+  const { fetchData, error } = useAxios({
     method: 'GET',
     url: `/api/member/posts/${postId}/${option}`,
     shouldFetch: false,
@@ -11,7 +11,7 @@ const useInteractionPost = (postId, option) => {
     await fetchData();
   };
 
-  return { interact };
+  return { interact, error };
 };
 
 export default useInteractionPost;

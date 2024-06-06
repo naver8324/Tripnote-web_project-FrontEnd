@@ -7,9 +7,6 @@ import mockImg from '../../assets/busan.jpg';
 
 export default function PostCard({ contents }) {
   const { id, nickname, createdAt, title, content, hashtagResponseDTOList } = contents;
-    // 데이터 확인을 위한 로그
-    console.log('PostCard contents:', contents);
-    console.log('Hashtags:', hashtagResponseDTOList);
   return (
     <Link
       to={`/post/${id}`}

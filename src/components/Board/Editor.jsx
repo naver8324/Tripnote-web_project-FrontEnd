@@ -13,7 +13,6 @@ export default function Editor() {
   const handleImageUpload = async (file) => {
     try {
       const token = localStorage.getItem('accessToken');
-      console.log(token);
   
       const presignedUrlResponse = await axios.put(
         'http://34.64.39.102:8080/api/member/images',
@@ -25,7 +24,7 @@ export default function Editor() {
         {
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `${token}`,
+            Authorization: `Bearer ${token}`,
           },
         },
       );
@@ -123,6 +122,7 @@ export default function Editor() {
   };
 
   const handleSubmit = async () => {
+    console.log("editor content", content)
     const date = new Date();
     try {
       await createPost({
@@ -152,6 +152,7 @@ export default function Editor() {
           placeholder="내용을 입력하세요..."
         />
       </div>
+      <button onClick={handleSubmit}>submit</button>
     </>
   );
 }
