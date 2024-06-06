@@ -9,9 +9,9 @@ const useAdminLogin = () => {
         shouldFetch: false,
     });
 
-    const login = async (id, password) => {
+    const adminLogin = async (loginId, password) => {
         try {
-            const response = await fetchData({ data: { id, password} });
+            const response = await fetchData({ data: { loginId, password} });
 
             const accessToken = response.headers.authorization.split(' ')[1];
             localStorage.setItem('accessToken', accessToken);
@@ -28,7 +28,7 @@ const useAdminLogin = () => {
         }
     };
 
-    return { login, loading, error };
+    return { adminLogin, loading, error };
 };
 
 export default useAdminLogin;
