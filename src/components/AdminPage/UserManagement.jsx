@@ -11,7 +11,7 @@ const UserManagement = () => {
 
     const token = window.localStorage.getItem("accessToken");
 
-    const [currentPage, setCurrentPage] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
     const { members } = useMembers(
       currentPage - 1,
       10,
@@ -31,7 +31,7 @@ const UserManagement = () => {
 
         try {
             const response = await axios({
-                url: `http://34.64.39.102:8080/api/admin/delete-member`,
+                url: `api/admin/delete-member`,
                 method: 'DELETE',
                 params: { email: memberEmail },
                 headers: {
