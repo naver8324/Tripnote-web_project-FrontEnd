@@ -1,30 +1,11 @@
-import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React from 'react';
 import mockImg from '../../assets/profile.png';
-import NaverMap from '../../components/Map/NaverMap';
 import { formmateDate } from '../../utils/date';
-import useDetailPost from '../../Hooks/posts/useDetailPost';
-import Spinner from '../commons/Spinner';
-import { ToastAlert } from '../commons/ToastAlert';
 import PostInteraction from './PostInteraction';
 
-export default function PostDetail() {
-  const { postId } = useParams();
-  const { detailPost, error, loading, refetch } = useDetailPost(postId);
-
-  if (loading) {
-    return <Spinner />;
-  }
-  if (error) {
-    return ToastAlert(`${error.message}`, 'error');
-  }
-  if (!detailPost) {
-    return <div>No data available</div>;
-  }
-
+export default function PostDetail({ postDetail }) {
   const {
     id,
-    routeId,
     title,
     nickname,
     createdAt,
@@ -34,11 +15,10 @@ export default function PostDetail() {
     likedAt,
     markedAt,
     reportedAt,
-  } = detailPost;
+  } = postDetail;
 
   return (
     <div className="w-[900px] center pb-10 max-lg:px-[5vw] text-title">
-      {/* <NaverMap className="aspect-video h-[200px]" /> */}
       <div className="mt-12">
         <div className="">
           <h1 className="text-xl font-semibold">{title}</h1>

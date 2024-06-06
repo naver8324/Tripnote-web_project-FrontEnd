@@ -36,7 +36,7 @@ export default function PostInteraction({ id, likes, likedAt, markedAt, reported
         >
           {userLike ? <GoHeartFill /> : <GoHeart />}
         </button>
-        <p>{likes}</p>
+        {/* <p>{likes}</p> */}
         <button
           onClick={handleBookmark}
           className={userBookmark ? 'text-red-400' : 'text-title'}
