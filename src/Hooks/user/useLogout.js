@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import useAuthStore from '../../store/useAuthStore';
 
 const useLogout = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const { setIsAuth } = useAuthStore();
 
   const logout = async () => {
     setLoading(true);
@@ -13,7 +15,7 @@ const useLogout = () => {
       localStorage.removeItem('accessToken');
 
       console.log('Logout successful');
-
+      setIsAuth(false);
       return true;
     } catch (err) {
       console.error('Error:', err);

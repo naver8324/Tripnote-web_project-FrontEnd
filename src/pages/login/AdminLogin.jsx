@@ -30,7 +30,6 @@ export default function AdminLogin() {
             console.log('Login successful, navigating to main');
             const token = response.headers.authorization;
             window.localStorage.setItem("accessToken", token);
-            setIsLoggedIn(true);
 
             navigate('/admin');
 

@@ -13,7 +13,7 @@ export default function MyPage() {
   const navigate = useNavigate();
 
   const handleProfileClick = () => {
-    navigate('/mypage/profile');
+    navigate('/mypage/checkedpassword');
   };
   return (
     <>

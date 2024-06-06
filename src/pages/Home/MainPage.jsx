@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import mainImg from '../../assets/travel.jpg';
 import elicelogo from '../../assets/elicelogo.png';
 import seoul from '../../assets/seoul.jpg';
@@ -11,10 +11,12 @@ import ImageCard from '../../components/Home/ImageCard';
 import useStore from '../../store/store';
 import Button from '../../components/commons/Button';
 import Input from '../../components/commons/Input';
+import Selector from '../../components/Home/Selector';
+import { ToastAlert } from '../../components/commons/ToastAlert';
 
 const regions = [
   { imgSrc: seoul, name: '서울' },
-  { imgSrc: suwon, name: '수원' },
+  { imgSrc: suwon, name: '경기' },
   { imgSrc: busan, name: '부산' },
   { imgSrc: daejeon, name: '대전' },
 ];
@@ -24,7 +26,7 @@ export default function MainPage() {
   const searchQuery = useStore((state) => state.searchQuery);
 
   const setScrollSmooth = () => {
-    if(searchRef) {
+    if (searchRef) {
       searchRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   };
@@ -37,6 +39,8 @@ export default function MainPage() {
 
   const handleButtonClick = () => {
     setScrollSmooth();
+    ToastAlert('test', 'info');
+
   };
 
   return (
@@ -63,7 +67,7 @@ export default function MainPage() {
               size="large"
               className="bg-white hover:bg-prime text-title hover:text-white text-lg font-semibold px-6 py-2 rounded-full border-2 border-grey-300 hover:border-prime transition-all duration-300"
             >
-              경로 검색
+              경로 추천
             </Button>
           </div>
         </div>
@@ -75,8 +79,9 @@ export default function MainPage() {
         </div>
       </div>
       <div id="search" ref={searchRef} className="inner flex flex-col gap-8">
-        <form className="relative mt-4 flex">
-          <Input variant="searchInput" placeholder="여행지를 검색해보세요!" />
+        <form className="relative flex">
+          {/* <Input variant="searchInput" placeholder="여행지를 검색해보세요!" /> */}
+          <Selector />
         </form>
         <p className="text-title text-xl font-semibold mt-4">
           지금 뜨는 여행지

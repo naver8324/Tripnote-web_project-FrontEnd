@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 export default function InfoInput({ title, type, className, value, onChange }) {
   return (

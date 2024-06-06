@@ -1,23 +1,25 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-export default function Navigation({ routes, defaultIndex = 0, children }) {
+export default function Navigation({ routes, defaultIndex = 0, children, onTabChange }) {
   const [navIndex, setNavIndex] = useState(defaultIndex);
   const activeTabLine = useRef();
   const activeTab = useRef();
 
   const changePage = (btn, i) => {
-    console.log(btn, i);
     const { offsetWidth, offsetLeft } = btn;
 
     activeTabLine.current.style.width = offsetWidth + 'px';
     activeTabLine.current.style.left = offsetLeft + 'px';
     
     setNavIndex(i);
+    if (onTabChange) {
+      onTabChange(routes[i]);
+    }
   };
 
   useEffect(() => {
-    changePage(activeTab.current, defaultIndex)
-  }, [])
+    changePage(activeTab.current, defaultIndex);
+  }, []);
 
   return (
     <>
@@ -26,7 +28,7 @@ export default function Navigation({ routes, defaultIndex = 0, children }) {
           return (
             <button
               ref={i === defaultIndex ? activeTab : null}
-              key={i}
+              key={`${route}-${i}`}
               className={
                 'p-4 px-5 ' +
                 (navIndex === i ? 'text-title' : 'text-gray-300')

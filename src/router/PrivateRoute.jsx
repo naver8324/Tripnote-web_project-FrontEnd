@@ -1,17 +1,17 @@
 import React from 'react';
-import {Navigate, useLocation} from 'react-router-dom';
-import useAuthStore from '../store/useAuthStore';
+import { Route, Redirect } from 'react-router-dom';
+import useAuth from '../Hooks/useAuth';
+const PrivateRoute = ({ element: Element, ...rest }) => {
+  const { isAuth } = useAuth();
 
-const PrivateRoute = ({ children }) => {
-  const { isLoggedIn } = useAuthStore();
-
-  //return isLoggedIn ? children : <Navigate to="/login" />;
-  const location = useLocation();
-
-  const isAdminRoute = location.pathname.includes('/admin');
-  const redirectPath = isAdminRoute ? '/admin/login' : '/login';
-
-  return isLoggedIn ? children : <Navigate to={redirectPath} />;
+  return (
+      <Route
+          {...rest}
+          render={(props) =>
+              isAuth ? <Element {...props} /> : <Redirect to="/login" />
+          }
+      />
+  );
 };
 
 export default PrivateRoute;

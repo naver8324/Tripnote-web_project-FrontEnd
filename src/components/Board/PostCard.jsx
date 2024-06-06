@@ -4,13 +4,15 @@ import { formmateDate } from '../../utils/date';
 import { Link } from 'react-router-dom';
 import mockImg from '../../assets/busan.jpg';
 
-const mockDate = new Date();
-const mockHashtag = ['서울', '혼자여행'];
 
-export default function PostCard() {
+export default function PostCard({ contents }) {
+  const { id, nickname, createdAt, title, content, hashtagResponseDTOList } = contents;
+    // 데이터 확인을 위한 로그
+    console.log('PostCard contents:', contents);
+    console.log('Hashtags:', hashtagResponseDTOList);
   return (
     <Link
-      to={`/post/:postId`}
+      to={`/post/${id}`}
       className="flex gap-8 items-center border-b border-grey pb-5 mb-4"
     >
       <div className="w-full">
@@ -20,26 +22,17 @@ export default function PostCard() {
             alt="profile image"
             className="w-6 h-6 rounded-full"
           />
-          {/* 닉네임 한줄 표시 */}
-          <p className="line-clamp-1">닉네임</p>
-          <p className="min-w-fit">{formmateDate(mockDate)}</p>
+          <p className="line-clamp-1">{nickname}</p>
+          <p className="min-w-fit">{formmateDate(createdAt)}</p>
         </div>
-        <h1 className="text-xl">What is Lorem Ipsum?</h1>
+        <h1 className="text-xl">{title}</h1>
         <p className="my-3 leading-6 line-clamp-3 max-sm:hidden md:max-[1100px]:hidden">
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s, when an unknown printer took a galley of type and
-          scrambled it to make a type specimen book. It has survived not only
-          five centuries, but also the leap into electronic typesetting,
-          remaining essentially unchanged. It was popularised in the 1960s with
-          the release of Letraset sheets containing Lorem Ipsum passages, and
-          more recently with desktop publishing software like Aldus PageMaker
-          including versions of Lorem Ipsum.
+          {content}
         </p>
-        <div className="flex gap-4 mt-7">
-          {mockHashtag.map((i) => (
-            <span className="text-sm py-1 px-4 rounded-full bg-gray-100">
-              #{i}
+        <div className="flex gap-2 mt-3 flex-wrap">
+          {(hashtagResponseDTOList || []).map((hashtag) => (
+            <span key={hashtag.id} className="text-sm py-1 px-3 rounded-full bg-gray-100">
+              #{hashtag.name}
             </span>
           ))}
         </div>
