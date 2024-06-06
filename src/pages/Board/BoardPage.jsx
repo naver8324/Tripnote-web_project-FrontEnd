@@ -71,7 +71,7 @@ export default function BoardPage() {
         <Input variant="searchInput" />
       </nav>
       <div className="flex flex-1 w-full mb-16">
-        <div className="flex-1 pr-4">
+        <div className="flex-1 pr-4 space-y-8">
           <Navigation routes={['최신순', '인기순']} onTabChange={setSortOption}>
             <>
               {localPosts === null ? (

@@ -3,43 +3,38 @@ import { useParams } from 'react-router-dom';
 import mockImg from '../../assets/profile.png';
 import NaverMap from '../../components/Map/NaverMap';
 import { formmateDate } from '../../utils/date';
-import { GoHeart } from 'react-icons/go';
-import { GoHeartFill } from 'react-icons/go';
-import { GoBookmark } from 'react-icons/go';
-import { GoBookmarkFill } from 'react-icons/go';
 import useDetailPost from '../../Hooks/posts/useDetailPost';
+import Spinner from '../commons/Spinner';
+import { ToastAlert } from '../commons/ToastAlert';
+import PostInteraction from './PostInteraction';
 
 export default function PostDetail() {
   const { postId } = useParams();
   const { detailPost, error, loading, refetch } = useDetailPost(postId);
-  const [userLike, setUserLike] = useState(false);
-  const [userBookmark, setUserBookmark] = useState(false);
-  
-  // 로딩 상태 처리
+
   if (loading) {
-    return <div>Loading...</div>;
+    return <Spinner />;
   }
-
-  // 에러 상태 처리
   if (error) {
-    return <div>Error: {error.message}</div>;
+    return ToastAlert(`${error.message}`, 'error');
   }
-
-  // 데이터가 없는 경우 처리
   if (!detailPost) {
     return <div>No data available</div>;
   }
 
-  // 데이터 구조 분해 할당
-  const { routeId, title, nickname, createdAt, content, hashtagResponseDTOList } = detailPost;
-
-  const handleLike = () => {
-    setUserLike((prev) => !prev);
-  };
-
-  const handleBookmark = () => {
-    setUserBookmark((prev) => !prev);
-  };
+  const {
+    id,
+    routeId,
+    title,
+    nickname,
+    createdAt,
+    content,
+    hashtagResponseDTOList,
+    likes,
+    likedAt,
+    markedAt,
+    reportedAt,
+  } = detailPost;
 
   return (
     <div className="w-[900px] center pb-10 max-lg:px-[5vw] text-title">
@@ -59,25 +54,22 @@ export default function PostDetail() {
           <p>{content}</p>
           <div className="flex space-x-3 mt-7">
             {(hashtagResponseDTOList || []).map((hashtag) => (
-              <span key={hashtag.id} className="text-sm py-1 px-4 rounded-full bg-gray-100">
+              <span
+                key={hashtag.id}
+                className="text-sm py-1 px-4 rounded-full bg-gray-100"
+              >
                 #{hashtag.name}
               </span>
             ))}
           </div>
         </div>
-        <div className="mt-10 p-4 border-t border-b border-gray flex justify-between items-center gap-4">
-          <div className="flex space-x-4">
-            <button onClick={handleLike} className={userLike ? 'text-red-400' : 'text-title'}>
-              {userLike ? <GoHeartFill /> : <GoHeart />}
-            </button>
-            <button onClick={handleBookmark} className={userBookmark ? 'text-red-400' : 'text-title'}>
-              {userBookmark ? <GoBookmarkFill /> : <GoBookmark />}
-            </button>
-          </div>
-          <div className="border border-grey-300 rounded-full w-8 h-8 flex justify-center items-center">
-            <p className="text-xs">0</p>
-          </div>
-        </div>
+        <PostInteraction
+          id={id}
+          likes={likes}
+          likedAt={likedAt}
+          markedAt={markedAt}
+          reportedAt={reportedAt}
+        />
       </div>
     </div>
   );
