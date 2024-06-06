@@ -1,21 +1,26 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
+import useAxios from '../../Hooks/useAxios';
 
-const Oauth = () => {
-  const kakaoLogin = () => {
-    const clientId = 'adf026fc50031769a1d948578419e6b3';
-    const redirectUri = encodeURIComponent(
-      'http://34.64.39.102:8080/api/member/kakao/callback',
-    ); // 백엔드에서 처리할 콜백 URI로 설정
-    const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}`;
+const useOauth = () => {
+  const { responseData, error, loading, fetchData } = useAxios({
+    method: 'GET',
+    url: '/api/member/kakao',
+    shouldFetch: false,
+    showBoundary: true,
+  });
 
-    window.location.href = kakaoAuthUrl;
+  const kakaoLogin = async () => {
+    try {
+      await fetchData();
+      // 응답 데이터를 사용하여 추가 처리를 수행합니다.
+      console.log('Login successful:', responseData);
+      // window.location.href = '/'; // 로그인 후 리디렉션할 경로
+    } catch (err) {
+      console.error('Login failed:', err);
+    }
   };
 
-  return (
-    <div>
-      <button onClick={kakaoLogin}>카카오 로그인</button>
-    </div>
-  );
+  return { kakaoLogin, loading, error };
 };
 
-export default Oauth;
+export default useOauth;

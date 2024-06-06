@@ -4,8 +4,8 @@ const SpotCard = ({ spot, onClick }) => {
   return (
     <div
       key={spot.id}
-      className="w-[330px] h-[110px]  mt-4 flex cursor-pointer rounded-xl"
-      onClick={() => onClick(spot.lat, spot.lng)}
+      className="w-[330px] h-[110px] mt-4 flex cursor-pointer rounded-xl"
+      onClick={onClick}
     >
       <img
         src={spot.imageUrl}

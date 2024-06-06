@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import api from '../utils/api';
 import { useErrorBoundary } from 'react-error-boundary';
+import qs from 'qs'; // 쿼리 스트링을 만들기 위해 qs 라이브러리 사용
 
 const useAxios = ({
   method,
   url,
   data = {},
+  params = {},
   shouldFetch = false,
   showBoundary = false,
 }) => {
@@ -15,19 +17,31 @@ const useAxios = ({
   const [loading, setLoading] = useState(false);
 
   const fetchData = async (
-    params = {},
+    fetchParams = params,
     fetchUrl = url,
     fetchMethod = method,
+    fetchData = data,
   ) => {
     setLoading(true);
     try {
-      console.log('Requesting:', method, url);
-      console.log('Data:', data);
+      console.log('Requesting:', fetchMethod, fetchUrl);
+      console.log('Data:', fetchData);
+
+      let finalUrl = fetchUrl;
+      if (
+        fetchMethod.toUpperCase() === 'GET' &&
+        Object.keys(fetchParams).length
+      ) {
+        const queryString = qs.stringify(fetchParams);
+        finalUrl = `${fetchUrl}?${queryString}`;
+      }
+
       const response = await api.request({
         method: fetchMethod,
-        url: fetchUrl,
-        data: params.data || data,
+        url: finalUrl,
+        data: fetchMethod.toUpperCase() !== 'GET' ? fetchData : undefined,
       });
+
       setResponseData(response.data);
       setError(null);
       return response;

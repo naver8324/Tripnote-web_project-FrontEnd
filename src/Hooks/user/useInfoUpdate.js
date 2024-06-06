@@ -3,7 +3,7 @@ import useAxios from '../useAxios';
 const useInfoUpdate = () => {
   const { responseData, error, loading, fetchData } = useAxios({
     method: 'POST',
-    url: '/api/member/update',
+    url: '/api/member/update-profile',
     data: {},
     shouldFetch: false,
     showBoundary: true,
