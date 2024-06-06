@@ -1,40 +1,29 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import useLogin from '../../Hooks/user/useLogin';
 import logo from '../../assets/logo-green.png';
 import GhostButton from '../../components/commons/GhostButton';
 import InfoInput from '../../components/commons/InfoInput';
-import axios from "axios";
-import useAuthStore from "../../store/useAuthStore.js";
+import {ToastAlert} from "../../components/commons/ToastAlert.jsx";
 
 export default function AdminLogin() {
     const navigate = useNavigate();
-    const { setIsLoggedIn } = useAuthStore();
     const [id, setId] = useState('');
     const [password, setPassword] = useState('');
     const { login, loading: loginLoading, error: loginError } = useLogin();
 
     const handleLoginClick = async () => {
-
+        console.log('Login button clicked');
         console.log(id, password);
 
         try {
-            const response = await axios({
-                url: `http://34.64.39.102:8080/login`,
-                method: 'POST',
-                data: { loginId: id, password: password },
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
+            await login(id, password);
             console.log('Login successful, navigating to main');
-            const accessToken = response.headers.authorization.split(' ')[1];
-            window.localStorage.setItem("accessToken", accessToken);
+            ToastAlert('로그인 되었습니다.', 'success');
 
             navigate('/admin');
-
-        } catch (error) {
-            console.error('Login failed:', error);
+        } catch (err) {
+            console.error('Login failed:', err);
         }
     };
 
