@@ -28,8 +28,8 @@ export default function AdminLogin() {
                 },
             });
             console.log('Login successful, navigating to main');
-            const token = response.headers.authorization;
-            window.localStorage.setItem("accessToken", token);
+            const accessToken = response.headers.authorization.split(' ')[1];
+            window.localStorage.setItem("accessToken", accessToken);
 
             navigate('/admin');
 
