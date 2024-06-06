@@ -1,35 +1,30 @@
 import React, {useEffect, useState} from 'react';
-import {Link, useNavigate} from "react-router-dom";
+import {Link} from "react-router-dom";
 import Button from '../commons/Button';
 import axios from "axios";
+import Pagination from "../commons/Pagination.jsx";
+import useMembers from "../../Hooks/admin/useMembers.js";
+import Spinner from "../commons/Spinner.jsx";
+import NoData from "../../pages/Board/NoData.jsx";
 
 const UserManagement = () => {
 
     const token = window.localStorage.getItem("accessToken");
 
-    const [MemberData, setMemberData] = useState([]);
-
-    const getMemberData = async () => {
-        try {
-
-            // 로그인 성공 후 멤버 데이터 가져오기
-            const getMembers = await axios({
-                url: `http://34.64.39.102:8080/api/admin/members`,
-                method: 'GET',
-                headers: {
-                    Authorization: token,
-                },
-            });
-            console.log("setMemberData = ", getMembers.data.content);
-            setMemberData(getMembers.data.content);
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-    };
+    const [currentPage, setCurrentPage] = useState(0);
+    const { members } = useMembers(
+      currentPage - 1,
+      10,
+      token
+    );
+    const [localMembers, setLocalMembers] = useState(null);
 
     useEffect(() => {
-        getMemberData();
-    }, []);
+      if (members && members.content) {
+        setLocalMembers(members.content);
+        console.log('localMembers:', members.content);
+      }
+    }, [members]);
 
     const handleDeleteMember = async (memberEmail) => {
         console.log("member.email : ", memberEmail);
@@ -46,11 +41,15 @@ const UserManagement = () => {
             console.log("response: ", response);
 
             // 삭제 요청 후 getMemberData 함수 호출하여 데이터 새로 조회
-            await getMemberData();
+            //await getMemberData();
         } catch (error) {
             console.error('Error fetching data:', error);
         }
     }
+
+    const handlePageChange = (event, page) => {
+        setCurrentPage(page);
+    };
 
     return (
     <div className=" flex flex-col">
@@ -61,26 +60,35 @@ const UserManagement = () => {
         <div className="flex-1 text-center">deletedAt</div>
         <div className="flex-1 text-center">status</div>
       </div>
-        {MemberData.length > 0 ? (
-          MemberData.map((member) => (
-          <div key={member.id} className="flex flex-wrap items-center justify-around border-b border-grey p-2">
-            <div className="flex-1 text-center">{member.id}</div>
+        {localMembers === null ? (
+          <Spinner />
+        ) : localMembers.length ? (
+          localMembers.map((localMember) => (
+          <div key={localMember.id} className="flex flex-wrap items-center justify-around border-b border-grey p-2">
+            <div className="flex-1 text-center">{localMember.id}</div>
             <div className="flex-1 text-center">
-              <Link to={`/:1`}>{member.email}</Link></div>
-            <div className="flex-1 text-center">{member.nickname}</div>
-            <div className="flex-1 text-center">{member.deleteAt}</div>
+              <Link to={`/:1`}>{localMember.email}</Link></div>
+            <div className="flex-1 text-center">{localMember.nickname}</div>
+            <div className="flex-1 text-center">{localMember.deleteAt}</div>
             <div className="flex-1 text-center flex justify-between items-center">
-                <div className="flex-1 text-center">{member.status}</div>
+                <div className="flex-1 text-center">{localMember.status}</div>
               <Button
                   variant={'nomalButton'}
                   size={'medium'}
                   className="text-center"
-                  onClick={() => handleDeleteMember(member.email)}
+                  onClick={() => handleDeleteMember(localMember.email)}
               >탈퇴</Button></div>
           </div>
           ))
-      ): (
-            <div>Loading...</div>)}
+      ) : (
+        <NoData message="회원이 없습니다." />
+      )}
+        <Pagination
+          currentPage={currentPage}
+          totalPage={Math.ceil(
+            members ? members.totalElements / members.pageable.pageSize : 5,
+          )}
+          onPageChange={handlePageChange}/>
     </div>
   );
 };
