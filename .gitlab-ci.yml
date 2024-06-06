@@ -29,5 +29,5 @@ deploy-to-s3:
     - pip install awscli
     - aws s3 sync dist s3://tripnote.site
   only:
-    - adminPage
+    - dev
   when: manual
