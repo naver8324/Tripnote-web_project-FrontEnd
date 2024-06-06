@@ -1,49 +1,54 @@
 import React, {useEffect, useState} from 'react';
 import {Link} from "react-router-dom";
 import Button from '../commons/Button';
-import axios from "axios";
 import Pagination from "../commons/Pagination.jsx";
 import useMembers from "../../Hooks/admin/useMembers.js";
 import Spinner from "../commons/Spinner.jsx";
 import NoData from "../../pages/Board/NoData.jsx";
+import useDeleteMember from "../../Hooks/admin/useDeleteMember.js";
+import {ToastAlert} from "../commons/ToastAlert.jsx";
 
 const UserManagement = () => {
 
     const token = window.localStorage.getItem("accessToken");
 
     const [currentPage, setCurrentPage] = useState(1);
-    const { members } = useMembers(
+    const { members, refetch } = useMembers(
       currentPage - 1,
       10,
       token
     );
     const [localMembers, setLocalMembers] = useState(null);
+    const { deleteMember, loading: DeleteLoading, error: DeleteError } = useDeleteMember(token);
+    const [ memberEmail, setMemberEmail] = useState(null);
+
 
     useEffect(() => {
+
       if (members && members.content) {
         setLocalMembers(members.content);
-        console.log('localMembers:', members.content);
       }
     }, [members]);
 
+    useEffect(() => {
+
+        if (members && members.content) {
+            refetch();
+            setLocalMembers(members.content);
+        }
+    }, [memberEmail]);
+
     const handleDeleteMember = async (memberEmail) => {
-        console.log("member.email : ", memberEmail);
 
         try {
-            const response = await axios({
-                url: `api/admin/delete-member`,
-                method: 'DELETE',
-                params: { email: memberEmail },
-                headers: {
-                    Authorization: token,
-                },
-            });
-            console.log("response: ", response);
+            await deleteMember(memberEmail);
+            setMemberEmail(memberEmail);
+            console.log("response: ", 'Delete successful');
+            ToastAlert(`관리자에 의해 ${memberEmail} 회원이 탈퇴되었습니다.`, 'success');
 
             // 삭제 요청 후 getMemberData 함수 호출하여 데이터 새로 조회
-            //await getMemberData();
         } catch (error) {
-            console.error('Error fetching data:', error);
+            console.error('Delete member failed:', error);
         }
     }
 
@@ -89,6 +94,11 @@ const UserManagement = () => {
             members ? members.totalElements / members.pageable.pageSize : 5,
           )}
           onPageChange={handlePageChange}/>
+
+        {DeleteError && (
+            <p className="text-red-500">회원탈퇴 오류: {DeleteError}</p>
+        )}
+        {DeleteLoading && <p>회원 탈퇴 중...</p>}
     </div>
   );
 };
