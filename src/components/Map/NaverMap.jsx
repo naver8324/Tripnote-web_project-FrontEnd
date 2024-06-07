@@ -1,6 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react';
 
-export default function NaverMap({ className, markers, center }) {
+export default function NaverMap({
+  className,
+  markers,
+  center,
+  selectedRouteIndex,
+}) {
   const mapRef = useRef(null);
   const [naverMap, setNaverMap] = useState(null);
   const markerColor = '#1DC078';
@@ -82,14 +87,11 @@ export default function NaverMap({ className, markers, center }) {
     }
 
     const colors = [
-      'rgba(255, 0, 0, 0.7)',
-      'rgba(255, 127, 0, 0.7)',
-      'rgba(255, 255, 0, 0.7)',
-      'rgba(0, 255, 0, 0.7)',
-      'rgba(0, 0, 255, 0.7)',
-      'rgba(75, 0, 130, 0.7)',
-      'rgba(139, 0, 255, 0.7)',
+      'rgba(255, 0, 0, 0.7)', // 연빨간색
+      'rgba(135, 206, 250, 0.7)', // 하늘색
+      'rgba(147, 112, 219, 0.7)', // 연보라색
     ];
+
     const newPolylines = markers
       .map((marker, index) => {
         if (index > 0) {
@@ -103,7 +105,7 @@ export default function NaverMap({ className, markers, center }) {
 
           return new window.naver.maps.Polyline({
             path,
-            strokeColor: colors[(index - 1) % colors.length],
+            strokeColor: colors[selectedRouteIndex % colors.length],
             strokeWeight: 6,
             map,
           });
@@ -131,7 +133,7 @@ export default function NaverMap({ className, markers, center }) {
         naverMap.setCenter(newCenter);
       }
     }
-  }, [markers, center]); // markers 배열과 center가 변경될 때마다 이 useEffect가 실행
+  }, [markers, center, selectedRouteIndex]); // markers, center, selectedRouteIndex가 변경될 때마다 이 useEffect가 실행
 
   return <div id="map" className={`h-auto ${className}`} ref={mapRef}></div>;
 }

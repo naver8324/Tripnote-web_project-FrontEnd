@@ -13,7 +13,11 @@ const SpotSearchList = () => {
 
   // SEOUL 지역의 스팟 데이터를 가져오는 useSpots 훅 사용
   const { spots, error, loading } = useSpots('SEOUL');
-  const { responseData: routes } = useSpotRoutes(selectedSpotId);
+  const {
+    responseData: routes,
+    error: routeError,
+    loading: routeLoading,
+  } = useSpotRoutes(selectedSpotId);
 
   useEffect(() => {
     if (routes && routes.length > 0) {
