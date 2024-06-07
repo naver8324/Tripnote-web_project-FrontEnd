@@ -26,7 +26,7 @@ const errorHandler = (err) => {
           message = '요청 시간이 초과되었습니다 (RequestTimeout)';
           break;
         default:
-          message = `예기치 않은 오류: ${status}`;
+          message = `예기치 않은 오류가 발생하였습니다.`;
       }
       err.message = message;
       ToastAlert(message, 'error');

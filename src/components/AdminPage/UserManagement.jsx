@@ -22,7 +22,7 @@ const UserManagement = () => {
     const [localMembers, setLocalMembers] = useState(null);
     const { deleteMember, loading: DeleteLoading, error: DeleteError } = useDeleteMember();
     const { restoreMember, loading: RestoreLoading, error: RestoreError } = useRestoreMember();
-    const [ memberEmail, setMemberEmail] = useState(null);
+    const [ functionActive, setFunctionActive] = useState(0);
 
 
     useEffect(() => {
@@ -38,13 +38,13 @@ const UserManagement = () => {
             refetch();
             setLocalMembers(members.content);
         }
-    }, [memberEmail]);
+    }, [functionActive]);
 
     const handleDeleteMember = async (memberEmail) => {
 
         try {
             await deleteMember(memberEmail);
-            setMemberEmail(memberEmail);
+            setFunctionActive(functionActive + 1);
             console.log("response: ", 'Delete successful');
             ToastAlert(`관리자에 의해 ${memberEmail} 회원이 탈퇴되었습니다.`, 'success');
 
@@ -58,7 +58,7 @@ const UserManagement = () => {
 
         try {
             await restoreMember(memberEmail);
-            setMemberEmail(memberEmail);
+            setFunctionActive(functionActive + 1);
             console.log("response: ", 'Restore successful');
             ToastAlert(`관리자에 의해 ${memberEmail} 회원이 복구되었습니다.`, 'success');
 
