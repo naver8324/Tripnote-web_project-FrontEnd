@@ -1,20 +1,21 @@
-import React, { useState } from 'react';
-import NaverMap from '../components/Map/NaverMap';
+import React from 'react';
 import Tabs from '../components/Tabs/Tabs';
 import RootSpot from '../components/root/RootSpot';
 import RootArea from '../components/root/RootArea';
 import BarRootSpot from '../components/root/BarRootSpot';
 import BarRootArea from '../components/root/BarRootArea';
 import useTabStore from '../store/useTabStore';
-import PhotoMap from '../components/Map/PhotoMap';
+import useMapStore from '../store/useMapStore';
+import NaverMap from '../components/Map/NaverMap';
 
 export default function RootRecommendationPage() {
   const { activeIndex } = useTabStore();
+  const markers = useMapStore((state) => state.markers);
 
   return (
     <div className="mt-[118px] w-full bg-subTitle flex mx-auto">
       <div className="w-[360px] bg-white border-e-2">
-        <div className="p-4 flex justify-between items-center ">
+        <div className="w-[360px] p-4 flex justify-between items-center">
           <Tabs>
             <Tabs.Tab index={0}>스팟 중심 추천</Tabs.Tab>
             <Tabs.Tab index={1}>지역 추천 Best 5</Tabs.Tab>
@@ -31,7 +32,7 @@ export default function RootRecommendationPage() {
         {activeIndex === 0 ? <BarRootSpot /> : <BarRootArea />}
       </div>
 
-      <PhotoMap />
+      <NaverMap markers={markers} className={'w-screen'} />
     </div>
   );
 }

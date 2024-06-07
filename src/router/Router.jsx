@@ -13,9 +13,9 @@ import AgreePage from '../pages/login/AgreePage';
 import LoginPage from '../pages/login/LoginPage';
 import EditBoardPage from '../pages/Board/EditBoardPage';
 import PostPage from '../pages/Board/PostPage';
-import Oauth from '../pages/login/Oauth';
-import useAuth, { PrivateRoute, PublicRoute } from '../Hooks/useAuth';
-// import OauthCallback from '../pages/login/OauthCallback'; // OauthCallback 컴포넌트 import
+import { PrivateRoute, PublicRoute } from '../Hooks/useAuth';
+import FindPassword from '../pages/login/FindPasswordPage';
+// import KakaoCallback from '../Hooks/user/KakaoCallback';
 
 const router = createBrowserRouter([
   {
@@ -41,7 +41,7 @@ const router = createBrowserRouter([
           { path: 'post/:postId', element: <PostPage /> },
         ],
       },
-
+      { path: 'findpassword', element: <FindPassword /> },
       { path: 'board', element: <Board /> },
       { path: 'root/recommend', element: <RootRecommendationPage /> },
       { path: 'root/create', element: <RootCreatePage /> },

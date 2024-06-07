@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import useLogin from '../../Hooks/user/useLogin';
 import logo from '../../assets/logo-green.png';
@@ -7,7 +7,7 @@ import naver from '../../assets/naver.png';
 import google from '../../assets/google.png';
 import GhostButton from '../../components/commons/GhostButton';
 import InfoInput from '../../components/commons/InfoInput';
-import Oauth from './Oauth'; // Oauth 컴포넌트 import
+import { kakaoLogin } from './Oauth';
 import { ToastAlert } from '../../components/commons/ToastAlert';
 
 export default function LoginPage() {
@@ -15,8 +15,6 @@ export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { login, loading: loginLoading, error: loginError } = useLogin();
-  const { kakaoLogin } = Oauth(); // Oauth 훅 사용
-
   const handleFindPasswordClick = () => {
     navigate('/findPassword');
   };
@@ -92,23 +90,23 @@ export default function LoginPage() {
         <div className="flex justify-center space-x-12">
           <Link onClick={kakaoLogin}>
             <img
-              className="w-14 h-auto rounded-lg "
+              className="w-14 h-auto rounded-lg"
               src={kakao}
-              alt="trip note logo"
+              alt="kakao login"
             />
           </Link>
           <Link to="/">
             <img
               className="w-14 h-auto rounded-lg"
               src={naver}
-              alt="trip note logo"
+              alt="naver login"
             />
           </Link>
           <Link to="/">
             <img
               className="w-14 h-auto rounded-lg shadow"
               src={google}
-              alt="trip note logo"
+              alt="google login"
             />
           </Link>
         </div>

@@ -23,7 +23,7 @@ const OauthCallback = () => {
     //       navigate('/'); // 에러 발생 시 메인 페이지로 리다이렉트
     //     });
     // }
-}, [navigate]);
+  }, [navigate]);
 
   return <div>Loading...</div>; // 로딩 중 표시
 };

@@ -13,9 +13,9 @@ export default function CheckedPasswordPage() {
   };
 
   useEffect(() => {
-    // if (isValid) {
-    navigate('/mypage/profile');
-    // }
+    if (isValid) {
+      navigate('/mypage/profile');
+    }
   }, [isValid, navigate]);
 
   return (

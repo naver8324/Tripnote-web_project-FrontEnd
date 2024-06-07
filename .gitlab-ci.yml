@@ -1,0 +1,33 @@
+image: node:latest
+
+stages:
+  - build
+  - deploy
+
+cache:
+  paths:
+    - node_modules/
+build:
+  stage: build
+  script:
+    - rm -rf package-lock.json
+    - rm -rf node_modules
+    - npm install
+    - echo "VITE_API_BASE_URL=$VITE_SERVER_ADDRESS">>.env
+    - npm run build
+  artifacts:
+# 만료 시간을 설정해 줍니다.
+    expire_in: 1 hour
+# 다음 stage에서 사용할 파일의 경로를 지정해 줍니다.
+    paths:
+      - ./dist
+
+deploy-to-s3:
+  image: python:latest
+  stage: deploy
+  script:
+    - pip install awscli
+    - aws s3 sync dist s3://tripnote.site
+  only:
+    - dev
+  when: manual
