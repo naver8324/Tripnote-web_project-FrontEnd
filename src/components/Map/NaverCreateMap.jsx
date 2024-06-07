@@ -6,7 +6,7 @@ import {
   updatePolylines,
 } from './naverMapHelpers';
 
-export default function NaverMap({ className }) {
+export default function NaverCreateMap({ className }) {
   const mapRef = useRef(null);
   const [naverMap, setNaverMap] = useState(null);
   const markers = useMapStore((state) => state.markers);
@@ -16,7 +16,10 @@ export default function NaverMap({ className }) {
   useEffect(() => {
     const cleanup = loadNaverMapScript(() => {
       const mapOptions = {
-        center: new window.naver.maps.LatLng(center.latitude, center.longitude),
+        center: new window.naver.maps.LatLng(
+          center?.latitude || 37.5665,
+          center?.longitude || 126.978,
+        ),
         zoom: 14,
       };
       const map = new window.naver.maps.Map(mapRef.current, mapOptions);
@@ -33,7 +36,7 @@ export default function NaverMap({ className }) {
     });
 
     return cleanup;
-  }, []);
+  }, [center, setMarkers]);
 
   useEffect(() => {
     if (naverMap) {
@@ -42,13 +45,13 @@ export default function NaverMap({ className }) {
 
       if (center) {
         const newCenter = new window.naver.maps.LatLng(
-          center.latitude,
-          center.longitude,
+          center.latitude || 37.5665,
+          center.longitude || 126.978,
         );
         naverMap.setCenter(newCenter);
       }
     }
-  }, [markers, center]);
+  }, [markers, center, naverMap]);
 
   return <div id="map" className={`h-auto ${className}`} ref={mapRef}></div>;
 }

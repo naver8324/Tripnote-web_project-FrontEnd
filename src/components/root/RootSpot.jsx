@@ -4,7 +4,7 @@ import SpotSearchList from '../SpotSearchList/SpotSearchList';
 const RootSpot = () => {
   return (
     <>
-      <SpotSearchList />
+      <SpotSearchList region="SEOUL" />
     </>
   );
 };

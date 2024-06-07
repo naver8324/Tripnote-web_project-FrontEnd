@@ -6,7 +6,7 @@ import BarRootSpot from '../components/root/BarRootSpot';
 import BarRootArea from '../components/root/BarRootArea';
 import useTabStore from '../store/useTabStore';
 import useMapStore from '../store/useMapStore';
-import NaverMap from '../components/Map/NaverMap';
+import NaverRecomMap from '../components/Map/NaverRecomMap';
 
 export default function RootRecommendationPage() {
   const { activeIndex } = useTabStore();
@@ -32,7 +32,7 @@ export default function RootRecommendationPage() {
         {activeIndex === 0 ? <BarRootSpot /> : <BarRootArea />}
       </div>
 
-      <NaverMap markers={markers} className={'w-screen'} />
+      <NaverRecomMap markers={markers} className={'w-screen'} />
     </div>
   );
 }

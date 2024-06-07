@@ -5,14 +5,14 @@ import Input from '../commons/Input';
 import useSpotRoutes from '../../Hooks/routes/useSpotRoutes';
 import useSpots from '../../Hooks/spots/useSpots';
 
-const SpotSearchList = () => {
+const SpotSearchList = ({ region }) => {
   const setMarkers = useMapStore((state) => state.setMarkers);
   const setRoutes = useMapStore((state) => state.setRoutes);
   const [selectedSpotId, setSelectedSpotId] = useState(null);
   const [center, setCenter] = useState(null);
 
-  // SEOUL 지역의 스팟 데이터를 가져오는 useSpots 훅 사용
-  const { spots, error, loading } = useSpots('SEOUL');
+  // 선택한 지역의 스팟 데이터를 가져오는 useSpots 훅 사용
+  const { spots, error, loading } = useSpots(region);
   const {
     responseData: routes,
     error: routeError,
@@ -27,16 +27,18 @@ const SpotSearchList = () => {
         name: spot.location, // 스팟 이름 추가
       }));
       setMarkers(routeMarkers);
+      setRoutes(routes); // 전역 상태로 루트 설정
       setCenter({
         latitude: routeMarkers[0].latitude,
         longitude: routeMarkers[0].longitude,
       });
     }
-  }, [routes]);
+  }, [routes, setMarkers, setRoutes]);
 
   const handleSpotClick = (spot) => {
     setSelectedSpotId(spot.id);
-    setCenter({ latitude: spot.lat, longitude: spot.lng });
+    const newCenter = { latitude: spot.lat, longitude: spot.lng };
+    setCenter(newCenter);
   };
 
   return (
