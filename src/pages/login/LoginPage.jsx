@@ -7,7 +7,7 @@ import naver from '../../assets/naver.png';
 import google from '../../assets/google.png';
 import GhostButton from '../../components/commons/GhostButton';
 import InfoInput from '../../components/commons/InfoInput';
-import useOauth from './Oauth';
+import { kakaoLogin } from './Oauth';
 import { ToastAlert } from '../../components/commons/ToastAlert';
 
 export default function LoginPage() {
@@ -15,7 +15,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { login, loading: loginLoading, error: loginError } = useLogin();
-  const { kakaoLogin, loading: kakaoLoading, error: kakaoError } = useOauth(); // Oauth 훅 사용
+  // const { kakaoLogin } = useOauth(); // Oauth 훅 사용
 
   const handleFindPasswordClick = () => {
     navigate('/findPassword');
