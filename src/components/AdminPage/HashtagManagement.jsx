@@ -1,143 +1,73 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import Button from '../commons/Button';
 import HashtagModal from '../Modal/HashtagModal';
+import useHashtags from '../../Hooks/admin/useHashtags';
+import Spinner from '../commons/Spinner';
+import NoData from '../../pages/Board/NoData';
+import Pagination from '../commons/Pagination';
+import useChangingHashtag from '../../Hooks/admin/useChangingHashtag';
+import useCreatingHashtag from '../../Hooks/admin/useCreatingHashtag';
+import useDeletingHashtag from '../../Hooks/admin/useDeletingHashtag';
 
 const HashtagManagement = () => {
-  const [adminLoginId, setAdminLoginId] = useState('admin');
-  const [adminPassword, setAdminPassword] = useState('12345678');
-  const [adminAuthorizationHeader, setAdminAuthorizationHeader] = useState('');
-  const [hashtags, setHashtags] = useState(null);
-  const [hashtagName, setHashtagName] = useState('');
-  const [hashtagIndex, setHashtagIndex] = useState(null);
-  const [hashtagCity, setHashtagCity] = useState(null);
-  const [hashtagModalIsOpen, setHashtagModalIsOpen] = useState(false);
-
-  useEffect(() => {
-    const getAuthorization = async () => {
-      try {
-        const response = await axios({
-          url: `http://34.64.39.102:8080/login`,
-          method: 'POST',
-          data: { loginId: adminLoginId, password: adminPassword },
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-        const authorizationHeader = response.headers.authorization;
-        setAdminAuthorizationHeader(authorizationHeader);
-
-        // 로그인 성공 후 해시태그 데이터 가져오기
-        const hashResponse = await axios({
-          url: `http://34.64.39.102:8080/api/admin/hashtags`,
-          method: 'GET',
-          headers: {
-            Authorization: authorizationHeader,
-          },
-        });
-        setHashtags(hashResponse.data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    getAuthorization();
-  }, [adminLoginId, adminPassword]);
-
-  const submitInput = (newHashtagName, newHashtagCity) => {
-    if (hashtagIndex !== null) {
-      const updateInput = async () => {
-        try {
-          const response = await axios({
-            url: `http://34.64.39.102:8080/api/admin/hashtags/update/${hashtagIndex}`,
-            method: 'PATCH',
-            data: { name: newHashtagName, city: `${newHashtagCity}` },
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: adminAuthorizationHeader,
-            },
-          });
-        } catch (error) {
-          console.error('Error fetching data:', error);
-          return;
-        }
-      };
-
-      updateInput();
-
-      setHashtags((prevHashtags) =>
-        prevHashtags.map((hashtag) =>
-          hashtag.id === hashtagIndex
-            ? {
-                ...hashtag,
-                name: newHashtagName,
-                city: newHashtagCity === 'true',
-              }
-            : hashtag,
-        ),
-      );
-      setHashtagName('');
-      setHashtagCity(null);
-      setHashtagIndex(null);
-      return;
-    }
-
-    const createInput = async () => {
-      try {
-        const response = await axios({
-          url: `http://34.64.39.102:8080/api/admin/hashtags/create`,
-          method: 'POST',
-          data: { name: newHashtagName, city: `${newHashtagCity}` },
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: adminAuthorizationHeader,
-          },
-        });
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        return;
-      }
-    };
-
-    const newHashtag = createInput();
-
-    setHashtags((prevHashtags) => [
-      ...prevHashtags,
-      {
-        id: newHashtag.id,
-        name: newHashtagName,
-        city: newHashtagCity === 'true',
-      },
-    ]);
-
-    console.log(newHashtag);
-
-    setHashtagName('');
-    setHashtagCity(null);
-    setHashtagIndex(null);
+  const defaultHashtagData = {
+    id: null,
+    name: '',
+    city: null,
   };
 
-  const handleDeleteHashtag = (deletedHashtagIndex) => {
-    const deleteHashtag = async () => {
-      try {
-        const response = await axios({
-          url: `http://34.64.39.102:8080/api/admin/hashtags/delete/${deletedHashtagIndex}`,
-          method: 'DELETE',
-          headers: {
-            Authorization: adminAuthorizationHeader,
-          },
-        });
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        return;
-      }
-    };
+  const token = window.localStorage.getItem('accessToken');
+  const [currentPage, setCurrentPage] = useState(1);
+  const { initialHashtags } = useHashtags(currentPage, 10, token);
+  const [hashtagData, setHashtagData] = useState({ ...defaultHashtagData });
 
-    deleteHashtag();
+  const [hashtags, setHashtags] = useState(null);
+  const [hashtagModalIsOpen, setHashtagModalIsOpen] = useState(false);
 
+  const { refetch: updateHashtag } = useChangingHashtag(hashtagData);
+  const { refetch: deleteHashtag } = useDeletingHashtag(hashtagData);
+  const [isDeletingHashtag, setIsDeletingHashtag] = useState(false);
+
+  const { response: createHashtagData, refetch: createHashtag } =
+    useCreatingHashtag(hashtagData);
+
+  useEffect(() => {
+    if (initialHashtags && initialHashtags.content) {
+      setHashtags((prev) => [...initialHashtags.content]);
+    }
+  }, [initialHashtags]);
+
+  useEffect(() => {
+    if (isDeletingHashtag) {
+      handleDeleteHashtag();
+      setIsDeletingHashtag(false);
+      setHashtagData(defaultHashtagData);
+    }
+  }, [hashtagData, isDeletingHashtag]);
+
+  const handleUpdateHashtag = async () => {
+    updateHashtag();
     setHashtags((prevHashtags) =>
       prevHashtags.map((hashtag) =>
-        hashtag.id === deletedHashtagIndex
+        hashtag.id === hashtagData.id
+          ? { ...hashtag, ...hashtagData }
+          : hashtag,
+      ),
+    );
+    setHashtagData({ ...defaultHashtagData });
+  };
+
+  const handleCreateHashtag = async () => {
+    createHashtag();
+    setHashtags((prevHashtags) => [...prevHashtags, createHashtagData]);
+    setHashtagData({ ...defaultHashtagData });
+  };
+
+  const handleDeleteHashtag = async () => {
+    deleteHashtag();
+    setHashtags((prevHashtags) =>
+      prevHashtags.map((hashtag) =>
+        hashtag.id === hashtagData.id
           ? {
               ...hashtag,
               delete: !hashtag.delete,
@@ -145,10 +75,7 @@ const HashtagManagement = () => {
           : hashtag,
       ),
     );
-
-    setHashtagName('');
-    setHashtagCity(null);
-    setHashtagIndex(null);
+    setHashtagData({ ...defaultHashtagData });
   };
 
   const renderHashtags = () => {
@@ -161,10 +88,8 @@ const HashtagManagement = () => {
           <Button
             variant={'nomalButton'}
             size={'medium'}
-            onClick={(prev) => {
-              setHashtagName(hashtag.name);
-              setHashtagIndex(hashtag.id);
-              setHashtagCity(hashtag.city);
+            onClick={() => {
+              setHashtagData(hashtag);
               setHashtagModalIsOpen(true);
             }}
           >
@@ -175,8 +100,9 @@ const HashtagManagement = () => {
           <Button
             variant={'nomalButton'}
             size={'medium'}
-            onClick={(prev) => {
-              handleDeleteHashtag(hashtag.id);
+            onClick={() => {
+              setHashtagData(hashtag);
+              setIsDeletingHashtag(true);
             }}
           >
             {!hashtag.delete ? '삭제' : '복원'}
@@ -186,54 +112,63 @@ const HashtagManagement = () => {
     ));
   };
 
+  const handlePageChange = (event, page) => {
+    setCurrentPage(page);
+  };
+
   return (
     <div>
       <h2 className="text-2xl font-bold">해쉬태그 관리</h2>
-      {
-        <>
-          <table style={{ width: '100%' }}>
-            <thead style={{ width: '100%' }}>
-              <tr>
-                <th>해시태그 이름</th>
-                <th>지역 여부</th>
-                <th>삭제 여부</th>
-                <th></th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {hashtags !== null && hashtags.length > 0 ? (
-                renderHashtags()
-              ) : (
-                <tr>No hashtags found.</tr>
-              )}
-            </tbody>
-          </table>
-          <Button
-            variant={'nomalButton'}
-            size={'large'}
-            onClick={() => {
-              setHashtagModalIsOpen(true);
-            }}
-          >
-            생성하기
-          </Button>
-          <HashtagModal
-            isOpen={hashtagModalIsOpen}
-            onRequestClose={() => {
-              setHashtagName('');
-              setHashtagIndex(null);
-              setHashtagCity(null);
-              setHashtagModalIsOpen(false);
-            }}
-            submitInput={submitInput}
-            hashtagName={hashtagName}
-            setHashtagName={setHashtagName}
-            hashtagCity={hashtagCity}
-            setHashtagCity={setHashtagCity}
-          ></HashtagModal>
-        </>
-      }
+
+      <table style={{ width: '100%' }}>
+        <thead style={{ width: '100%' }}>
+          <tr>
+            <th>해시태그 이름</th>
+            <th>지역 여부</th>
+            <th>삭제 여부</th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {hashtags === null ? (
+            <Spinner />
+          ) : hashtags.length ? (
+            renderHashtags()
+          ) : (
+            <NoData message="해시태그가 없습니다." />
+          )}
+        </tbody>
+      </table>
+      <Pagination
+        currentPage={currentPage}
+        totalPage={Math.ceil(
+          initialHashtags
+            ? initialHashtags.totalElements / initialHashtags.pageable.pageSize
+            : 5,
+        )}
+        onPageChange={handlePageChange}
+      />
+      <Button
+        variant={'nomalButton'}
+        size={'large'}
+        onClick={() => {
+          setHashtagModalIsOpen(true);
+        }}
+      >
+        생성하기
+      </Button>
+      <HashtagModal
+        isOpen={hashtagModalIsOpen}
+        onRequestClose={() => {
+          setHashtagData({ ...defaultHashtagData });
+          setHashtagModalIsOpen(false);
+        }}
+        hashtagData={hashtagData}
+        setHashtagData={setHashtagData}
+        handleCreateHashtag={handleCreateHashtag}
+        handleUpdateHashtag={handleUpdateHashtag}
+      ></HashtagModal>
     </div>
   );
 };
