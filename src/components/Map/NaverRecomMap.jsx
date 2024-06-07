@@ -21,7 +21,7 @@ export default function NaverRecomMap({
           markers[0]?.latitude || 37.5665,
           markers[0]?.longitude || 126.978,
         ),
-        zoom: 14,
+        zoom: 12,
       };
       const map = new window.naver.maps.Map(mapRef.current, mapOptions);
       setNaverMap(map);

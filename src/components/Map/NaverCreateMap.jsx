@@ -16,11 +16,8 @@ export default function NaverCreateMap({ className }) {
   useEffect(() => {
     const cleanup = loadNaverMapScript(() => {
       const mapOptions = {
-        center: new window.naver.maps.LatLng(
-          center?.latitude || 37.5665,
-          center?.longitude || 126.978,
-        ),
-        zoom: 14,
+        center: new window.naver.maps.LatLng(center.latitude, center.longitude),
+        zoom: 12,
       };
       const map = new window.naver.maps.Map(mapRef.current, mapOptions);
       setNaverMap(map);
@@ -36,7 +33,7 @@ export default function NaverCreateMap({ className }) {
     });
 
     return cleanup;
-  }, [center, setMarkers]);
+  }, []);
 
   useEffect(() => {
     if (naverMap) {
@@ -45,13 +42,13 @@ export default function NaverCreateMap({ className }) {
 
       if (center) {
         const newCenter = new window.naver.maps.LatLng(
-          center.latitude || 37.5665,
-          center.longitude || 126.978,
+          center.latitude,
+          center.longitude,
         );
         naverMap.setCenter(newCenter);
       }
     }
-  }, [markers, center, naverMap]);
+  }, [markers, center]);
 
   return <div id="map" className={`h-auto ${className}`} ref={mapRef}></div>;
 }

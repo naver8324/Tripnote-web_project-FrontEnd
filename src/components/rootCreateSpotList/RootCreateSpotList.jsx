@@ -3,7 +3,7 @@ import useMapStore from '../../store/useMapStore';
 import Input from '../commons/Input';
 import useSpotRoutes from '../../Hooks/routes/useSpotRoutes';
 import useSpots from '../../Hooks/spots/useSpots';
-import SpotCard from '../SpotSearchList/SpotCard';
+import SpotPlusCard from './SpotPlusCard';
 
 const RootCreateSpotList = ({ region }) => {
   const setMarkers = useMapStore((state) => state.setMarkers);
@@ -54,7 +54,7 @@ const RootCreateSpotList = ({ region }) => {
       {error && <p>Error loading spots: {error}</p>}
       {spots &&
         spots.map((spot) => (
-          <SpotCard
+          <SpotPlusCard
             key={spot.id}
             spot={spot}
             isAdded={isSpotAdded(spot)}

@@ -1,10 +1,19 @@
 import React from 'react';
+import useMapStore from '../../store/useMapStore';
 
-const SpotCard = ({ spot, onAddClick, onRemoveClick, isAdded }) => {
+const SpotCard = ({ spot, onClick, showAddButton = false }) => {
+  const addSpot = useMapStore((state) => state.addSpotToRoute);
+
+  const handleAddClick = (e) => {
+    e.stopPropagation();
+    addSpot(spot);
+  };
+
   return (
     <div
       key={spot.id}
       className="w-[330px] h-[110px] mt-4 flex cursor-pointer rounded-xl"
+      onClick={onClick}
     >
       <img
         src={spot.imageUrl}
@@ -16,20 +25,6 @@ const SpotCard = ({ spot, onAddClick, onRemoveClick, isAdded }) => {
         <p className="text-sm">{spot.region}</p>
         <p className="text-sm">{spot.address}</p>
       </div>
-
-      <button
-        onClick={(e) => {
-          e.preventDefault();
-          isAdded ? onRemoveClick() : onAddClick();
-        }}
-        className={`w-1/6 flex items-center justify-center text-xl font-bold text-white ${
-          isAdded
-            ? 'bg-red-400 hover:bg-red-300'
-            : 'bg-blue-400 hover:bg-blue-300'
-        } rounded-r-xl`}
-      >
-        {isAdded ? '-' : '+'}
-      </button>
     </div>
   );
 };
