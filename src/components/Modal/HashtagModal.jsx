@@ -7,11 +7,10 @@ Modal.setAppElement('#root'); // 모달을 사용할 애플리케이션 루트 �
 const HashtagModal = ({
   isOpen,
   onRequestClose,
-  submitInput,
-  hashtagName,
-  setHashtagName,
-  hashtagCity,
-  setHashtagCity,
+  hashtagData,
+  setHashtagData,
+  setIsCreatingHashtag,
+  handleUpdateHashtag,
 }) => {
   return (
     <Modal
@@ -29,7 +28,12 @@ const HashtagModal = ({
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              submitInput(hashtagName, hashtagCity);
+
+              if (hashtagData.id !== null) {
+                handleUpdateHashtag();
+              } else {
+                setIsCreatingHashtag(true);
+              }
               onRequestClose();
             }}
           >
@@ -37,16 +41,18 @@ const HashtagModal = ({
             <InfoInput
               title="해시태그 이름"
               type="text"
-              value={hashtagName}
+              value={hashtagData.name}
               onChange={(e) => {
-                setHashtagName(e.target.value);
+                setHashtagData((prev) => ({ ...prev, name: e.target.value }));
               }}
             />
             <label htmlFor="selectOption">옵션 선택:</label>
             <select
               id="selectOption"
-              value={hashtagCity}
-              onChange={(e) => setHashtagCity(e.target.value)}
+              value={hashtagData.city}
+              onChange={(e) =>
+                setHashtagData((prev) => ({ ...prev, city: e.target.value }))
+              }
             >
               <option value={true}>지역</option>
               <option value={false}>지역 외</option>
