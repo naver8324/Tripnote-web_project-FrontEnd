@@ -13,7 +13,7 @@ const HashtagManagement = () => {
   const defaultHashtagData = {
     id: null,
     name: '',
-    city: null,
+    city: true,
   };
 
   const token = window.localStorage.getItem('accessToken');
@@ -27,13 +27,14 @@ const HashtagManagement = () => {
   const { refetch: updateHashtag } = useChangingHashtag(hashtagData);
   const { refetch: deleteHashtag } = useDeletingHashtag(hashtagData);
   const [isDeletingHashtag, setIsDeletingHashtag] = useState(false);
+  const [isCreatingHashtag, setIsCreatingHashtag] = useState(false);
 
   const { response: createHashtagData, refetch: createHashtag } =
     useCreatingHashtag(hashtagData);
 
   useEffect(() => {
     if (initialHashtags && initialHashtags.content) {
-      setHashtags((prev) => [...initialHashtags.content]);
+      setHashtags(initialHashtags.content);
     }
   }, [initialHashtags]);
 
@@ -42,8 +43,21 @@ const HashtagManagement = () => {
       handleDeleteHashtag();
       setIsDeletingHashtag(false);
       setHashtagData(defaultHashtagData);
+      return;
     }
-  }, [hashtagData, isDeletingHashtag]);
+
+    if (isCreatingHashtag) {
+      handleCreateHashtag();
+      setIsCreatingHashtag(false);
+      setHashtagData(defaultHashtagData);
+    }
+  }, [hashtagData, isDeletingHashtag, isCreatingHashtag]);
+
+  useEffect(() => {
+    if (initialHashtags && initialHashtags.content && createHashtagData) {
+      setHashtags((prevHashtags) => [...prevHashtags, createHashtagData]);
+    }
+  }, [createHashtagData]);
 
   const handleUpdateHashtag = async () => {
     updateHashtag();
@@ -57,10 +71,8 @@ const HashtagManagement = () => {
     setHashtagData({ ...defaultHashtagData });
   };
 
-  const handleCreateHashtag = async () => {
+  const handleCreateHashtag = () => {
     createHashtag();
-    setHashtags((prevHashtags) => [...prevHashtags, createHashtagData]);
-    setHashtagData({ ...defaultHashtagData });
   };
 
   const handleDeleteHashtag = async () => {
@@ -75,7 +87,6 @@ const HashtagManagement = () => {
           : hashtag,
       ),
     );
-    setHashtagData({ ...defaultHashtagData });
   };
 
   const renderHashtags = () => {
@@ -133,7 +144,7 @@ const HashtagManagement = () => {
         <tbody>
           {hashtags === null ? (
             <Spinner />
-          ) : hashtags.length ? (
+          ) : hashtags.length > 0 ? (
             renderHashtags()
           ) : (
             <NoData message="해시태그가 없습니다." />
@@ -161,12 +172,11 @@ const HashtagManagement = () => {
       <HashtagModal
         isOpen={hashtagModalIsOpen}
         onRequestClose={() => {
-          setHashtagData({ ...defaultHashtagData });
           setHashtagModalIsOpen(false);
         }}
         hashtagData={hashtagData}
         setHashtagData={setHashtagData}
-        handleCreateHashtag={handleCreateHashtag}
+        setIsCreatingHashtag={setIsCreatingHashtag}
         handleUpdateHashtag={handleUpdateHashtag}
       ></HashtagModal>
     </div>

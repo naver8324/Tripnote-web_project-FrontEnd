@@ -9,7 +9,7 @@ const HashtagModal = ({
   onRequestClose,
   hashtagData,
   setHashtagData,
-  handleCreateHashtag,
+  setIsCreatingHashtag,
   handleUpdateHashtag,
 }) => {
   return (
@@ -32,7 +32,7 @@ const HashtagModal = ({
               if (hashtagData.id !== null) {
                 handleUpdateHashtag();
               } else {
-                handleCreateHashtag();
+                setIsCreatingHashtag(true);
               }
               onRequestClose();
             }}
