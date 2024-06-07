@@ -15,6 +15,7 @@ const useMemberInfo = () => {
       const response = await fetchData();
       setEmail(response.data.email);
       setNickname(response.data.nickname);
+      console.log(response.data);
       return response.data;
     } catch (err) {
       console.error(err);

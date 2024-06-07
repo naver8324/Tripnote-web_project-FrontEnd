@@ -1,8 +1,12 @@
 import useAxios from '../useAxios';
 import useAuthStore from '../../store/useAuthStore';
+import useUserStore from '../../store/useUserStore'; // 사용자 스토어 임포트
+import useMemberInfo from './useMemberInfo';
 
 const useLogin = () => {
   const setIsAuth = useAuthStore((state) => state.setIsAuth);
+  const { setEmail, setNickname } = useUserStore();
+  const { memberInfo } = useMemberInfo();
   const { fetchData, error, loading } = useAxios({
     method: 'POST',
     url: '/login',
@@ -20,6 +24,8 @@ const useLogin = () => {
       console.log(accessToken);
 
       setIsAuth(true); // Zustand 상태 업데이트
+
+      await memberInfo();
 
       return accessToken;
     } catch (err) {
