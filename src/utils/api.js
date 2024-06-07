@@ -1,4 +1,6 @@
-import axios, { isAxiosError } from 'axios';
+import axios, { isAxiosError, HttpStatusCode } from 'axios';
+import useAuthStore from '../store/useAuthStore';
+import errorHandler from './errorHandler';
 
 axios.defaults.headers.common['Content-Type'] = 'application/json';
 axios.defaults.timeout = 5000;
@@ -7,53 +9,37 @@ const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
 });
 
+// 요청 인터셉터: 모든 요청에 토큰을 추가
 api.interceptors.request.use(
-  (req) => {
-    if (req.data && req.data instanceof FormData) {
-      req.headers['Content-Type'] = 'multipart/form-data';
+  (config) => {
+    const token = localStorage.getItem('accessToken');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
-    return req;
+    if (config.data instanceof FormData) {
+      config.headers['Content-Type'] = 'multipart/form-data';
+    }
+    return config;
   },
-  (err) => Promise.reject(err),
+  (error) => {
+    return Promise.reject(error);
+  },
 );
 
+// 응답 인터셉터: 토큰이 유효하지 않은 경우 로그아웃
 api.interceptors.response.use(
-  (response) => response,
-  (err) => {
-    if (isAxiosError(err)) {
-      if (err.response) {
-        const { status } = err.response;
-        switch (status) {
-          case 400:
-            err.message = '잘못된 요청입니다 (BadRequest)';
-            break;
-          case 401:
-            err.message = '인증되지 않았습니다 (Unauthorized)';
-            break;
-          case 403:
-            err.message = '금지된 요청입니다 (Forbidden)';
-            break;
-          case 404:
-            err.message = '찾을 수 없습니다 (NotFound)';
-            break;
-          case 405:
-            err.message = '허용되지 않는 메서드입니다 (MethodNotAllowed)';
-            break;
-          case 408:
-            err.message = '요청 시간이 초과되었습니다 (RequestTimeout)';
-            break;
-          default:
-            err.message = `예기치 않은 오류: ${status}`;
-        }
-      } else if (err.request) {
-        err.message = '응답이 없습니다'; // 요청이 이루어졌으나 응답이 없음
-      } else {
-        err.message = '오류가 발생했습니다'; // 요청 설정 중 오류 발생
-      }
-    } else {
-      err.message = '네트워크 오류'; // 네트워크 오류
+  (response) => {
+    return response;
+  },
+  (error) => {
+    if (
+      isAxiosError(error) &&
+      error.response &&
+      error.response.status === HttpStatusCode.Unauthorized
+    ) {
+      useAuthStore.getState().logout(); // Zustand store의 로그아웃 함수 호출
     }
-    return Promise.reject(err);
+    return errorHandler(error); // 기존 에러 핸들러 호출
   },
 );
 

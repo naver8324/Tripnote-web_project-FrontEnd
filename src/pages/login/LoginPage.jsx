@@ -7,15 +7,13 @@ import naver from '../../assets/naver.png';
 import google from '../../assets/google.png';
 import GhostButton from '../../components/commons/GhostButton';
 import InfoInput from '../../components/commons/InfoInput';
-import Oauth from './Oauth'; // Oauth 컴포넌트 import
+import { kakaoLogin } from './Oauth';
 
 export default function LoginPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { login, loading: loginLoading, error: loginError } = useLogin();
-  const { kakaoLogin } = Oauth(); // Oauth 훅 사용
-
   const handleFindPasswordClick = () => {
     navigate('/findPassword');
   };

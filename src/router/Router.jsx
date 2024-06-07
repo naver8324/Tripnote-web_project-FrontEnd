@@ -13,7 +13,6 @@ import AgreePage from '../pages/login/AgreePage';
 import LoginPage from '../pages/login/LoginPage';
 import EditBoardPage from '../pages/Board/EditBoardPage';
 import PostPage from '../pages/Board/PostPage';
-import Oauth from '../pages/login/Oauth';
 // import OauthCallback from '../pages/login/OauthCallback'; // OauthCallback 컴포넌트 import
 
 const router = createBrowserRouter([
@@ -34,7 +33,7 @@ const router = createBrowserRouter([
       { path: 'root/create', element: <RootCreatePage /> },
       { path: 'editBoard', element: <EditBoardPage /> },
       { path: 'post/:postId', element: <PostPage /> },
-      { path: 'oauth', element: <Oauth /> },
+      { path: 'oauth', element: <kakaoLogin /> },
       // { path: 'oauth/kakao/callback', element: <OauthCallback /> }, // OauthCallback 경로 추가
     ],
   },
