@@ -1,4 +1,3 @@
-import React from 'react';
 import Tabs from '../../components/Tabs/Tabs';
 import MyRoot from '../../components/Mypage/MyRoot';
 import LoverRoot from '../../components/Mypage/LoverRoot';
@@ -13,7 +12,7 @@ export default function MyPage() {
   const navigate = useNavigate();
 
   const handleProfileClick = () => {
-    navigate('/mypage/profile');
+    navigate('/mypage/checkedpassword');
   };
   return (
     <>

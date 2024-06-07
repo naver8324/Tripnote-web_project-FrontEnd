@@ -1,9 +1,9 @@
 import React from 'react';
-import useProfileStore from '../store/useProfileStore';
+import useUserStore from '../store/useUserStore';
 import profile from '../assets/profile.png';
 
 const Profile = () => {
-  const { nickname } = useProfileStore();
+  const nickname = useUserStore((state) => state.nickname);
 
   // userId 값을 nickname으로 설정
   const userId = nickname;

@@ -8,12 +8,14 @@ import ProfilePage from '../pages/MyPage/ProfilePage';
 import RootRecommendationPage from '../pages/RootRecommendationPage';
 import RootCreatePage from '../pages/RootCreatePage';
 import SignupPage from '../pages/login/SignupPage';
-import FindPasswordPage from '../pages/login/FindPasswordPage';
+import CheckedPasswordPage from '../pages/login/CheckedPasswordPage';
 import AgreePage from '../pages/login/AgreePage';
 import LoginPage from '../pages/login/LoginPage';
 import EditBoardPage from '../pages/Board/EditBoardPage';
 import PostPage from '../pages/Board/PostPage';
-// import OauthCallback from '../pages/login/OauthCallback'; // OauthCallback 컴포넌트 import
+import { PrivateRoute, PublicRoute } from '../Hooks/useAuth';
+import FindPassword from '../pages/login/FindPasswordPage';
+// import KakaoCallback from '../Hooks/user/KakaoCallback';
 
 const router = createBrowserRouter([
   {
@@ -22,18 +24,29 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       { index: true, element: <MainPage /> },
-      { path: 'login', element: <LoginPage /> },
-      { path: 'agree', element: <AgreePage /> },
-      { path: 'signup', element: <SignupPage /> },
-      { path: 'findPassword', element: <FindPasswordPage /> },
+      {
+        element: <PublicRoute />,
+        children: [
+          { path: 'login', element: <LoginPage /> },
+          { path: 'agree', element: <AgreePage /> },
+          { path: 'signup', element: <SignupPage /> },
+        ],
+      },
+      {
+        element: <PrivateRoute />,
+        children: [
+          { path: 'mypage', element: <MyPage /> },
+          { path: 'mypage/profile', element: <ProfilePage /> },
+          { path: 'mypage/checkedpassword', element: <CheckedPasswordPage /> },
+        ],
+      },
+      { path: 'findpassword', element: <FindPassword /> },
       { path: 'board', element: <Board /> },
-      { path: 'mypage', element: <MyPage /> },
-      { path: 'mypage/profile', element: <ProfilePage /> },
       { path: 'root/recommend', element: <RootRecommendationPage /> },
       { path: 'root/create', element: <RootCreatePage /> },
       { path: 'editBoard', element: <EditBoardPage /> },
       { path: 'post/:postId', element: <PostPage /> },
-      { path: 'oauth', element: <kakaoLogin /> },
+      { path: 'oauth', element: <Oauth /> },
       // { path: 'oauth/kakao/callback', element: <OauthCallback /> }, // OauthCallback 경로 추가
     ],
   },

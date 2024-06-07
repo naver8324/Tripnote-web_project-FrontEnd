@@ -1,12 +1,10 @@
 import React, { forwardRef } from 'react';
 import { GoSearch } from 'react-icons/go';
 
-function InputComponent({
-  variant = 'nomalInput',
-  size = 'medium',
-  className = '',
-  ...props
-}, ref) {
+function InputComponent(
+  { variant = 'nomalInput', size = 'medium', className = '', ...props },
+  ref,
+) {
   const getStyleClass = () => {
     const classNames = ['border', 'p-1', 'border-gray-300'];
 
@@ -34,9 +32,9 @@ function InputComponent({
   return (
     <>
       {variant === 'searchInput' ? (
-        <div className='relative'>
+        <div className="relative">
           <input className={getStyleClass()} {...props} />
-          <button type='submit' className='absolute top-0 bottom-0 right-4'>
+          <button type="submit" className="absolute top-0 bottom-0 right-16">
             <GoSearch />
           </button>
         </div>

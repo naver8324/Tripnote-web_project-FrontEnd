@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import useLogin from '../../Hooks/user/useLogin';
 import logo from '../../assets/logo-green.png';
@@ -8,6 +8,7 @@ import google from '../../assets/google.png';
 import GhostButton from '../../components/commons/GhostButton';
 import InfoInput from '../../components/commons/InfoInput';
 import { kakaoLogin } from './Oauth';
+import { ToastAlert } from '../../components/commons/ToastAlert';
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -29,6 +30,8 @@ export default function LoginPage() {
     try {
       await login(email, password);
       console.log('Login successful, navigating to main');
+      ToastAlert('로그인 되었습니다.', 'success');
+
       navigate('/');
     } catch (err) {
       console.error('Login failed:', err);
@@ -61,9 +64,7 @@ export default function LoginPage() {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        {loginError && (
-          <p className="text-red-500">로그인 오류: {loginError.message}</p>
-        )}
+        {loginError && <p className="text-red-500">로그인에 실패하였습니다.</p>}
         {loginLoading && <p>로그인 중...</p>}
 
         <p
@@ -89,23 +90,23 @@ export default function LoginPage() {
         <div className="flex justify-center space-x-12">
           <Link onClick={kakaoLogin}>
             <img
-              className="w-14 h-auto rounded-lg "
+              className="w-14 h-auto rounded-lg"
               src={kakao}
-              alt="trip note logo"
+              alt="kakao login"
             />
           </Link>
           <Link to="/">
             <img
               className="w-14 h-auto rounded-lg"
               src={naver}
-              alt="trip note logo"
+              alt="naver login"
             />
           </Link>
           <Link to="/">
             <img
               className="w-14 h-auto rounded-lg shadow"
               src={google}
-              alt="trip note logo"
+              alt="google login"
             />
           </Link>
         </div>

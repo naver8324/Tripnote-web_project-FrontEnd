@@ -10,6 +10,20 @@ export default {
         subBackground: '#FAFAFA',
         errprime: '#DB4455',
       },
+      keyframes: {
+        'accordion-down': {
+          from: { height: '0' },
+          to: { height: 'var(--radix-accordion-content-height)' },
+        },
+        'accordion-up': {
+          from: { height: 'var(--radix-accordion-content-height)' },
+          to: { height: '0' },
+        },
+      },
+      animation: {
+        'accordion-down': 'accordion-down 1s ease-out',
+        'accordion-up': 'accordion-up 1s ease-out',
+      },
     },
   },
   plugins: [],
