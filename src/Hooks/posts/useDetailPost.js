@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import useAxios from '../useAxios';
 
-const useHashTag = (cityOption = true) => {
+const useDetailPost = (postId) => {
   const { responseData, error, loading, fetchData } = useAxios({
     method: 'GET',
-    url: `/api/hashtags/isCity?isCity=${cityOption}`,
+    url: `/api/member/posts/${postId}`,
     shouldFetch: true,
   });
 
@@ -12,7 +12,7 @@ const useHashTag = (cityOption = true) => {
     fetchData();
   }, []);
 
-  return { Hashtags: responseData, error, loading, refetch: fetchData };
+  return { detailPost: responseData, error, loading, refetch: fetchData };
 };
 
-export default useHashTag;
+export default useDetailPost;

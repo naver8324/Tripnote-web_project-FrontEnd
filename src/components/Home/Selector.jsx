@@ -29,7 +29,7 @@ export default function Selector() {
   return (
     <div className="w-72 font-medium top-0">
       <div className="w-full p-2 flex items-center justify-between rounded bg-subBackground" onClick={() => setDropdown(!dropdown)}>
-        경로 검색
+        여행지 검색
         <GoChevronDown className={`text-xl ${dropdown && 'rotate-180'}`} />
       </div>
       <ul className={`bg-subBackground mt-2 overflow-y-auto ${dropdown ? 'max-h-40' : 'max-h-0'}`}>
