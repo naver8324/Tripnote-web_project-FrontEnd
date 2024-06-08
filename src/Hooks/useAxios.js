@@ -26,8 +26,8 @@ const useAxios = ({
       const response = await api.request({
         method: fetchMethod,
         url: fetchUrl,
-        ...(fetchMethod === 'DELETE' ? { params: params.params } : { data: params.data || data }),
-      });
+        params: fetchMethod === 'DELETE' || fetchMethod === 'GET' ? params.params : undefined,
+        data: fetchMethod !== 'DELETE' && fetchMethod !== 'GET' ? params.data || data : undefined,      });
       setResponseData(response.data);
       setError(null);
       return response;
