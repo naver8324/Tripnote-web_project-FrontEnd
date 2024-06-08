@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import api from '../utils/api';
 import { useErrorBoundary } from 'react-error-boundary';
+import qs from 'qs';
 
 const useAxios = ({
   method,
@@ -8,6 +9,7 @@ const useAxios = ({
   data = {},
   shouldFetch = false,
   showBoundary = false,
+  params = {},
 }) => {
   const { showBoundary: showBoundaryFunc } = useErrorBoundary();
   const [responseData, setResponseData] = useState(null);
@@ -15,19 +17,34 @@ const useAxios = ({
   const [loading, setLoading] = useState(false);
 
   const fetchData = async (
-    params = {},
+    fetchParams = params,
     fetchUrl = url,
     fetchMethod = method,
   ) => {
     setLoading(true);
     try {
-      console.log('Requesting:', method, url);
-      console.log('Data:', data);
+      console.log('Requesting:', fetchMethod, fetchUrl);
+      console.log('Params:', fetchParams);
+      let finalUrl = fetchUrl;
+      if (
+        (fetchMethod.toUpperCase() === 'GET' ||
+          fetchMethod.toUpperCase() === 'DELETE') &&
+        Object.keys(fetchParams).length
+      ) {
+        const queryString = qs.stringify(fetchParams);
+        finalUrl = `${fetchUrl}?${queryString}`;
+      }
+
       const response = await api.request({
         method: fetchMethod,
-        url: fetchUrl,
-        params: fetchMethod === 'DELETE' || fetchMethod === 'GET' ? params.params : undefined,
-        data: fetchMethod !== 'DELETE' && fetchMethod !== 'GET' ? params.data || data : undefined,      });
+        // params: fetchMethod === 'DELETE' || fetchMethod === 'GET' ? params.params : undefined,
+        // data: fetchMethod !== 'DELETE' && fetchMethod !== 'GET' ? params.data || data : undefined,      });
+        url: finalUrl,
+        ...(fetchMethod === 'GET' || fetchMethod === 'DELETE'
+          ? { params: fetchParams.params}
+          : { data: fetchParams.data || data }),
+      });
+
       setResponseData(response.data);
       setError(null);
       return response;

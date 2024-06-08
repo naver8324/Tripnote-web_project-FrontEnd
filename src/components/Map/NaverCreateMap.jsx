@@ -6,7 +6,7 @@ import {
   updatePolylines,
 } from './naverMapHelpers';
 
-export default function NaverMap({ className }) {
+export default function NaverCreateMap({ className }) {
   const mapRef = useRef(null);
   const [naverMap, setNaverMap] = useState(null);
   const markers = useMapStore((state) => state.markers);
@@ -17,7 +17,7 @@ export default function NaverMap({ className }) {
     const cleanup = loadNaverMapScript(() => {
       const mapOptions = {
         center: new window.naver.maps.LatLng(center.latitude, center.longitude),
-        zoom: 14,
+        zoom: 12,
       };
       const map = new window.naver.maps.Map(mapRef.current, mapOptions);
       setNaverMap(map);

@@ -9,7 +9,6 @@ import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const location = useLocation();
-
   const hideHeader = location.pathname.startsWith('/admin');
   const hideFooter = ['/root/', '/admin'].some(prefix => location.pathname.startsWith(prefix));
 

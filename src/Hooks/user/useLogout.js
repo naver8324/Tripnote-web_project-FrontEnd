@@ -1,8 +1,16 @@
 import { useState } from 'react';
+// import useAxios from '../useAxios';
+import useAuthStore from '../../store/useAuthStore';
 
 const useLogout = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const { setIsAuth } = useAuthStore();
+  // const { fetchData } = useAxios({
+  //   method: 'POST',
+  //   url: '/api/member/logout',
+  //   shouldFetch: false,
+  // });
 
   const logout = async () => {
     setLoading(true);
@@ -48,11 +56,11 @@ const useLogout = () => {
       localStorage.removeItem('accessToken');
 
       console.log('Logout successful');
+      setIsAuth(false);
 
       return true;
     } catch (err) {
       console.error('Error:', err);
-
       setError({
         message: '로그아웃 중 오류가 발생했습니다',
         error: err.message,
