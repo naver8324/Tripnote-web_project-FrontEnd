@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import useMapStore from '../../store/useMapStore';
+import useMapCreateStore from '../../store/useMapCreateStore';
 import {
   loadNaverMapScript,
   updateMarkers,
@@ -9,9 +9,9 @@ import {
 export default function NaverCreateMap({ className }) {
   const mapRef = useRef(null);
   const [naverMap, setNaverMap] = useState(null);
-  const markers = useMapStore((state) => state.markers);
-  const setMarkers = useMapStore((state) => state.setMarkers);
-  const center = useMapStore((state) => state.center);
+  const markers = useMapCreateStore((state) => state.markers);
+  const setMarkers = useMapCreateStore((state) => state.setMarkers);
+  const center = useMapCreateStore((state) => state.center);
 
   useEffect(() => {
     const cleanup = loadNaverMapScript(() => {

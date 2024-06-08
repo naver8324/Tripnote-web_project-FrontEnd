@@ -1,14 +1,13 @@
 import React from 'react';
-
 import SpotDndCard from '../rootCreateSpotList/SpotDndCard';
-import useMapStore from '../../store/useMapStore';
+import useMapCreateStore from '../../store/useMapCreateStore';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
 export default function BarRootCreate() {
-  const routeSpots = useMapStore((state) => state.routeSpots);
-  const setRouteSpots = useMapStore((state) => state.setRouteSpots);
-  const setMarkers = useMapStore((state) => state.setMarkers);
+  const routeSpots = useMapCreateStore((state) => state.routeSpots);
+  const setRouteSpots = useMapCreateStore((state) => state.setRouteSpots);
+  const setMarkers = useMapCreateStore((state) => state.setMarkers);
 
   const moveSpot = (fromIndex, toIndex) => {
     const updatedSpots = [...routeSpots];

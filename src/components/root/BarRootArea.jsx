@@ -13,7 +13,7 @@ export default function BarRootArea() {
   };
 
   return (
-    <div className="p-4">
+    <div className="p-4 w-[340px]">
       <p className="text-lg font-medium">지역추천 아코디언 컴포넌트</p>
       <button
         onClick={openModal}

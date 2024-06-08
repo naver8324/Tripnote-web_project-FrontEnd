@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import SpotCard from './SpotCard';
-import useMapStore from '../../store/useMapStore';
+import useMapSpotStore from '../../store/useMapSpotStore';
 import Input from '../commons/Input';
 import useSpotRoutes from '../../Hooks/routes/useSpotRoutes';
 import useSpots from '../../Hooks/spots/useSpots';
 
 const SpotSearchList = ({ region }) => {
-  const setMarkers = useMapStore((state) => state.setMarkers);
-  const setRoutes = useMapStore((state) => state.setRoutes);
+  const setMarkers = useMapSpotStore((state) => state.setMarkers);
+  const setRoutes = useMapSpotStore((state) => state.setRoutes);
+  const setSelectedRouteIndex = useMapSpotStore(
+    (state) => state.setSelectedRouteIndex,
+  );
   const [selectedSpotId, setSelectedSpotId] = useState(null);
   const [center, setCenter] = useState(null);
 
@@ -21,17 +24,20 @@ const SpotSearchList = ({ region }) => {
 
   useEffect(() => {
     if (routes && routes.length > 0) {
-      const routeMarkers = routes[0].spots.map((spot) => ({
-        latitude: spot.lat,
-        longitude: spot.lng,
-        name: spot.location, // 스팟 이름 추가
-      }));
+      const routeMarkers = routes.flatMap((route) =>
+        route.spots.map((spot) => ({
+          latitude: spot.lat,
+          longitude: spot.lng,
+          name: spot.location, // 스팟 이름 추가
+        })),
+      );
       setMarkers(routeMarkers);
       setRoutes(routes); // 전역 상태로 루트 설정
       setCenter({
         latitude: routeMarkers[0].latitude,
         longitude: routeMarkers[0].longitude,
       });
+      setSelectedRouteIndex(null); // 모든 경로를 표시하도록 설정
     }
   }, [routes, setMarkers, setRoutes]);
 
@@ -39,6 +45,7 @@ const SpotSearchList = ({ region }) => {
     setSelectedSpotId(spot.id);
     const newCenter = { latitude: spot.lat, longitude: spot.lng };
     setCenter(newCenter);
+    setSelectedRouteIndex(null); // 특정 스팟을 선택하면 모든 경로를 표시
   };
 
   return (

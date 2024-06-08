@@ -5,12 +5,12 @@ import RootArea from '../components/root/RootArea';
 import BarRootSpot from '../components/root/BarRootSpot';
 import BarRootArea from '../components/root/BarRootArea';
 import useTabStore from '../store/useTabStore';
-import useMapStore from '../store/useMapStore';
-import NaverRecomMap from '../components/Map/NaverRecomMap';
+import NaverSpotMap from '../components/Map/NaverSpotMap';
+import useMapSpotStore from '../store/useMapSpotStore';
 
 export default function RootRecommendationPage() {
   const { activeIndex } = useTabStore();
-  const markers = useMapStore((state) => state.markers);
+  const markers = useMapSpotStore((state) => state.markers);
 
   return (
     <div className="mt-[118px] w-full bg-subTitle flex mx-auto">
@@ -32,7 +32,7 @@ export default function RootRecommendationPage() {
         {activeIndex === 0 ? <BarRootSpot /> : <BarRootArea />}
       </div>
 
-      <NaverRecomMap markers={markers} className={'w-screen'} />
+      <NaverSpotMap markers={markers} className={'w-screen'} />
     </div>
   );
 }

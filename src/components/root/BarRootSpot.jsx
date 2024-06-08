@@ -5,20 +5,23 @@ import {
   AccordionTrigger,
 } from '@radix-ui/react-accordion';
 import React, { useState } from 'react';
-import useMapStore from '../../store/useMapStore';
+import useMapSpotStore from '../../store/useMapSpotStore';
 
 export default function BarRootSpot() {
-  const routes = useMapStore((state) => state.routes);
-  const setMarkers = useMapStore((state) => state.setMarkers);
+  const routes = useMapSpotStore((state) => state.routes);
+  const setSelectedRouteIndex = useMapSpotStore(
+    (state) => state.setSelectedRouteIndex,
+  );
   const [selectedMarker, setSelectedMarker] = useState(null);
 
-  const handleRouteClick = (route) => {
+  const handleRouteClick = (index) => {
+    setSelectedRouteIndex(index);
+    const route = routes[index];
     const markers = route.spots.map((spot) => ({
       latitude: spot.lat,
       longitude: spot.lng,
       id: spot.id,
     }));
-    setMarkers(markers);
     setSelectedMarker(markers[0]); // 루트의 첫 번째 스팟을 선택된 마커로 설정
   };
 
@@ -29,7 +32,7 @@ export default function BarRootSpot() {
           <AccordionItem
             key={route.routeId}
             value={`item-${index + 1}`}
-            onClick={() => handleRouteClick(route)}
+            onClick={() => handleRouteClick(index)}
           >
             <AccordionTrigger>
               <p className="text-3xl">{`경로 ${index + 1}`}</p>

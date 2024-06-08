@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import useMapStore from '../../store/useMapStore';
 import Input from '../commons/Input';
 import useSpotRoutes from '../../Hooks/routes/useSpotRoutes';
 import useSpots from '../../Hooks/spots/useSpots';
 import SpotPlusCard from './SpotPlusCard';
+import useMapCreateStore from '../../store/useMapCreateStore';
 
 const RootCreateSpotList = ({ region }) => {
-  const setMarkers = useMapStore((state) => state.setMarkers);
-  const setRoutes = useMapStore((state) => state.setRoutes);
-  const addSpotToRoute = useMapStore((state) => state.addSpotToRoute);
-  const removeSpotFromRoute = useMapStore((state) => state.removeSpotFromRoute);
-  const routeSpots = useMapStore((state) => state.routeSpots);
+  const setMarkers = useMapCreateStore((state) => state.setMarkers);
+  const setCenter = useMapCreateStore((state) => state.setCenter);
+  const addSpotToRoute = useMapCreateStore((state) => state.addSpotToRoute);
+  const removeSpotFromRoute = useMapCreateStore(
+    (state) => state.removeSpotFromRoute,
+  );
+  const routeSpots = useMapCreateStore((state) => state.routeSpots);
   const [selectedSpotId, setSelectedSpotId] = useState(null);
-  const [center, setCenter] = useState(null);
 
   const { spots, error, loading } = useSpots(region);
   const {
@@ -57,9 +58,9 @@ const RootCreateSpotList = ({ region }) => {
           <SpotPlusCard
             key={spot.id}
             spot={spot}
-            isAdded={isSpotAdded(spot)}
             onAddClick={() => addSpotToRoute(spot)}
             onRemoveClick={() => removeSpotFromRoute(spot.id)}
+            isAdded={isSpotAdded(spot)}
           />
         ))}
     </form>

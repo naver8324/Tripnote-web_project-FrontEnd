@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
-import useMapStore from '../../store/useMapStore';
 import {
   loadNaverMapScript,
   updateMarkers,
   updatePolylines,
 } from './naverMapHelpers';
+import useMapSpotStore from '../../store/useMapSpotStore';
 
 export default function NaverMap({ className }) {
   const mapRef = useRef(null);
   const [naverMap, setNaverMap] = useState(null);
-  const markers = useMapStore((state) => state.markers);
-  const setMarkers = useMapStore((state) => state.setMarkers);
-  const center = useMapStore((state) => state.center);
+  const markers = useMapSpotStore((state) => state.markers);
+  const setMarkers = useMapSpotStore((state) => state.setMarkers);
+  const center = useMapSpotStore((state) => state.center);
 
   useEffect(() => {
     const cleanup = loadNaverMapScript(() => {

@@ -5,7 +5,7 @@ import {
   updatePolylines,
 } from './naverMapHelpers';
 
-export default function NaverRecomMap({
+export default function NaverRegionMap({
   className,
   markers,
   center,

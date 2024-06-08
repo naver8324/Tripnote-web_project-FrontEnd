@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import RootCreate from '../components/root/RootCreate';
 import BarRootCreate from '../components/root/BarRootCreate';
-import useMapStore from '../store/useMapStore';
+import useMapCreateStore from '../store/useMapCreateStore';
 import NaverCreateMap from '../components/Map/NaverCreateMap';
 
 export default function RootCreatePage() {
-  const markers = useMapStore((state) => state.markers);
+  const markers = useMapCreateStore((state) => state.markers);
 
   return (
     <div className="mt-[118px] w-full bg-subTitle flex mx-auto">
