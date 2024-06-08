@@ -16,7 +16,7 @@ const useKakaoRedirect = () => {
 
             const accessToken = response.data.jwtToken;
             localStorage.setItem('kakaoToken', response.data.kakaoToken);
-            localStorage.setItem("accessToken : ", accessToken);
+            localStorage.setItem('accessToken', accessToken);
 
             console.log('Login successful');
             console.log(accessToken);
