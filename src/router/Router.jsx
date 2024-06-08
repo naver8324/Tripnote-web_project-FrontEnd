@@ -17,6 +17,7 @@ import useAuth, { PrivateRoute, PublicRoute } from '../Hooks/useAuth';
 // import OauthCallback from '../pages/login/OauthCallback'; // OauthCallback 컴포넌트 import
 import AdminPage from '../pages/AdminPage/AdminPage';
 import AdminLogin from "../pages/login/AdminLogin.jsx";
+import KakaoRedirect from "../pages/login/kakaoRedirect.jsx";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,7 @@ const router = createBrowserRouter([
           { path: 'login', element: <LoginPage /> },
           { path: 'agree', element: <AgreePage /> },
           { path: 'signup', element: <SignupPage /> },
+          { path: '/api/member/kakao/login', element: <KakaoRedirect />}
         ],
       },
       {
@@ -49,9 +51,10 @@ const router = createBrowserRouter([
       { path: 'root/create', element: <RootCreatePage /> },
       { path: 'editBoard', element: <EditBoardPage /> },
       { path: 'post/:postId', element: <PostPage /> },
-      { path: 'oauth', element: <kakaoLogin /> },
+      // { path: 'oauth', element: <kakaoLogin /> },
       // { path: 'oauth/kakao/callback', element: <OauthCallback /> }, // OauthCallback 경로 추가
       { path: 'admin/login', element: <AdminLogin /> },
+      { path: 'admin', element: <AdminPage /> },
     ],
   },
 ]);

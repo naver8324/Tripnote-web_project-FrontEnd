@@ -23,42 +23,36 @@
 
 // return { kakaoLogin, loading, error };
 import axios from 'axios';
-
-export async function kakaoLogin() {
-  try {
-    const response = await axios.get(
-      'http://34.64.39.102:8080/api/member/kakao',
-      {
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-        },
-        // CORS 설정은 서버에서 처리합니다. 클라이언트에서는 설정하지 않습니다.
-      },
-    );
-
-    if (response.status === 302 || response.status === 301) {
-      // 리다이렉트 URL로 수동으로 이동
-      window.location.href = response.headers.location;
-      console.log(response.config.headers);
-    } else {
-      console.log(response.data);
-    }
-  } catch (error) {
-    if (
-      error.response &&
-      (error.response.status === 302 || error.response.status === 301)
-    ) {
-      // 에러 응답이 리다이렉트인 경우 수동으로 이동
-      window.location.href = error.response.headers.location;
-    } else {
-      console.error('Error fetching data:', error);
-      if (error.response) {
-        console.error('Response data:', error.response.data);
-        console.error('Response status:', error.response.status);
-        console.error('Response headers:', error.response.headers);
-      } else if (error.request) {
-        console.error('Request data:', error.request);
-      }
-    }
-  }
-}
+// import {useNavigate} from "react-router-dom";
+// import useKakaoRedirect from "../../Hooks/user/useKakaoRedirect.js";
+// import useAxios from "../../Hooks/useAxios.js";
+//
+// export async function kakaoLogin() {
+//   const navigate = useNavigate();
+//   const { kakaoRedirect } = useKakaoRedirect();
+//
+//   try {
+//     const {response} = useAxios({
+//       method: 'GET',
+//       url: '/api/member/kakao',
+//       shouldFetch: true,
+//     });
+//
+//     const kakaoAuthUrl = response.data;
+//     console.log("kakaoAuthUrl : ", response.data);
+//
+//     // 새 창에서 Kakao 인증 URL 열기
+//     window.location.href = kakaoAuthUrl;
+//
+//     const code = new URL(window.location.href).searchParams.get("code");
+//
+//     try {
+//       await kakaoRedirect(code);
+//       navigate('/');
+//     }catch (err){
+//       console.error("kakao redirect failed: ", err);
+//     }
+//   }catch (err){
+//       console.error("kakao login failed: ", err);
+//   }
+// }

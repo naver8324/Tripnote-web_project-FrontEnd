@@ -7,13 +7,14 @@ import naver from '../../assets/naver.png';
 import google from '../../assets/google.png';
 import GhostButton from '../../components/commons/GhostButton';
 import InfoInput from '../../components/commons/InfoInput';
-import { kakaoLogin } from './Oauth';
+import useKakaoLogin from "../../Hooks/user/useKakaoLogin.js";
 
 export default function LoginPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { login, loading: loginLoading, error: loginError } = useLogin();
+  const { kakaoLogin } = useKakaoLogin();
   const handleFindPasswordClick = () => {
     navigate('/findPassword');
   };
@@ -34,6 +35,16 @@ export default function LoginPage() {
       console.error('Login failed:', err);
     }
   };
+
+  const handleKakaoLoginClick = async () => {
+    try{
+      await kakaoLogin();
+      console.log('kakao Login redirect successful');
+    } catch (err){
+      console.error('kakao Login redirect failed:', err);
+    }
+
+  }
 
   return (
       <div className="">
@@ -87,7 +98,7 @@ export default function LoginPage() {
             SNS간편 로그인
           </p>
           <div className="flex justify-center space-x-12">
-            <Link onClick={kakaoLogin}>
+            <Link onClick={handleKakaoLoginClick}>
               <img
                   className="w-14 h-auto rounded-lg "
                   src={kakao}
