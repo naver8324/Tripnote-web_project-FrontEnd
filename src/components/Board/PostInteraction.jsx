@@ -20,7 +20,7 @@ export default function PostInteraction({ id, likes, likedAt, markedAt, reported
       setUserLike(prevUserLike.current); //초기값으로 원복시킨다.
     }
   }, [likeError])
-   // Optimistic (react-query에 옵션으로 할 수도 있다.) => useInteractionPost에서 추상화하면 좋을듯!
+   // Optimistic UI(react-query에 옵션으로 할 수도 있다.) => useInteractionPost에서 추상화하면 좋을듯!
 
   const handleBookmark = async () => {
     await bookmarkInteract();
