@@ -11,6 +11,7 @@ export default function NaverSpotMap({
   center,
   selectedRouteIndex,
   routes,
+  polylineColors, // 폴리라인 색상에 대한 새로운 props
 }) {
   const mapRef = useRef(null);
   const [naverMap, setNaverMap] = useState(null);
@@ -34,17 +35,13 @@ export default function NaverSpotMap({
             longitude: spot.lng,
           }));
           updateMarkers(map, routeMarkers);
-          updatePolylines(map, routeMarkers, [
-            'rgba(255, 0, 0, 0.7)', // 연빨간색
-            'rgba(135, 206, 250, 0.7)', // 하늘색
-            'rgba(147, 112, 219, 0.7)', // 연보라색
-          ]);
+          updatePolylines(map, routeMarkers, [...polylineColors]); // 폴리라인 색상 전달
         });
       }
     });
 
     return cleanup;
-  }, [routes]);
+  }, [routes, polylineColors]);
 
   useEffect(() => {
     if (naverMap) {
@@ -56,18 +53,10 @@ export default function NaverSpotMap({
           }),
         );
         updateMarkers(naverMap, selectedMarkers);
-        updatePolylines(naverMap, selectedMarkers, [
-          'rgba(255, 0, 0, 0.7)', // 연빨간색
-          'rgba(135, 206, 250, 0.7)', // 하늘색
-          'rgba(147, 112, 219, 0.7)', // 연보라색
-        ]);
+        updatePolylines(naverMap, selectedMarkers, [...polylineColors]); // 폴리라인 색상 전달
       } else {
         updateMarkers(naverMap, markers);
-        updatePolylines(naverMap, markers, [
-          'rgba(255, 0, 0, 0.7)', // 연빨간색
-          'rgba(135, 206, 250, 0.7)', // 하늘색
-          'rgba(147, 112, 219, 0.7)', // 연보라색
-        ]);
+        updatePolylines(naverMap, markers, [...polylineColors]); // 폴리라인 색상 전달
       }
 
       if (center) {
@@ -78,7 +67,7 @@ export default function NaverSpotMap({
         naverMap.setCenter(newCenter);
       }
     }
-  }, [markers, center, selectedRouteIndex, routes]);
+  }, [markers, center, selectedRouteIndex, routes, polylineColors]);
 
   return <div id="map" className={`h-auto ${className}`} ref={mapRef}></div>;
 }

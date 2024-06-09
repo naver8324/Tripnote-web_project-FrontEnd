@@ -56,7 +56,7 @@ export const updateMarkers = (map, markers) => {
   map.markers = newMarkers;
 };
 
-export const updatePolylines = (map, markers) => {
+export const updatePolylines = (map, markers, colors = ['#1DC078']) => {
   if (map.polylines) {
     map.polylines.forEach((polyline) => polyline.setMap(null));
   }
@@ -65,9 +65,11 @@ export const updatePolylines = (map, markers) => {
     (marker) => new window.naver.maps.LatLng(marker.latitude, marker.longitude),
   );
 
+  const strokeColor = colors.length ? colors.shift() : '#1DC078'; // 기본 색상 설정
+
   const polyline = new window.naver.maps.Polyline({
     path,
-    strokeColor: '#1DC078',
+    strokeColor,
     strokeWeight: 6,
     map,
   });
