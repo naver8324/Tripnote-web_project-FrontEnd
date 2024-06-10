@@ -13,6 +13,9 @@ const useMemberInfo = () => {
   const memberInfo = async () => {
     try {
       const response = await fetchData();
+      const userNickname = response.data.nickname;
+      localStorage.setItem('userNickname', userNickname);
+
       setEmail(response.data.email);
       setNickname(response.data.nickname);
       console.log(response.data);
