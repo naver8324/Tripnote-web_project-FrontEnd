@@ -16,9 +16,8 @@ const HashtagManagement = () => {
     city: true,
   };
 
-  const token = window.localStorage.getItem('accessToken');
   const [currentPage, setCurrentPage] = useState(1);
-  const { initialHashtags } = useHashtags(currentPage, 10, token);
+  const { initialHashtags } = useHashtags(currentPage, 10);
   const [hashtagData, setHashtagData] = useState({ ...defaultHashtagData });
 
   const [hashtags, setHashtags] = useState(null);
@@ -151,12 +150,11 @@ const HashtagManagement = () => {
           )}
         </tbody>
       </table>
-      <Pagination
+        <Pagination
         currentPage={currentPage}
         totalPage={Math.ceil(
           initialHashtags
-            ? initialHashtags.totalElements / initialHashtags.pageable.pageSize
-            : 5,
+            ? initialHashtags.totalElements / initialHashtags.pageable.pageSize : 5,
         )}
         onPageChange={handlePageChange}
       />
