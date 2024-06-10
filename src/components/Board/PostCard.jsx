@@ -27,7 +27,7 @@ export default function PostCard({ contents }) {
           {content}
         </p>
         <div className="flex gap-2 mt-3 flex-wrap">
-          {(hashtagResponseDTOList || []).map((hashtag) => (
+          {hashtagResponseDTOList?.map((hashtag) => (
             <span key={hashtag.id} className="text-sm py-1 px-3 rounded-full bg-gray-100">
               #{hashtag.name}
             </span>

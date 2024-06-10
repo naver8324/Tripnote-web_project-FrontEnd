@@ -1,17 +1,28 @@
-import React from 'react';
+import React, { useMemo } from 'react';
+
+const MAX_VISIBLE_PAGE = 5; // 최대 보여지는 페이지 버튼 수
 
 export default function Pagination({ currentPage, totalPage, onPageChange }) {
-  const MAX_VISIBLE_PAGE = 5; // 최대 보여지는 페이지 버튼 수
-  const startPage = Math.max(1, currentPage - Math.floor(MAX_VISIBLE_PAGE / 2));
-  const endPage = Math.min(totalPage, startPage + MAX_VISIBLE_PAGE - 1);
+  const startPage = useMemo(
+    () => Math.max(1, currentPage - Math.floor(MAX_VISIBLE_PAGE / 2)),
+    [currentPage],
+  );
+  const endPage = useMemo(
+    () => Math.min(totalPage, startPage + MAX_VISIBLE_PAGE - 1),
+    [totalPage, startPage],
+  );
 
-  const pages = Array.from(
-    { length: endPage - startPage + 1 },
-    (_, index) => startPage + index
+  const pages = useMemo(
+    () =>
+      Array.from(
+        { length: endPage - startPage + 1 },
+        (_, index) => startPage + index,
+      ),
+    [startPage, endPage],
   );
 
   return (
-    <div className='flex justify-center items-center'>
+    <div className="flex justify-center items-center">
       <ul className="flex list-none p-0">
         {currentPage > 0 && (
           <li
