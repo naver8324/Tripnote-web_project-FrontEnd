@@ -2,8 +2,8 @@ import React from 'react';
 import Tabs from '../../components/Tabs/Tabs';
 import UserManagement from '../../components/AdminPage/UserManagement';
 import HashtagManagement from '../../components/AdminPage/HashtagManagement';
-import PostCommentManagement from '../../components/AdminPage/PostCommentManagement';
-import UserPostCommentManagement from '../../components/AdminPage/UserPostCommentManagement';
+import PostManagement from '../../components/AdminPage/PostManagement';
+import CommentManagement from '../../components/AdminPage/CommentManagement';
 
 export default function AdminPage() {
   return (
@@ -13,8 +13,8 @@ export default function AdminPage() {
           <Tabs className="w-full flex justify-center">
             <Tabs.Tab index={0}>유저 관리</Tabs.Tab>
             <Tabs.Tab index={1}>해쉬태그 관리</Tabs.Tab>
-            <Tabs.Tab index={2}>전체 게시글/댓글 관리</Tabs.Tab>
-            <Tabs.Tab index={3}>유저 게시글/댓글 관리</Tabs.Tab>
+            <Tabs.Tab index={2}>게시글 관리</Tabs.Tab>
+            <Tabs.Tab index={3}>댓글 관리</Tabs.Tab>
           </Tabs>
         </div>
         <Tabs className="w-full mt-8">
@@ -25,10 +25,10 @@ export default function AdminPage() {
             <HashtagManagement />
           </Tabs.TabContent>
           <Tabs.TabContent index={2}>
-            <PostCommentManagement />
+            <PostManagement />
           </Tabs.TabContent>
           <Tabs.TabContent index={3}>
-            <UserPostCommentManagement />
+            <CommentManagement />
           </Tabs.TabContent>
         </Tabs>
       </div>

@@ -1,72 +1,57 @@
 import React, { useEffect, useState } from 'react';
+import usePosts from '../../Hooks/admin/usePosts';
 import Pagination from '../commons/Pagination';
 import NoData from '../../pages/Board/NoData';
 import Spinner from '../commons/Spinner';
 import Button from '../commons/Button';
 import InfoInput from '../commons/InfoInput';
 import { formmateDate } from '../../utils/date';
-import useComments from '../../Hooks/admin/useComments';
-import useDeletingComment from '../../Hooks/admin/useDeletingComment';
+import { Link } from 'react-router-dom';
 
-const UserPostCommentManagement = () => {
+const PostManagement = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [commentId, setCommentId] = useState(null);
-  const [deletedCommentId, setDeletedCommentId] = useState(null);
+  const [postId, setPostId] = useState(null);
   const [nickname, setNickname] = useState(null);
   const [typedNickname, setTypedNickname] = useState('');
-  const { initialComments, refetch: refetchComments } = useComments(
-    commentId,
+  const { initialPosts, refetch: refetechPosts } = usePosts(
+    postId,
     nickname,
     currentPage,
     10,
   );
-  const { refetch: refetechDeleteComment } =
-    useDeletingComment(deletedCommentId);
-
-  const [comments, setComments] = useState(null);
+  const [posts, setPosts] = useState(null);
 
   useEffect(() => {
-    if (initialComments && initialComments.content) {
-      setComments(initialComments.content);
+    if (initialPosts && initialPosts.content) {
+      setPosts(initialPosts.content);
     }
-  }, [initialComments]);
+  }, [initialPosts]);
 
   useEffect(() => {
-    refetchComments();
-  }, [commentId, nickname]);
+    refetechPosts();
+  }, [postId, nickname]);
 
-  useEffect(() => {
-    if (deletedCommentId !== null) {
-      refetechDeleteComment();
-      setDeletedCommentId(null);
-    }
-  }, [deletedCommentId]);
-
-  const renderComments = () => {
-    return comments.map((comment) => (
+  const renderPosts = () => {
+    return posts.map((post) => (
       <tr>
-        <th>{comment.id}</th>
+        <th>{post.id}</th>
         <th
           className="cursor-pointer"
           onClick={() => {
             setNickname(null);
-            setCommentId(comment.id);
+            setPostId(post.id);
           }}
         >
-          {comment.nickname}
+          {post.nickname}
         </th>
-        <th>{comment.content}</th>
-        <th>{formmateDate(comment.createdAt)}</th>
-        <th>{comment.delete ? 'Yes' : 'No'}</th>
         <th>
-          <Button
-            variant={'nomalButton'}
-            size={'medium'}
-            onClick={() => {
-              setDeletedCommentId(comment.id);
-            }}
-          >
-            {!comment.delete ? '삭제' : '복원'}
+          <Link to={`/post/${post.id}`}>{post.title}</Link>
+        </th>
+        <th>{formmateDate(post.createdAt)}</th>
+        <th>{post.delete ? 'Yes' : 'No'}</th>
+        <th>
+          <Button variant={'nomalButton'} size={'medium'} onClick={() => {}}>
+            {!post.delete ? '삭제' : '복원'}
           </Button>
         </th>
       </tr>
@@ -80,9 +65,9 @@ const UserPostCommentManagement = () => {
   return (
     <div>
       <h2 className="text-2xl font-bold mt-10 mb-10">
-        댓글 관리 (member ={' '}
-        {commentId !== null
-          ? comments.find((comment) => comment.id === commentId)?.nickname || ''
+        게시글 관리 (member ={' '}
+        {postId !== null
+          ? posts.find((post) => post.id === postId)?.nickname || ''
           : nickname !== null
             ? nickname
             : '전체'}
@@ -93,7 +78,7 @@ const UserPostCommentManagement = () => {
         variant={'nomalButton'}
         size={'large'}
         onClick={() => {
-          setCommentId(null);
+          setPostId(null);
           setNickname(null);
         }}
       >
@@ -121,19 +106,19 @@ const UserPostCommentManagement = () => {
       <table className="mb-10" style={{ width: '100%' }}>
         <thead style={{ width: '100%' }}>
           <tr>
-            <th>댓글 id</th>
+            <th>게시글 id</th>
             <th>작성자</th>
-            <th>내용</th>
+            <th>제목</th>
             <th>생성일</th>
             <th>삭제 여부</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
-          {comments === null ? (
+          {posts === null ? (
             <Spinner />
-          ) : comments.length > 0 ? (
-            renderComments()
+          ) : posts.length > 0 ? (
+            renderPosts()
           ) : (
             <NoData message="게시글이 없습니다." />
           )}
@@ -142,8 +127,8 @@ const UserPostCommentManagement = () => {
       <Pagination
         currentPage={currentPage}
         totalPage={Math.ceil(
-          initialComments
-            ? initialComments.totalElements / initialComments.pageable.pageSize
+          initialPosts
+            ? initialPosts.totalElements / initialPosts.pageable.pageSize
             : 5,
         )}
         onPageChange={handlePageChange}
@@ -152,4 +137,4 @@ const UserPostCommentManagement = () => {
   );
 };
 
-export default UserPostCommentManagement;
+export default PostManagement;

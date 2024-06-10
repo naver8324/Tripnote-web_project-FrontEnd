@@ -16,9 +16,8 @@ const HashtagManagement = () => {
     city: true,
   };
 
-  const token = window.localStorage.getItem('accessToken');
   const [currentPage, setCurrentPage] = useState(1);
-  const { initialHashtags } = useHashtags(currentPage, 10, token);
+  const { initialHashtags } = useHashtags(currentPage, 10);
   const [hashtagData, setHashtagData] = useState({ ...defaultHashtagData });
 
   const [hashtags, setHashtags] = useState(null);
@@ -129,9 +128,9 @@ const HashtagManagement = () => {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold">해쉬태그 관리</h2>
+      <h2 className="text-2xl font-bold mt-10 mb-10">해쉬태그 관리</h2>
 
-      <table style={{ width: '100%' }}>
+      <table className="mb-10" style={{ width: '100%' }}>
         <thead style={{ width: '100%' }}>
           <tr>
             <th>해시태그 이름</th>
@@ -161,6 +160,7 @@ const HashtagManagement = () => {
         onPageChange={handlePageChange}
       />
       <Button
+        className="mt-10"
         variant={'nomalButton'}
         size={'large'}
         onClick={() => {
