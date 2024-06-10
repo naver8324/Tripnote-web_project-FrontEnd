@@ -5,12 +5,18 @@ import RootArea from '../components/root/RootArea';
 import BarRootSpot from '../components/root/BarRootSpot';
 import BarRootArea from '../components/root/BarRootArea';
 import useTabStore from '../store/useTabStore';
-import useMapStore from '../store/useMapStore';
-import NaverMap from '../components/Map/NaverMap';
+import NaverSpotMap from '../components/Map/NaverSpotMap';
+import useMapSpotStore from '../store/useMapSpotStore';
 
 export default function RootRecommendationPage() {
   const { activeIndex } = useTabStore();
-  const markers = useMapStore((state) => state.markers);
+  const markers = useMapSpotStore((state) => state.markers);
+  const polylineColors = useMapSpotStore((state) => state.polylineColors);
+  const routes = useMapSpotStore((state) => state.routes);
+  const selectedRouteIndex = useMapSpotStore(
+    (state) => state.selectedRouteIndex,
+  );
+  const center = useMapSpotStore((state) => state.center);
 
   return (
     <div className="mt-[118px] w-full bg-subTitle flex mx-auto">
@@ -32,7 +38,14 @@ export default function RootRecommendationPage() {
         {activeIndex === 0 ? <BarRootSpot /> : <BarRootArea />}
       </div>
 
-      <NaverMap markers={markers} className={'w-screen'} />
+      <NaverSpotMap
+        markers={markers}
+        className={'w-screen'}
+        polylineColors={polylineColors}
+        routes={routes}
+        selectedRouteIndex={selectedRouteIndex}
+        center={center}
+      />
     </div>
   );
 }

@@ -1,9 +1,16 @@
 import React from 'react';
+import useMapSpotStore from '../../store/useMapSpotStore';
 
-const SpotCard = ({ spot, onClick }) => {
+const SpotCard = ({ spot, onClick, showAddButton = false }) => {
+  const addSpot = useMapSpotStore((state) => state.addSpotToRoute);
+
+  const handleAddClick = (e) => {
+    e.stopPropagation();
+    addSpot(spot);
+  };
+
   return (
     <div
-      key={spot.id}
       className="w-[330px] h-[110px] mt-4 flex cursor-pointer rounded-xl"
       onClick={onClick}
     >

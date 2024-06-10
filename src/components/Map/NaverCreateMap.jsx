@@ -1,23 +1,23 @@
 import React, { useState, useEffect, useRef } from 'react';
+import useMapCreateStore from '../../store/useMapCreateStore';
 import {
   loadNaverMapScript,
   updateMarkers,
   updatePolylines,
 } from './naverMapHelpers';
-import useMapSpotStore from '../../store/useMapSpotStore';
 
-export default function NaverMap({ className }) {
+export default function NaverCreateMap({ className }) {
   const mapRef = useRef(null);
   const [naverMap, setNaverMap] = useState(null);
-  const markers = useMapSpotStore((state) => state.markers);
-  const setMarkers = useMapSpotStore((state) => state.setMarkers);
-  const center = useMapSpotStore((state) => state.center);
+  const markers = useMapCreateStore((state) => state.markers);
+  const setMarkers = useMapCreateStore((state) => state.setMarkers);
+  const center = useMapCreateStore((state) => state.center);
 
   useEffect(() => {
     const cleanup = loadNaverMapScript(() => {
       const mapOptions = {
         center: new window.naver.maps.LatLng(center.latitude, center.longitude),
-        zoom: 14,
+        zoom: 12,
       };
       const map = new window.naver.maps.Map(mapRef.current, mapOptions);
       setNaverMap(map);

@@ -1,38 +1,51 @@
 import React, { useState, useEffect } from 'react';
 import SpotCard from './SpotCard';
-import useMapStore from '../../store/useMapStore';
+import useMapSpotStore from '../../store/useMapSpotStore';
 import Input from '../commons/Input';
 import useSpotRoutes from '../../Hooks/routes/useSpotRoutes';
 import useSpots from '../../Hooks/spots/useSpots';
 
-const SpotSearchList = () => {
-  const setMarkers = useMapStore((state) => state.setMarkers);
-  const setRoutes = useMapStore((state) => state.setRoutes);
+const SpotSearchList = ({ region }) => {
+  const setMarkers = useMapSpotStore((state) => state.setMarkers);
+  const setRoutes = useMapSpotStore((state) => state.setRoutes);
+  const setSelectedRouteIndex = useMapSpotStore(
+    (state) => state.setSelectedRouteIndex,
+  );
   const [selectedSpotId, setSelectedSpotId] = useState(null);
   const [center, setCenter] = useState(null);
 
-  // SEOUL 지역의 스팟 데이터를 가져오는 useSpots 훅 사용
-  const { spots, error, loading } = useSpots('SEOUL');
-  const { responseData: routes } = useSpotRoutes(selectedSpotId);
+  // 선택한 지역의 스팟 데이터를 가져오는 useSpots 훅 사용
+  const { spots, error, loading } = useSpots(region);
+  const {
+    responseData: routes,
+    error: routeError,
+    loading: routeLoading,
+  } = useSpotRoutes(selectedSpotId);
 
   useEffect(() => {
     if (routes && routes.length > 0) {
-      const routeMarkers = routes[0].spots.map((spot) => ({
-        latitude: spot.lat,
-        longitude: spot.lng,
-        name: spot.location, // 스팟 이름 추가
-      }));
+      const routeMarkers = routes.flatMap((route) =>
+        route.spots.map((spot) => ({
+          latitude: spot.lat,
+          longitude: spot.lng,
+          name: spot.location, // 스팟 이름 추가
+        })),
+      );
       setMarkers(routeMarkers);
+      setRoutes(routes); // 전역 상태로 루트 설정
       setCenter({
         latitude: routeMarkers[0].latitude,
         longitude: routeMarkers[0].longitude,
       });
+      setSelectedRouteIndex(null); // 모든 경로를 표시하도록 설정
     }
-  }, [routes]);
+  }, [routes, setMarkers, setRoutes]);
 
   const handleSpotClick = (spot) => {
     setSelectedSpotId(spot.id);
-    setCenter({ latitude: spot.lat, longitude: spot.lng });
+    const newCenter = { latitude: spot.lat, longitude: spot.lng };
+    setCenter(newCenter);
+    setSelectedRouteIndex(null); // 특정 스팟을 선택하면 모든 경로를 표시
   };
 
   return (
