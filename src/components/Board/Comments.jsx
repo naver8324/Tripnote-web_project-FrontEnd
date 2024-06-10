@@ -143,6 +143,12 @@ export default function Comments({ postDetail }) {
                       content: e.target.value,
                     })
                   }
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault(); // Enter키 누르면 줄바꿈 방지 **Mac OS 체크필요
+                      handleSaveUpdateComment(e);
+                    }
+                  }}
                   className="resize-none outline-none w-full h-[60px] overflow-auto bg-gray-100 rounded-md pr-[80px]"
                 ></textarea>
               ) : (
