@@ -93,7 +93,7 @@ export default function BarRootCreate() {
       </div>
       {isModalOpen && (
         <Modal>
-          <h2>경로와 관련된 해시태그를 추가해주세요!</h2>
+          <h2>만드신 경로의 이름을 지어주세요!</h2>
           {themeLoading ? (
             <p>Loading...</p>
           ) : (
