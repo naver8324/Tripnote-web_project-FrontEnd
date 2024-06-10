@@ -11,6 +11,11 @@ const SpotSearchList = ({ region }) => {
   const setSelectedRouteIndex = useMapSpotStore(
     (state) => state.setSelectedRouteIndex,
   );
+  const setOpenItems = useMapSpotStore((state) => state.setOpenItems); // 상태 추가
+  const setClickedSpotName = useMapSpotStore(
+    (state) => state.setClickedSpotName,
+  ); // 상태 추가
+
   const [selectedSpotId, setSelectedSpotId] = useState(null);
   const [center, setCenter] = useState(null);
 
@@ -31,6 +36,7 @@ const SpotSearchList = ({ region }) => {
           name: spot.location, // 스팟 이름 추가
         })),
       );
+      console.log('Route markers:', routeMarkers);
       setMarkers(routeMarkers);
       setRoutes(routes); // 전역 상태로 루트 설정
       setCenter({
@@ -42,10 +48,13 @@ const SpotSearchList = ({ region }) => {
   }, [routes, setMarkers, setRoutes]);
 
   const handleSpotClick = (spot) => {
+    console.log('handleSpotClick:', spot);
     setSelectedSpotId(spot.id);
     const newCenter = { latitude: spot.lat, longitude: spot.lng };
     setCenter(newCenter);
     setSelectedRouteIndex(null); // 특정 스팟을 선택하면 모든 경로를 표시
+    setOpenItems([]); // 모든 아코디언 항목 닫기
+    setClickedSpotName(spot.location); // 클릭한 스팟 이름 설정
   };
 
   return (
