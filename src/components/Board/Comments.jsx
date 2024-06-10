@@ -7,6 +7,7 @@ import NoData from '../../pages/Board/NoData';
 import { formmateDate } from '../../utils/date';
 import useUserStore from '../../store/useUserStore';
 import useDeleteComment from '../../Hooks/posts/useDeleteComment';
+import useUpdateComment from '../../Hooks/posts/useUpdateComment';
 
 export default function Comments({ postDetail }) {
   const { id } = postDetail;
@@ -46,22 +47,24 @@ export default function Comments({ postDetail }) {
   };
 
   const [updateComment, setUpdateComment] = useState({ id: null, content: '' });
+  const { saveComment } = useUpdateComment();
 
   // 댓글 수정 상태 업데이트 함수
   const handleUpdateComment = (commentData) => {
     console.log(updateComment);
     setUpdateComment({
-      id: commentData.content.id,
-      content: commentData.content.content,
+      id: commentData.id,
+      content: commentData.content,
     });
   };
   // 댓글 수정 서버 업데이트 함수
   const handleSaveUpdateComment = async () => {
     try {
-      await saveComment(updateComment.content);
+      await saveComment(updateComment.id ,updateComment.content);
       ToastAlert('댓글이 수정되었습니다.', 'success');
       setUpdateComment({ id: null, content: '' }); // 수정 상태 초기화
       refetch(); // 수정 후 댓글 목록 다시 불러오기
+
     } catch (error) {
       ToastAlert('댓글 수정 실패', 'error');
     }
@@ -110,14 +113,14 @@ export default function Comments({ postDetail }) {
                       size="small"
                       className="hover:bg-red-400 hover:text-white"
                       onClick={() => {
-                        if (updateComment.id === commentData.content.id) {
+                        if (updateComment.id === commentData.id) {
                           handleSaveUpdateComment(); // 저장 함수 호출
                         } else {
                           handleUpdateComment(commentData); // 수정 함수 호출
                         }
                       }}
                     >
-                      {updateComment.id === commentData.content.id
+                      {updateComment.id === commentData.id
                         ? '저장'
                         : '수정'}
                     </Button>
@@ -131,7 +134,7 @@ export default function Comments({ postDetail }) {
                   </div>
                 )}
               </div>
-              {updateComment.id === commentData.content.id ? (
+              {updateComment.id === commentData.id ? (
                 <textarea
                   value={updateComment.content}
                   onChange={(e) =>
