@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import useAxios from '../useAxios.js';
 
 // 전체 회원 GET
-const useHashtags = (page = 0, size = 10, token) => {
+const useHashtags = (page = 0, size = 10) => {
   const { responseData, error, loading, fetchData } = useAxios({
     method: 'GET',
     url: `api/admin/hashtags?page=${page}&size=${size}&sort=id`,
@@ -11,7 +11,7 @@ const useHashtags = (page = 0, size = 10, token) => {
 
   useEffect(() => {
     fetchData();
-  }, [page, size, token]);
+  }, [page, size]);
 
   return { initialHashtags: responseData, error, loading, refetch: fetchData };
 };
