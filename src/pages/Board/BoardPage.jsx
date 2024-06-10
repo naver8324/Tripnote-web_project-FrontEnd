@@ -78,7 +78,7 @@ export default function BoardPage() {
     <section className="min-h-screen mt-40 w-[840px] mx-auto flex flex-col text-title">
       <nav className="flex items-center justify-between w-full mb-8">
         <h1 className="searchResult text-3xl font-semibold">{pageState}</h1>
-        <Input variant="searchInput" />
+        {/* <Input variant="searchInput" /> */}
       </nav>
       <div className="flex flex-1 w-full mb-16">
         <div className="flex-1 pr-4 space-y-8">

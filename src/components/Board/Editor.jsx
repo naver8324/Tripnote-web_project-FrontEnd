@@ -1,19 +1,19 @@
-import React, { useMemo, useState, useRef } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import ImageResize from 'quill-image-resize';
-import axios from 'axios'; // axios 임포트
+import axios from 'axios';
 
 Quill.register('modules/ImageResize', ImageResize);
 
-export default function Editor() {
+export default function Editor({ postTitle, postContent, setPostTitle, setPostContent }) {
   const QuillRef = useRef(null);
   const [images, setImages] = useState([]);
 
   const handleImageUpload = async (file) => {
     try {
       const token = localStorage.getItem('accessToken');
-  
+
       const presignedUrlResponse = await axios.put(
         'http://34.64.39.102:8080/api/member/images',
         {
@@ -28,33 +28,32 @@ export default function Editor() {
           },
         },
       );
-  
+
       if (presignedUrlResponse.status !== 200) {
         throw new Error('Failed to get presigned URL');
       }
-  
+
       const presignedUrlData = presignedUrlResponse.data;
       const { presignedUrl, key } = presignedUrlData;
       console.log(presignedUrl);
-  
-      // axios로 presigned URL에 PUT 요청
+
       const uploadResponse = await axios.put(presignedUrl, file, {
         headers: {
           'Content-Type': file.type,
         },
       });
-  
+
       if (uploadResponse.status !== 200) {
         throw new Error('Failed to upload image');
       }
-  
-      return presignedUrl.split('?')[0]; // 업로드된 이미지 URL 반환
+
+      return presignedUrl.split('?')[0];
     } catch (error) {
       console.error('Error uploading image:', error);
       return null;
     }
   };
-  
+
   const imageHandler = async () => {
     const input = document.createElement('input');
     input.setAttribute('type', 'file');
@@ -114,25 +113,12 @@ export default function Editor() {
     [],
   );
 
-  const [content, setContent] = useState('');
-  const [title, setTitle] = useState('');
-
   const handleTitleChange = (e) => {
-    setTitle(e.currentTarget.value);
+    setPostTitle(e.currentTarget.value);
   };
 
-  const handleSubmit = async () => {
-    console.log("editor content", content)
-    const date = new Date();
-    try {
-      await createPost({
-        title: title,
-        content,
-        date,
-      }).then((res) => console.log(res));
-    } catch (error) {
-      console.log(error);
-    }
+  const handleContentChange = (value) => {
+    setPostContent(value);
   };
 
   return (
@@ -143,16 +129,17 @@ export default function Editor() {
           type="text"
           placeholder="제목을 입력하세요."
           onChange={handleTitleChange}
+          value={postTitle}
         ></textarea>
         <ReactQuill
           ref={QuillRef}
           className="mt-2 mb-24 h-[440px]"
           modules={modules}
-          onChange={setContent}
           placeholder="내용을 입력하세요..."
+          onChange={handleContentChange}
+          value={postContent}
         />
       </div>
-      <button onClick={handleSubmit}>submit</button>
     </>
   );
 }
