@@ -2,6 +2,7 @@ import React from 'react';
 import profile from '../../assets/profile.png';
 import { formmateDate } from '../../utils/date';
 import { Link } from 'react-router-dom';
+import useAuth from '../../Hooks/useAuth';
 
 export default function PostCard({ contents }) {
   const { id, nickname, createdAt, title, content, hashtagResponseDTOList } =
@@ -16,9 +17,15 @@ export default function PostCard({ contents }) {
   const doc = parser.parseFromString(content, 'text/html');
   const textContent = doc.body.textContent || '';
 
+  // 로그인 유무에 따라 redirecturl로 변경 및 url 인코딩
+  const { isAuth } = useAuth();
+  const postUrl = isAuth
+    ? `/post/${id}`
+    : `/login?redirecturl=${encodeURIComponent(`/post/${id}`)}`;
+
   return (
     <Link
-      to={`/post/${id}`}
+      to={postUrl}
       className="flex gap-8 items-center border-b border-grey pb-5 mb-4"
     >
       <div className="w-full">
