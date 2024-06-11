@@ -1,9 +1,10 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   loadNaverMapScript,
   updateMarkers,
   updatePolylines,
 } from './naverMapHelpers';
+import useMapSpotStore from '../../store/useMapSpotStore';
 
 export default function NaverSpotMap({
   className,
@@ -35,7 +36,7 @@ export default function NaverSpotMap({
             longitude: spot.lng,
           }));
           updateMarkers(map, routeMarkers);
-          updatePolylines(map, routeMarkers, [...polylineColors]); // 폴리라인 색상 전달
+          updatePolylines(map, routeMarkers, [polylineColors[index]]); // 폴리라인 색상 전달
         });
       }
     });
@@ -45,6 +46,7 @@ export default function NaverSpotMap({
 
   useEffect(() => {
     if (naverMap) {
+      console.log('selectedRouteIndex:', selectedRouteIndex);
       if (selectedRouteIndex !== null && routes && routes[selectedRouteIndex]) {
         const selectedMarkers = routes[selectedRouteIndex].spots.map(
           (spot) => ({
@@ -52,11 +54,21 @@ export default function NaverSpotMap({
             longitude: spot.lng,
           }),
         );
+        console.log('Selected route markers:', selectedMarkers);
         updateMarkers(naverMap, selectedMarkers);
-        updatePolylines(naverMap, selectedMarkers, [...polylineColors]); // 폴리라인 색상 전달
+        updatePolylines(naverMap, selectedMarkers, [
+          polylineColors[selectedRouteIndex],
+        ]); // 폴리라인 색상 전달
       } else {
-        updateMarkers(naverMap, markers);
-        updatePolylines(naverMap, markers, [...polylineColors]); // 폴리라인 색상 전달
+        const allMarkers = routes.flatMap((route) =>
+          route.spots.map((spot) => ({
+            latitude: spot.lat,
+            longitude: spot.lng,
+          })),
+        );
+        console.log('All route markers:', allMarkers);
+        updateMarkers(naverMap, allMarkers);
+        updatePolylines(naverMap, allMarkers, polylineColors); // 모든 경로의 폴리라인 색상 전달
       }
 
       if (center) {

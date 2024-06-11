@@ -4,7 +4,7 @@ import useSendEmail from '../../Hooks/email/useSendEmail';
 import useCheckedEmail from '../../Hooks/email/useCheckedEmail';
 import { ToastAlert } from '../commons/ToastAlert';
 
-const EmailVerification = ({ email, setEmail, setIsVerified }) => {
+const EmailVerification = ({ email, setEmail, isVerified, setIsVerified }) => {
   const [verificationCode, setVerificationCode] = useState('');
   const [verificationSent, setVerificationSent] = useState(false);
   const [timer, setTimer] = useState(0);
@@ -93,16 +93,17 @@ const EmailVerification = ({ email, setEmail, setIsVerified }) => {
             type="email"
             className="w-full h-14 p-2 border border-gray-300 rounded-lg"
             value={email}
+            disabled={emailError === '이메일 인증이 완료되었습니다.'}
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
         <button
           className={`w-1/4 h-14 bg-prime text-white p-2 rounded-lg ${
-            verificationSent
-              ? 'bg-gray-400 text-gray-600'
+            emailError === '이메일 인증이 완료되었습니다.'
+              ? 'bg-gray-500 text-white'
               : 'bg-prime text-white'
           }`}
-          disabled={verificationSent}
+          disabled={emailError === '이메일 인증이 완료되었습니다.'}
           onClick={handleCheckEmail}
         >
           {verificationSent ? '재전송' : '인증번호 전송'}
@@ -132,9 +133,7 @@ const EmailVerification = ({ email, setEmail, setIsVerified }) => {
             </div>
             <button
               className={`w-1/4 h-14 p-2 rounded-lg ${
-                timer === 0
-                  ? 'bg-gray-400 text-gray-600'
-                  : 'bg-prime text-white'
+                timer === 0 ? 'bg-gray-500 text-white' : 'bg-prime text-white'
               }`}
               onClick={handleVerifyCode}
               disabled={timer === 0}

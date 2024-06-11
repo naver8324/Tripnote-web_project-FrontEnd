@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import useLogin from '../../Hooks/user/useLogin';
 import logo from '../../assets/logo-green.png';
 import kakao from '../../assets/kakao.png';
@@ -9,18 +9,25 @@ import GhostButton from '../../components/commons/GhostButton';
 import InfoInput from '../../components/commons/InfoInput';
 import { kakaoLogin } from './Oauth';
 import { ToastAlert } from '../../components/commons/ToastAlert';
+import useKakaoLogin from './../../Hooks/user/useKakaoLogin';
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { login, loading: loginLoading, error: loginError } = useLogin();
+  const { kakaoLogin } = useKakaoLogin();
+
+  const redirectUrl =
+    new URLSearchParams(location.search).get('redirecturl') || '/';
+
   const handleFindPasswordClick = () => {
     navigate('/findPassword');
   };
 
   const handleSignupClick = () => {
-    navigate('/agree');
+    navigate(`/agree?redirecturl=${redirectUrl}`);
   };
 
   const handleLoginClick = async () => {
@@ -32,9 +39,18 @@ export default function LoginPage() {
       console.log('Login successful, navigating to main');
       ToastAlert('로그인 되었습니다.', 'success');
 
-      navigate('/');
+      navigate(redirectUrl);
     } catch (err) {
       console.error('Login failed:', err);
+    }
+  };
+
+  const handleKakaoLoginClick = async () => {
+    try {
+      await kakaoLogin();
+      console.log('카카오 로그인 리다이렉트 성공');
+    } catch (err) {
+      console.log('카카오 리다이렉트 실패', err);
     }
   };
 
@@ -88,7 +104,7 @@ export default function LoginPage() {
           SNS간편 로그인
         </p>
         <div className="flex justify-center space-x-12">
-          <Link onClick={kakaoLogin}>
+          <Link onClick={handleKakaoLoginClick}>
             <img
               className="w-14 h-auto rounded-lg"
               src={kakao}

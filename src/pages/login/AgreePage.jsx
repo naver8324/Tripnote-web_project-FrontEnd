@@ -6,6 +6,9 @@ export default function AgreePage() {
   const [privacyChecked, setPrivacyChecked] = useState(false);
   const [termsChecked, setTermsChecked] = useState(false);
 
+  const redirectUrl =
+    new URLSearchParams(location.search).get('redirecturl') || '/';
+
   const allChecked = useMemo(
     () => ageChecked && privacyChecked && termsChecked,
     [ageChecked, privacyChecked, termsChecked],
@@ -33,7 +36,7 @@ export default function AgreePage() {
 
   const handleNext = useCallback(() => {
     if (allChecked) {
-      navigate('/signup');
+      navigate(`/signup?redirecturl=${redirectUrl}`);
     } else {
       alert('필수 항목에 동의해주세요.');
     }

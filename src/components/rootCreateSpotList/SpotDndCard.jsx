@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 
-const SpotDndCard = ({ spot, index, moveSpot }) => {
+const SpotDndCard = ({ spot, index, moveSpot, removeSpot }) => {
   const ref = useRef(null);
 
   const [, drop] = useDrop({
@@ -28,8 +28,11 @@ const SpotDndCard = ({ spot, index, moveSpot }) => {
     <div
       ref={ref}
       style={{ opacity: isDragging ? 0.5 : 1 }}
-      className="spot-card w-[330px] h-[110px] mt-4 flex cursor-pointer rounded-xl shadow-md animate-fade-in"
+      className="spot-card w-[330px] h-[110px] mt-4 flex cursor-pointer rounded-xl shadow-md animate-fade-in relative border-2 border-transparent"
     >
+      {isDragging && (
+        <div className="absolute inset-0 bg-yellow-100 opacity-50 rounded-xl border-2 border-yellow-500"></div>
+      )}
       <img
         src={spot.imageUrl}
         alt={spot.location}
@@ -40,6 +43,12 @@ const SpotDndCard = ({ spot, index, moveSpot }) => {
         <p className="text-sm">{spot.region}</p>
         <p className="text-sm">{spot.address}</p>
       </div>
+      <button
+        onClick={() => removeSpot(index)}
+        className="absolute  bg-red-400 text-white rounded-full w-6 h-6 flex items-center justify-center"
+      >
+        <p className="text-lg">ㅡ</p>
+      </button>
     </div>
   );
 };

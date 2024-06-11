@@ -1,6 +1,6 @@
 import useAxios from '../useAxios';
 import useAuthStore from '../../store/useAuthStore';
-import useUserStore from '../../store/useUserStore'; // 사용자 스토어 임포트
+import useUserStore from '../../store/useUserStore';
 import useMemberInfo from './useMemberInfo';
 
 const useLogin = () => {

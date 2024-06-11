@@ -33,13 +33,13 @@ function InputComponent(
     <>
       {variant === 'searchInput' ? (
         <div className="relative">
-          <input className={getStyleClass()} {...props} />
-          <button type="submit" className="absolute top-0 bottom-0 right-16">
+          <input className={getStyleClass()} {...props} ref={ref} />
+          <button type="submit" className="absolute top-0 bottom-0 right-2">
             <GoSearch />
           </button>
         </div>
       ) : (
-        <input className={getStyleClass()} {...props} />
+        <input className={getStyleClass()} {...props} ref={ref} />
       )}
     </>
   );

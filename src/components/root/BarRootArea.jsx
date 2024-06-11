@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PostModal from '../Modal/PostModal';
 import useSpotRoutes from '../../Hooks/routes/useSpotRoutes';
+import NoData from './../../pages/Board/NoData';
 
 export default function BarRootArea({ selectedRegion }) {
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -20,7 +21,7 @@ export default function BarRootArea({ selectedRegion }) {
 
   return (
     <div className="p-4 w-[340px]">
-      <p className="text-lg font-medium">지역 추천 경로</p>
+      <p className="m-t text-xl font-medium">지역 추천 경로</p>
       {loading && <p>Loading...</p>}
       {error && <p>Error loading routes: {error.message}</p>}
       {routes && routes.length > 0 ? (
@@ -30,14 +31,12 @@ export default function BarRootArea({ selectedRegion }) {
           ))}
         </ul>
       ) : (
-        !loading && <p>No routes available for the selected region.</p>
+        !loading && (
+          <p>
+            <NoData message={'No data!'} />
+          </p>
+        )
       )}
-      <button
-        onClick={openModal}
-        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-300"
-      >
-        게시물 상태보기
-      </button>
       <PostModal isOpen={modalIsOpen} onRequestClose={closeModal} />
     </div>
   );

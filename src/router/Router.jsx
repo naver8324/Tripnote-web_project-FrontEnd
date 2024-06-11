@@ -15,6 +15,8 @@ import EditBoardPage from '../pages/Board/EditBoardPage';
 import PostPage from '../pages/Board/PostPage';
 import { PrivateRoute, PublicRoute } from '../Hooks/useAuth';
 import FindPassword from '../pages/login/FindPasswordPage';
+import KakaoRedirect from '../pages/login/KakaoRedirect';
+
 // import KakaoCallback from '../Hooks/user/KakaoCallback';
 
 const router = createBrowserRouter([
@@ -27,6 +29,8 @@ const router = createBrowserRouter([
       {
         element: <PublicRoute />,
         children: [
+          { path: '/api/member/kakao/login', element: <KakaoRedirect /> },
+
           { path: 'login', element: <LoginPage /> },
           { path: 'agree', element: <AgreePage /> },
           { path: 'signup', element: <SignupPage /> },
