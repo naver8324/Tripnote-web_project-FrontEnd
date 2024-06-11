@@ -18,9 +18,22 @@ const SpotSearchList = ({ region }) => {
 
   const [selectedSpotId, setSelectedSpotId] = useState(null);
   const [center, setCenter] = useState(null);
+  const [searchInput, setSearchInput] = useState('');
+  const [searchLocation, setSearchLocation] = useState('');
 
-  // 선택한 지역의 스팟 데이터를 가져오는 useSpots 훅 사용
-  const { spots, error, loading } = useSpots(region);
+  // 초기 로드 시 region 값만으로 스팟 데이터를 가져오는 useSpots 훅 사용
+  const {
+    spots: initialSpots,
+    error: initialError,
+    loading: initialLoading,
+  } = useSpots(region);
+  // 검색 시 사용될 스팟 데이터를 가져오는 useSpots 훅 사용
+  const {
+    spots: searchedSpots,
+    error: searchError,
+    loading: searchLoading,
+  } = useSpots(region, searchLocation);
+
   const {
     responseData: routes,
     error: routeError,
@@ -57,21 +70,41 @@ const SpotSearchList = ({ region }) => {
     setClickedSpotName(spot.location); // 클릭한 스팟 이름 설정
   };
 
+  const handleInputChange = (event) => {
+    setSearchInput(event.target.value);
+  };
+
+  const handleSearch = async (event) => {
+    event.preventDefault();
+    setSearchLocation(searchInput);
+  };
+
   return (
-    <form className="relative mt-4 flex-col justify-center">
-      <div className="pt-4 pb-4 pl-3">
-        <Input variant="searchInput" placeholder="여행지를 검색해보세요!" />
+    <form
+      className="relative mt-4 flex-col justify-center"
+      onSubmit={handleSearch}
+    >
+      <div className="pt-4 pb-4 pl-3 flex">
+        <Input
+          variant="searchInput"
+          placeholder="여행지를 검색해보세요!"
+          value={searchInput}
+          onChange={handleInputChange}
+        />
       </div>
-      {loading && <p>Loading...</p>}
-      {error && <p>Error loading spots: {error}</p>}
-      {spots &&
-        spots.map((spot) => (
-          <SpotCard
-            key={spot.id}
-            spot={spot}
-            onClick={() => handleSpotClick(spot)}
-          />
-        ))}
+      {initialLoading && <p>Loading initial spots...</p>}
+      {initialError && <p>Error loading initial spots: {initialError}</p>}
+      {searchLoading && <p>Loading search results...</p>}
+      {searchError && <p>{searchError}</p>}
+      {(searchLocation ? searchedSpots : initialSpots)?.length > 0
+        ? (searchLocation ? searchedSpots : initialSpots).map((spot) => (
+            <SpotCard
+              key={spot.id}
+              spot={spot}
+              onClick={() => handleSpotClick(spot)}
+            />
+          ))
+        : !searchLoading && <p>검색 결과가 없습니다.</p>}
     </form>
   );
 };

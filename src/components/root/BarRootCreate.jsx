@@ -7,6 +7,7 @@ import Modal from '../Modal/Modal';
 import useHashTag from '../../Hooks/posts/useHashTag'; // 추가
 import { ToastAlert } from '../commons/ToastAlert';
 import { useNavigate } from 'react-router-dom';
+import useCreateRoute from '../../Hooks/routes/useCreateRoute'; // 추가
 
 export default function BarRootCreate() {
   const navigate = useNavigate();
@@ -15,11 +16,13 @@ export default function BarRootCreate() {
   const setMarkers = useMapCreateStore((state) => state.setMarkers);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedHashtags, setSelectedHashtags] = useState([]);
+  const [routeName, setRouteName] = useState('');
   const {
     Hashtags: themeTags,
     error: themeError,
     loading: themeLoading,
   } = useHashTag(false); // 테마 해시태그
+  const { createRoute, loading: createLoading } = useCreateRoute(); // 추가
 
   const moveSpot = (fromIndex, toIndex) => {
     const updatedSpots = [...routeSpots];
@@ -31,6 +34,19 @@ export default function BarRootCreate() {
       longitude: spot.lng,
       id: spot.id,
       index: index + 1,
+    }));
+    setMarkers(newMarkers);
+  };
+
+  const removeSpot = (index) => {
+    const updatedSpots = [...routeSpots];
+    updatedSpots.splice(index, 1);
+    setRouteSpots(updatedSpots);
+    const newMarkers = updatedSpots.map((spot, i) => ({
+      latitude: spot.lat,
+      longitude: spot.lng,
+      id: spot.id,
+      index: i + 1,
     }));
     setMarkers(newMarkers);
   };
@@ -51,27 +67,38 @@ export default function BarRootCreate() {
     );
   };
 
-  const handleRouteSave = () => {
-    // 해시태그를 포함한 경로 정보 저장 로직 추가
-    console.log('Selected Hashtags:', selectedHashtags);
-    console.log('Route Spots:', routeSpots);
+  const handleRouteSave = async () => {
+    const spotIds = routeSpots.map((spot) => spot.id);
+    const hashtagIds = selectedHashtags.map(
+      (tag) => themeTags.find((t) => `#${t.name}` === tag).id,
+    );
 
-    // 전역 상태로 저장
-    useMapCreateStore.setState({
-      savedRoutes: [
-        ...useMapCreateStore.getState().savedRoutes,
-        { spots: routeSpots, hashtags: selectedHashtags },
-      ],
-    });
+    const routeData = {
+      name: routeName,
+      spotIds,
+      hashtagIds,
+    };
 
-    setIsModalOpen(false);
-    ToastAlert('경로 추가가 완료되었습니다', 'success');
-    navigate('/mypage');
+    try {
+      await createRoute(routeData);
+      // 경로 생성 성공 후 상태 초기화
+      setRouteSpots([]);
+      setMarkers([]);
+      setSelectedHashtags([]);
+      setRouteName('');
+      setIsModalOpen(false);
+      ToastAlert('경로 추가가 완료되었습니다', 'success');
+      navigate('/mypage');
+    } catch (error) {
+      ToastAlert('경로 저장 중 오류가 발생했습니다', 'error');
+    }
   };
+
+  const isSaveEnabled = routeName.length > 0 && selectedHashtags.length > 0;
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="w-[340px] m-5">
+      <div className="w-[340px] m-5 h-[calc(100vh-150px)] overflow-y-auto">
         <p className="text-lg">스팟을 드래그하여 경로를 만들어보세요!</p>
         {routeSpots.map((spot, index) => (
           <SpotDndCard
@@ -79,11 +106,14 @@ export default function BarRootCreate() {
             spot={spot}
             index={index}
             moveSpot={moveSpot}
+            removeSpot={removeSpot}
           />
         ))}
         <div className="flex justify-end m-4">
           <button
-            className={`mt-4 px-4 py-2 text-white rounded-lg  ${routeSpots.length < 2 ? 'bg-gray-300' : 'bg-prime'}`}
+            className={`mt-4 px-4 py-2 text-white rounded-lg ${
+              routeSpots.length < 2 ? 'bg-gray-300' : 'bg-prime'
+            }`}
             disabled={routeSpots.length < 2}
             onClick={handleCreateRoute}
           >
@@ -94,15 +124,25 @@ export default function BarRootCreate() {
       {isModalOpen && (
         <Modal>
           <h2>만드신 경로의 이름을 지어주세요!</h2>
+          <input
+            type="text"
+            value={routeName}
+            onChange={(e) => setRouteName(e.target.value)}
+            className="w-full p-2 mt-2 mb-4 border rounded"
+          />
+          <h3 className="mt-4 text-lg">테마 해시태그</h3>
           {themeLoading ? (
             <p>Loading...</p>
           ) : (
-            <div className="w-[600px]">
-              <h3 className="mt-4 text-lg">테마 해시태그</h3>
+            <div className="flex flex-wrap">
               {themeTags.map((hashtag) => (
                 <button
                   key={hashtag.id}
-                  className={`m-2 p-2 rounded-2xl ${selectedHashtags.includes(`#${hashtag.name}`) ? 'bg-prime text-white ' : 'bg-white shadow'}`}
+                  className={`m-2 p-2 rounded-2xl ${
+                    selectedHashtags.includes(`#${hashtag.name}`)
+                      ? 'bg-prime text-white'
+                      : 'bg-white shadow'
+                  }`}
                   onClick={() => handleHashtagSelect(`#${hashtag.name}`)}
                 >
                   #{hashtag.name}
@@ -113,7 +153,12 @@ export default function BarRootCreate() {
           <div className="flex justify-end mt-4">
             <button
               onClick={handleRouteSave}
-              className="px-4 py-2 bg-green-400 text-white rounded-lg mr-2 hover:bg-prime"
+              className={`px-4 py-2 rounded-lg mr-2 ${
+                isSaveEnabled
+                  ? 'bg-green-400 text-white hover:bg-prime'
+                  : 'bg-gray-300'
+              }`}
+              disabled={!isSaveEnabled}
             >
               저장
             </button>
