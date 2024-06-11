@@ -6,9 +6,14 @@ export const loadNaverMapScript = (callback) => {
   document.head.appendChild(script);
 
   script.onload = () => {
+    console.log('Naver Map script loaded successfully');
     if (typeof callback === 'function') {
       callback();
     }
+  };
+
+  script.onerror = () => {
+    console.error('Failed to load Naver Map script');
   };
 
   return () => {
@@ -55,6 +60,7 @@ export const updateMarkers = (map, markers) => {
 
   map.markers = newMarkers;
 };
+
 export const updatePolylines = (map, markers, colors = ['#1DC078']) => {
   if (map.polylines) {
     map.polylines.forEach((polyline) => polyline.setMap(null));
