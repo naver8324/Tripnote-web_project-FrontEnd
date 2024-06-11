@@ -5,6 +5,7 @@ import GhostButton from '../../components/commons/GhostButton';
 import useSignup from '../../Hooks/user/useSignup';
 import { ToastAlert } from '../../components/commons/ToastAlert';
 import EmailVerification from '../../components/Email/EmailVerification';
+import axios from 'axios';
 
 export default function SignupPage() {
   const navigate = useNavigate();
@@ -15,43 +16,65 @@ export default function SignupPage() {
   const [passwordError, setPasswordError] = useState('');
   const [nicknameError, setNicknameError] = useState('');
   const [nicknameErrorColor, setNicknameErrorColor] = useState('red-500');
+  const [emailError, setEmailError] = useState('');
+  const [emailErrorColor, setEmailErrorColor] = useState('red-500');
   const [isVerified, setIsVerified] = useState(false); // 이메일 인증 상태 추가
   const { signup, loading, error } = useSignup();
+  const [nicknameLoading, setNicknameLoading] = useState(false);
+  const [nicknameCheckError, setNicknameCheckError] = useState('');
+
+  const redirectUrl =
+    new URLSearchParams(location.search).get('redirecturl') || '/';
 
   const handleCheckNickname = async () => {
+    setNicknameLoading(true);
+    setNicknameCheckError('');
     try {
       if (nickname.length < 2 || nickname.length > 10) {
         setNicknameError('닉네임은 2글자 이상 10글자 이하이어야 합니다.');
         setNicknameErrorColor('red-500');
-        return;
+        setNicknameLoading(false);
+        return false;
       }
       const response = await axios.get(
-        `http://34.64.39.102:8080/api/member/check-nickname?nickname=${nickname}`,
+        `${import.meta.env.VITE_API_BASE_URL}api/member/check-nickname?nickname=${nickname}`,
       );
       if (response.data) {
         setNicknameError('이미 사용 중인 닉네임입니다.');
         setNicknameErrorColor('red-500');
+        setNicknameLoading(false);
+        return false;
       } else {
         setNicknameError('사용 가능한 닉네임입니다.');
         setNicknameErrorColor('prime');
+        setNicknameLoading(false);
+        return true;
       }
     } catch (error) {
       console.error('Error while checking nickname:', error);
       setNicknameError('닉네임 확인 중 오류가 발생했습니다.');
       setNicknameErrorColor('red-500');
+      setNicknameLoading(false);
+      setNicknameCheckError(error.message);
+      return false;
     }
   };
 
   const handleSignup = async () => {
     console.log('가입하기 클릭됨');
+
     // 닉네임 중복 확인
-    await handleCheckNickname();
+    const isNicknameAvailable = await handleCheckNickname();
+    if (!isNicknameAvailable) {
+      return;
+    }
 
     // 비밀번호 확인
     if (password !== confirmPassword) {
       setPasswordError('비밀번호가 일치하지 않습니다.');
       return;
     }
+
     // 비밀번호 형식 검증
     const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$/;
     if (!passwordRegex.test(password)) {
@@ -72,7 +95,7 @@ export default function SignupPage() {
       ToastAlert('회원가입이 완료되었습니다.', 'success');
 
       console.log('Signup successful, navigating to login');
-      navigate('/login');
+      navigate(`/login?redirecturl=${redirectUrl}`);
     } catch (error) {
       console.error('Signup failed:', error);
       setPasswordError('가입 중 오류가 발생했습니다.');
@@ -105,6 +128,7 @@ export default function SignupPage() {
           <button
             className="w-1/4 h-14 bg-prime text-white p-2 rounded-lg"
             onClick={handleCheckNickname}
+            disabled={nicknameLoading}
           >
             확인
           </button>
@@ -113,6 +137,9 @@ export default function SignupPage() {
           <p className={`mb-6 text-500 text-${nicknameErrorColor}`}>
             {nicknameError}
           </p>
+        )}
+        {nicknameCheckError && (
+          <p className="text-red-500">닉네임 확인 중 오류가 발생했습니다.</p>
         )}
         <div className="mt-6 mb-4">
           <InfoInput
@@ -140,7 +167,7 @@ export default function SignupPage() {
           title="가입하기"
           className={'mt-6'}
           onClick={handleSignup}
-          disabled={!isVerified} // 이메일 인증 완료되기 전까지 비활성화
+          disabled={!isVerified || nicknameLoading} // 이메일 인증 완료되기 전까지 비활성화
         />
         <div className="text-center">
           <Link

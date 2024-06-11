@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import useLogin from '../../Hooks/user/useLogin';
 import logo from '../../assets/logo-green.png';
 import kakao from '../../assets/kakao.png';
@@ -12,15 +12,20 @@ import { ToastAlert } from '../../components/commons/ToastAlert';
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { login, loading: loginLoading, error: loginError } = useLogin();
+
+  const redirectUrl =
+    new URLSearchParams(location.search).get('redirecturl') || '/';
+
   const handleFindPasswordClick = () => {
     navigate('/findPassword');
   };
 
   const handleSignupClick = () => {
-    navigate('/agree');
+    navigate(`/agree?redirecturl=${redirectUrl}`);
   };
 
   const handleLoginClick = async () => {
@@ -32,7 +37,7 @@ export default function LoginPage() {
       console.log('Login successful, navigating to main');
       ToastAlert('로그인 되었습니다.', 'success');
 
-      navigate('/');
+      navigate(redirectUrl);
     } catch (err) {
       console.error('Login failed:', err);
     }
