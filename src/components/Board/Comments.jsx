@@ -8,6 +8,7 @@ import { formmateDate } from '../../utils/date';
 import useUserStore from '../../store/useUserStore';
 import useDeleteComment from '../../Hooks/posts/useDeleteComment';
 import useUpdateComment from '../../Hooks/posts/useUpdateComment';
+import useDebounce from '../../Hooks/useDebounce';
 
 export default function Comments({ postDetail }) {
   const { id } = postDetail;
@@ -32,6 +33,8 @@ export default function Comments({ postDetail }) {
     ToastAlert('댓글이 등록되었습니다.', 'success');
     refetch(); // 댓글 목록 불러오기
   };
+
+  const debounceHandleSave = useDebounce(handleComment, 500)
 
   const deleteComment = useDeleteComment();
   // 댓글 삭제 함수
@@ -79,14 +82,14 @@ export default function Comments({ postDetail }) {
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
               e.preventDefault(); // Enter키 누르면 줄바꿈 방지 **Mac OS 체크필요
-              handleComment(e);
+              debounceHandleSave(e);
             }
           }}
           placeholder="댓글을 남겨주세요."
           className="pl-5 pt-5 placeholder:opacity-80 resize-none outline-none w-full h-[60px] overflow-auto bg-gray-100 rounded-md pr-[80px]"
         ></textarea>
         <Button
-          onClick={handleComment}
+          onClick={debounceHandleSave}
           size="medium"
           className="bg-red-400 text-white absolute right-1 top-1/2 transform -translate-y-1/2 px-4"
         >

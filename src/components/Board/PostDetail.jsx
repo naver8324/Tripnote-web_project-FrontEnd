@@ -36,16 +36,16 @@ export default function PostDetail({ postDetail }) {
   };
 
   const handleEditPost = () => {
-    navigate(`/editBoard`, { state: { postDetail }})
-  }
-  console.log('id', id)
+    navigate(`/editBoard`, { state: { postDetail } });
+  };
+  console.log('id', id);
   return (
-    <div className="w-[900px] center pb-10 max-lg:px-[5vw] text-title">
+    <div className="w-[900px] center pb-10 max-lg:px-[5vw]">
       <div className="mt-12">
         <div className="">
           <h1 className="text-2xl font-semibold">{title}</h1>
           <div className="flex gap-2 items-center justify-between mt-4">
-            <div className="flex space-x-2 items-center">
+            <div className="flex space-x-2 items-center  text-title">
               <img src={mockImg} alt="" className="w-6 h-6 rounded-full" />
               <p className="text-lg opacity-70">
                 {`${nickname} · ${formmateDate(createdAt)}`}
@@ -53,8 +53,10 @@ export default function PostDetail({ postDetail }) {
             </div>
             {nickname === userNickname && (
               <div className="space-x-2 text-medium">
-                <Button onClick={handleEditPost}>수정</Button>
-                <Button onClick={handleDeletePost} className="text-red-400">
+                <Button className=" text-title" onClick={handleEditPost}>
+                  수정
+                </Button>
+                <Button className="text-red-400" onClick={handleDeletePost}>
                   삭제
                 </Button>
               </div>

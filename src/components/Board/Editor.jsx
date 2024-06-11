@@ -10,7 +10,6 @@ Quill.register('modules/ImageResize', ImageResize);
 export default function Editor({ postTitle, postContent, setPostTitle, setPostContent }) {
   const QuillRef = useRef(null);
   const [images, setImages] = useState([]);
-  const location = useLocation();
   // const { postDetail } = location?.state;
   // const [editTitle, setEditTitle] = useState(postDetail?.title);
   // const [editContent, setEditContent] = useState(postDetail?.content);

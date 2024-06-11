@@ -17,7 +17,7 @@ export default function BoardPage() {
   const navigate = useNavigate();
   const [sortOption, setSortOption] = useState('최신순');
   const [currentPage, setCurrentPage] = useState(1);
-  const { posts, error, loading, refetch } = useMemberPosts(
+  const { posts, error, loading } = useMemberPosts(
     sortOption,
     currentPage,
     4,

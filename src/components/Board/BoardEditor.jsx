@@ -44,27 +44,23 @@ export default function BoardEditor() {
     }
   };
 
+  const handleGoBack = () => {
+    navigate(-1);
+  };
+
   return (
     <div className="w-[840px] flex-col justify-center items-center">
       <nav className="navBar flex items-center justify-between">
-        <Link to="/board">
+        <button onClick={handleGoBack}>
           <GoArrowLeft className="text-xl" />
-        </Link>
+        </button>
         <div className="flex space-x-2">
           <Button
             onClick={handleSavePost}
-            variant="roundButton"
             size="medium"
             className="bg-prime text-white border-none"
           >
             저장
-          </Button>
-          <Button
-            variant="roundButton"
-            size="medium"
-            className="bg-subBackground"
-          >
-            수정
           </Button>
         </div>
       </nav>
