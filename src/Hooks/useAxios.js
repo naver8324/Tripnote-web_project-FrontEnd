@@ -39,7 +39,7 @@ const useAxios = ({
         method: fetchMethod,
         url: finalUrl,
         ...(fetchMethod === 'GET' || fetchMethod === 'DELETE'
-          ? {}
+          ? { params: fetchParams.params }
           : { data: fetchParams.data || data }),
       });
 
