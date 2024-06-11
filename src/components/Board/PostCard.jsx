@@ -2,7 +2,6 @@ import React from 'react';
 import profile from '../../assets/profile.png';
 import { formmateDate } from '../../utils/date';
 import { Link } from 'react-router-dom';
-import { MdOutlineNoPhotography } from 'react-icons/md';
 
 export default function PostCard({ contents }) {
   const { id, nickname, createdAt, title, content, hashtagResponseDTOList } =

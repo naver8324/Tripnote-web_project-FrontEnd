@@ -3,12 +3,17 @@ import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import ImageResize from 'quill-image-resize';
 import axios from 'axios';
+import { useLocation } from 'react-router-dom';
 
 Quill.register('modules/ImageResize', ImageResize);
 
 export default function Editor({ postTitle, postContent, setPostTitle, setPostContent }) {
   const QuillRef = useRef(null);
   const [images, setImages] = useState([]);
+  const location = useLocation();
+  // const { postDetail } = location?.state;
+  // const [editTitle, setEditTitle] = useState(postDetail?.title);
+  // const [editContent, setEditContent] = useState(postDetail?.content);
 
   const handleImageUpload = async (file) => {
     try {
@@ -123,7 +128,7 @@ export default function Editor({ postTitle, postContent, setPostTitle, setPostCo
 
   return (
     <>
-      <div className="flex-col justify-center items-center">
+      <div className="w-[840px] flex-col justify-center items-center">
         <textarea
           className="border-none outline-none resize-none w-full h-10 text-3xl mt-10 leading-tight placeholder:opacity-80"
           type="text"

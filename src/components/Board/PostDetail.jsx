@@ -34,6 +34,10 @@ export default function PostDetail({ postDetail }) {
       ToastAlert('게시글 삭제 실패', 'error');
     }
   };
+
+  const handleEditPost = () => {
+    navigate(`/editBoard`, { state: { postDetail }})
+  }
   console.log('id', id)
   return (
     <div className="w-[900px] center pb-10 max-lg:px-[5vw] text-title">
@@ -49,7 +53,7 @@ export default function PostDetail({ postDetail }) {
             </div>
             {nickname === userNickname && (
               <div className="space-x-2 text-medium">
-                <Button>수정</Button>
+                <Button onClick={handleEditPost}>수정</Button>
                 <Button onClick={handleDeletePost} className="text-red-400">
                   삭제
                 </Button>

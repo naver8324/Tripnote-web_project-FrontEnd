@@ -1,16 +1,25 @@
 import React, { useState } from 'react';
 import Button from '../commons/Button';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { GoArrowLeft } from 'react-icons/go';
 import Editor from './Editor';
 import useSavePost from '../../Hooks/posts/useSavePost';
 import { ToastAlert } from '../commons/ToastAlert';
+import useUpdatePost from '../../Hooks/posts/useUpdatePost';
 
 export default function BoardEditor() {
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const { createPost } = useSavePost();
   const navigate = useNavigate();
+  const location = useLocation();
+  const { createPost } = useSavePost();
+  const { updatePost } = useUpdatePost();
+
+  const editPost = location.state?.postDetail || { title: '', content: '' };
+  const [title, setTitle] = useState(editPost.title);
+  const [content, setContent] = useState(editPost.content);
+
+  // 수정 모드 체크
+  const isEditing = Boolean(location.state?.postDetail);
+  console.log(isEditing);
 
   const handleSavePost = async () => {
     if (!title) {
@@ -22,7 +31,13 @@ export default function BoardEditor() {
       return;
     }
     try {
-      createPost(title, content);
+      if (isEditing) {
+        await updatePost(editPost.id, title, content);
+        ToastAlert('게시글이 수정되었습니다.', 'success');
+      } else {
+        await createPost(title, content);
+        ToastAlert('게시글이 등록되었습니다.', 'success');
+      }
       navigate('/board');
     } catch (error) {
       ToastAlert('게시글 작성을 실패했습니다.', 'error');
