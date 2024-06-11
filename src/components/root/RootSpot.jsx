@@ -1,9 +1,12 @@
-import React, { useEffect } from 'react';
+import React from 'react';
+import SpotSearchList from '../SpotSearchList/SpotSearchList';
 
-export default function RootSpot() {
+const RootSpot = () => {
   return (
     <>
-      <p>스팟중심 컴포넌트</p>
+      <SpotSearchList region="SEOUL" />
     </>
   );
-}
+};
+
+export default RootSpot;

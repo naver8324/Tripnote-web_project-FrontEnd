@@ -1,49 +1,62 @@
-import React, { useState } from 'react';
-import Accordion from '../components/Accordion/Accordion';
-import NaverMap from '../components/Map/NaverMap';
+import React from 'react';
 import Tabs from '../components/Tabs/Tabs';
 import RootSpot from '../components/root/RootSpot';
 import RootArea from '../components/root/RootArea';
-import AccordionButton from '../components/Accordion/AccordionButton';
-import AccordionRootSpot from '../components/root/AccordionRootSpot';
-import AccordionRootArea from '../components/root/AccordionRootArea';
+import BarRootSpot from '../components/root/BarRootSpot';
+import BarRootArea from '../components/root/BarRootArea';
 import useTabStore from '../store/useTabStore';
+import NaverSpotMap from '../components/Map/NaverSpotMap';
+import useMapSpotStore from '../store/useMapSpotStore';
+import NaverRegionMap from '../components/Map/NaverRegionMap';
 
 export default function RootRecommendationPage() {
-  const [isAccordionOpen, setIsAccordionOpen] = useState(false);
   const { activeIndex } = useTabStore();
-
-  const toggleAccordion = () => {
-    setIsAccordionOpen((prev) => !prev);
-  };
+  const markers = useMapSpotStore((state) => state.markers);
+  const polylineColors = useMapSpotStore((state) => state.polylineColors);
+  const routes = useMapSpotStore((state) => state.routes);
+  const selectedRouteIndex = useMapSpotStore(
+    (state) => state.selectedRouteIndex,
+  );
+  const center = useMapSpotStore((state) => state.center);
 
   return (
     <div className="mt-[118px] w-full bg-subTitle flex mx-auto">
-      <div className="w-1/5 bg-white">
-        <div className="p-4 flex justify-between items-center">
+      <div className="w-[360px] bg-white border-e-2">
+        <div className="w-[360px] p-4 flex justify-between items-center">
           <Tabs>
-            <Tabs.Tab index={0}>스팟 중심 추천</Tabs.Tab>
-            <Tabs.Tab index={1}>지역 추천 Best 5</Tabs.Tab>
+            <Tabs.Tab index={0}>지역 추천 Best 5</Tabs.Tab>
+            <Tabs.Tab index={1}>스팟 중심 추천</Tabs.Tab>
+
             <Tabs.TabContent index={0}>
-              <RootSpot />
+              <RootArea />
             </Tabs.TabContent>
             <Tabs.TabContent index={1}>
-              <RootArea />
+              <RootSpot />
             </Tabs.TabContent>
           </Tabs>
         </div>
-        <AccordionButton
-          isAccordionOpen={isAccordionOpen}
-          toggleAccordion={toggleAccordion}
-        />
+      </div>
+      <div className="w-[360px] bg-white">
+        {activeIndex === 1 ? <BarRootSpot /> : <BarRootArea />}
       </div>
 
-      {isAccordionOpen && (
-        <Accordion isOpen={isAccordionOpen}>
-          {activeIndex === 0 ? <AccordionRootSpot /> : <AccordionRootArea />}
-        </Accordion>
+      {activeIndex === 1 ? (
+        <NaverSpotMap
+          markers={markers}
+          className={'w-screen'}
+          polylineColors={polylineColors}
+          routes={routes}
+          selectedRouteIndex={selectedRouteIndex}
+          center={center}
+        />
+      ) : (
+        <NaverRegionMap
+          markers={markers}
+          className={'w-screen'}
+          selectedRouteIndex={selectedRouteIndex}
+          center={center}
+        />
       )}
-      <NaverMap className={isAccordionOpen ? 'w-3/5' : 'w-4/5'} />
     </div>
   );
 }

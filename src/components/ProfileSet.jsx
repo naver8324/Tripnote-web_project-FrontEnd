@@ -1,29 +1,102 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useProfileStore from '../store/useProfileStore';
+import useUserStore from '../store/useUserStore';
+import useMemberInfo from '../Hooks/user/useMemberInfo';
+import useInfoUpdate from '../Hooks/user/useInfoUpdate'; // 새로운 훅 임포트
+import { toast } from 'react-toastify';
+import { ToastAlert } from './commons/ToastAlert';
 
 const ProfileSet = () => {
   const navigate = useNavigate();
-  const {
-    email,
-    nickname,
-    isNicknameChanged,
-    setNickname,
-    resetNicknameChanged,
-  } = useProfileStore();
+  const email = useUserStore((state) => state.email);
+  const nickname = useUserStore((state) => state.nickname);
+  const setEmail = useUserStore((state) => state.setEmail);
+  const setNickname = useUserStore((state) => state.setNickname);
+  const resetUser = useUserStore((state) => state.resetUser);
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [errors, setErrors] = useState({ nickname: '', password: '' });
+  const { memberInfo } = useMemberInfo();
+  const { updateInfo } = useInfoUpdate(); // 새로운 훅 사용
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await memberInfo();
+        setEmail(data.email);
+        setNickname(data.nickname);
+      } catch (err) {
+        console.error('Error fetching member info:', err);
+      }
+    };
+
+    fetchData();
+  }, [setEmail, setNickname]);
 
   const handleNicknameChange = (e) => {
     setNickname(e.target.value);
+    if (e.target.value.length < 2) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        nickname: '닉네임은 2글자 이상이어야 합니다.',
+      }));
+    } else {
+      setErrors((prevErrors) => ({ ...prevErrors, nickname: '' }));
+    }
   };
 
-  const handleSave = () => {
-    // 저장 로직을 여기에 추가
-    console.log('Profile saved:', { email, nickname });
-    resetNicknameChanged();
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+    if (e.target.value.length < 8) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        password: '비밀번호는 영문과 숫자를 포함하여 8~20자여야 합니다.',
+      }));
+    } else {
+      setErrors((prevErrors) => ({ ...prevErrors, password: '' }));
+    }
+  };
+
+  const handleConfirmPasswordChange = (e) => {
+    setConfirmPassword(e.target.value);
+    if (e.target.value !== password) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        password: '비밀번호가 일치하지 않습니다.',
+      }));
+    } else {
+      setErrors((prevErrors) => ({ ...prevErrors, password: '' }));
+    }
+  };
+
+  const handleSave = async () => {
+    const data = {
+      nickname,
+    };
+    if (password.length >= 8) {
+      data.password = password;
+    }
+    try {
+      await updateInfo(data);
+      ToastAlert('정보 수정이 완료되었습니다.', 'success');
+      console.log('Profile saved:', data);
+      resetUser();
+      navigate('/mypage');
+    } catch (err) {
+      console.error('Error saving profile:', err);
+    }
   };
 
   const handleGoBack = () => {
     navigate('/mypage');
+  };
+
+  const isFormValid = () => {
+    return (
+      nickname.length >= 2 &&
+      (password.length === 0 || password.length >= 8) &&
+      (password.length === 0 || password === confirmPassword)
+    );
   };
 
   return (
@@ -31,7 +104,7 @@ const ProfileSet = () => {
       <h1 className="text-2xl mb-4">프로필 설정</h1>
       <form className="space-y-4">
         <div>
-          <label className="block text-subTitle ">이메일</label>
+          <label className="block text-subTitle">이메일</label>
           <input
             type="email"
             value={email}
@@ -47,15 +120,33 @@ const ProfileSet = () => {
             onChange={handleNicknameChange}
             className="w-full h-14 px-3 py-2 border border-gray-300 mb-4 text-xl rounded-lg"
           />
+          {errors.nickname && <p className="text-red-500">{errors.nickname}</p>}
+        </div>
+        <div>
+          <label className="block text-subTitle">비밀번호</label>
+          <input
+            type="password"
+            value={password}
+            onChange={handlePasswordChange}
+            className="w-full h-14 px-3 py-2 border border-gray-300 mb-4 text-xl rounded-lg"
+          />
+        </div>
+        <div>
+          <label className="block text-subTitle">비밀번호 확인</label>
+          <input
+            type="password"
+            value={confirmPassword}
+            onChange={handleConfirmPasswordChange}
+            className="w-full h-14 px-3 py-2 border border-gray-300 mb-4 text-xl rounded-lg"
+          />
+          {errors.password && <p className="text-red-500">{errors.password}</p>}
         </div>
         <div className="space-y-4">
           <button
             type="button"
             onClick={handleSave}
-            disabled={!isNicknameChanged}
-            className={`w-full h-14 px-4 py-2 rounded-lg text-white  ${
-              isNicknameChanged ? 'bg-prime' : 'bg-gray-300'
-            }`}
+            disabled={!isFormValid()}
+            className={`w-full h-14 px-4 py-2 rounded-lg text-white ${isFormValid() ? 'bg-prime' : 'bg-gray-300'}`}
           >
             저장
           </button>

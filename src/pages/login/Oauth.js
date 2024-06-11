@@ -27,7 +27,7 @@ import axios from 'axios';
 export async function kakaoLogin() {
   try {
     const response = await axios.get(
-      'https://api.tripnote.site/api/member/kakao',
+      'http://34.64.39.102:8080/api/member/kakao',
       {
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',

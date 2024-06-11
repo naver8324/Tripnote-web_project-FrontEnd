@@ -1,11 +1,12 @@
 import React from 'react';
+import useMemberPosts from '../../Hooks/posts/useMemberPosts';
+import MyPageContent from '../../pages/MyPage/MyPageContent';
 
 const MyReview = () => {
   return (
-    <div>
-      <h2 className="text-2xl font-bold">나의 여행후기 컴포넌트</h2>
-      {/* 추가적인 내용이나 UI 요소들을 여기에 추가하세요 */}
-    </div>
+    <>
+      <MyPageContent />
+    </>
   );
 };
 

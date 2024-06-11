@@ -1,9 +1,10 @@
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import InfoInput from '../../components/commons/InfoInput';
 import GhostButton from '../../components/commons/GhostButton';
 import useSignup from '../../Hooks/user/useSignup';
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { ToastAlert } from '../../components/commons/ToastAlert';
+import EmailVerification from '../../components/Email/EmailVerification';
 import axios from 'axios';
 
 export default function SignupPage() {
@@ -17,95 +18,63 @@ export default function SignupPage() {
   const [nicknameErrorColor, setNicknameErrorColor] = useState('red-500');
   const [emailError, setEmailError] = useState('');
   const [emailErrorColor, setEmailErrorColor] = useState('red-500');
-  const [verificationCode, setVerificationCode] = useState('');
-  const [verificationSent, setVerificationSent] = useState(false);
-  const [timer, setTimer] = useState(0);
+  const [isVerified, setIsVerified] = useState(false); // 이메일 인증 상태 추가
   const { signup, loading, error } = useSignup();
+  const [nicknameLoading, setNicknameLoading] = useState(false);
+  const [nicknameCheckError, setNicknameCheckError] = useState('');
 
-  useEffect(() => {
-    let countdown;
-    if (timer > 0) {
-      countdown = setInterval(() => {
-        setTimer((prev) => prev - 1);
-      }, 1000);
-    } else {
-      clearInterval(countdown);
-    }
-    return () => clearInterval(countdown);
-  }, [timer]);
+  const redirectUrl =
+    new URLSearchParams(location.search).get('redirecturl') || '/';
 
   const handleCheckNickname = async () => {
+    setNicknameLoading(true);
+    setNicknameCheckError('');
     try {
       if (nickname.length < 2 || nickname.length > 10) {
         setNicknameError('닉네임은 2글자 이상 10글자 이하이어야 합니다.');
         setNicknameErrorColor('red-500');
-        return;
+        setNicknameLoading(false);
+        return false;
       }
       const response = await axios.get(
-        `http://34.64.39.102:8080/api/member/check-nickname?nickname=${nickname}`,
+        `${import.meta.env.VITE_API_BASE_URL}api/member/check-nickname?nickname=${nickname}`,
       );
       if (response.data) {
         setNicknameError('이미 사용 중인 닉네임입니다.');
         setNicknameErrorColor('red-500');
+        setNicknameLoading(false);
+        return false;
       } else {
         setNicknameError('사용 가능한 닉네임입니다.');
         setNicknameErrorColor('prime');
+        setNicknameLoading(false);
+        return true;
       }
     } catch (error) {
       console.error('Error while checking nickname:', error);
       setNicknameError('닉네임 확인 중 오류가 발생했습니다.');
       setNicknameErrorColor('red-500');
+      setNicknameLoading(false);
+      setNicknameCheckError(error.message);
+      return false;
     }
-  };
-
-  const handleCheckEmail = async () => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      setEmailError('올바른 이메일 형식이 아닙니다.');
-      setEmailErrorColor('red-500');
-      return;
-    }
-    try {
-      const response = await axios.get(
-        `http://34.64.39.102:8080/api/member/check-email?email=${email}`,
-      );
-      if (response.data) {
-        setEmailError('이미 사용 중인 이메일입니다.');
-        setEmailErrorColor('red-500');
-      } else {
-        setEmailError('사용 가능한 이메일입니다.');
-        setEmailErrorColor('prime');
-        // 인증번호 발송
-        setVerificationSent(true);
-        setTimer(180); // 3분 카운트다운
-      }
-    } catch (error) {
-      console.error('Error while checking email:', error);
-      setEmailError('이메일 확인 중 오류가 발생했습니다.');
-      setEmailErrorColor('red-500');
-    }
-  };
-
-  const handleVerifyCode = () => {
-    // 인증번호 확인 로직 추가
-    console.log('인증번호 확인:', verificationCode);
-    // 예: 서버에 인증번호 확인 요청
-    // 인증 성공 시:
-    // navigate('/next-step'); // 다음 단계로 이동
   };
 
   const handleSignup = async () => {
     console.log('가입하기 클릭됨');
+
     // 닉네임 중복 확인
-    await handleCheckNickname();
-    // 이메일 중복 확인
-    await handleCheckEmail();
+    const isNicknameAvailable = await handleCheckNickname();
+    if (!isNicknameAvailable) {
+      return;
+    }
 
     // 비밀번호 확인
     if (password !== confirmPassword) {
       setPasswordError('비밀번호가 일치하지 않습니다.');
       return;
     }
+
     // 비밀번호 형식 검증
     const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$/;
     if (!passwordRegex.test(password)) {
@@ -113,11 +82,20 @@ export default function SignupPage() {
       return;
     }
 
+    // 이메일 인증 확인
+    if (!isVerified) {
+      setEmailError('이메일 인증이 필요합니다.');
+      setEmailErrorColor('red-500');
+      return;
+    }
+
     try {
       // 회원가입 요청
       await signup(email, password, nickname);
+      ToastAlert('회원가입이 완료되었습니다.', 'success');
+
       console.log('Signup successful, navigating to login');
-      navigate('/login');
+      navigate(`/login?redirecturl=${redirectUrl}`);
     } catch (error) {
       console.error('Signup failed:', error);
       setPasswordError('가입 중 오류가 발생했습니다.');
@@ -128,67 +106,12 @@ export default function SignupPage() {
     <div className="m-56 w-[480px]">
       <div className="">
         <p className="text-3xl mb-8">회원가입</p>
-        <label htmlFor="email" className="text-subTitle block mb-1">
-          이메일
-        </label>
-        <div className="flex justify-between items-center">
-          <div className="w-3/4 mr-2">
-            <input
-              id="email"
-              type="email"
-              className="w-full h-14 p-2 border border-gray-300 rounded-lg"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-          <button
-            className="w-1/4 h-14 bg-prime text-white p-2 rounded-lg"
-            onClick={handleCheckEmail}
-          >
-            {verificationSent ? '재전송' : '인증번호 전송'}
-          </button>
-        </div>
-        {emailError && (
-          <p className={`mb-6 text-500 text-${emailErrorColor}`}>
-            {emailError}
-          </p>
-        )}
-        {verificationSent && (
-          <div>
-            <label
-              htmlFor="verificationCode"
-              className="text-subTitle block mb-1"
-            >
-              인증번호
-            </label>
-            <div className="flex justify-between items-center">
-              <div className="w-3/4 mr-2">
-                <input
-                  id="verificationCode"
-                  type="text"
-                  className="w-full h-14 p-2 border border-gray-300 rounded-lg"
-                  value={verificationCode}
-                  onChange={(e) => setVerificationCode(e.target.value)}
-                  disabled={timer === 0}
-                />
-              </div>
-              <button
-                className={`w-1/4 h-14 p-2 rounded-lg ${
-                  timer === 0
-                    ? 'bg-gray-400 text-gray-600'
-                    : 'bg-prime text-white'
-                }`}
-                onClick={handleVerifyCode}
-                disabled={timer === 0}
-              >
-                확인
-              </button>
-            </div>
-            <p className="mb-4">
-              {`남은 시간: ${Math.floor(timer / 60)}분 ${timer % 60}초`}
-            </p>
-          </div>
-        )}
+        <EmailVerification
+          email={email}
+          setEmail={setEmail}
+          setIsVerified={setIsVerified}
+        />{' '}
+        {/* EmailVerification 컴포넌트 사용 */}
         <label htmlFor="nickname" className="mt-6 text-subTitle block mb-1">
           닉네임
         </label>
@@ -205,6 +128,7 @@ export default function SignupPage() {
           <button
             className="w-1/4 h-14 bg-prime text-white p-2 rounded-lg"
             onClick={handleCheckNickname}
+            disabled={nicknameLoading}
           >
             확인
           </button>
@@ -213,6 +137,9 @@ export default function SignupPage() {
           <p className={`mb-6 text-500 text-${nicknameErrorColor}`}>
             {nicknameError}
           </p>
+        )}
+        {nicknameCheckError && (
+          <p className="text-red-500">닉네임 확인 중 오류가 발생했습니다.</p>
         )}
         <div className="mt-6 mb-4">
           <InfoInput
@@ -240,6 +167,7 @@ export default function SignupPage() {
           title="가입하기"
           className={'mt-6'}
           onClick={handleSignup}
+          disabled={!isVerified || nicknameLoading} // 이메일 인증 완료되기 전까지 비활성화
         />
         <div className="text-center">
           <Link

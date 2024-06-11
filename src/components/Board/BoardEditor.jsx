@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Button from '../commons/Button';
 import { Link } from 'react-router-dom';
 import { GoArrowLeft } from 'react-icons/go';
@@ -6,6 +6,10 @@ import ReactQuill from 'react-quill';
 import Editor from './Editor';
 
 export default function BoardEditor() {
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+
+  
   return (
     <div className='w-[840px] flex-col justify-center items-center'>
       <nav className="navBar flex items-center justify-between">
