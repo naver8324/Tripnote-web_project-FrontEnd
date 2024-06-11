@@ -7,10 +7,12 @@ import Button from '../commons/Button';
 import InfoInput from '../commons/InfoInput';
 import { formmateDate } from '../../utils/date';
 import { Link } from 'react-router-dom';
+import useDeletingPost from '../../Hooks/admin/useDeletingPost';
 
 const PostManagement = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [postId, setPostId] = useState(null);
+  const [deletedPostId, setDeletedPostId] = useState(null);
   const [nickname, setNickname] = useState(null);
   const [typedNickname, setTypedNickname] = useState('');
   const { initialPosts, refetch: refetechPosts } = usePosts(
@@ -19,6 +21,9 @@ const PostManagement = () => {
     currentPage,
     10,
   );
+
+  const { refetch: refetchDeletePost } = useDeletingPost(deletedPostId);
+
   const [posts, setPosts] = useState(null);
 
   useEffect(() => {
@@ -30,6 +35,13 @@ const PostManagement = () => {
   useEffect(() => {
     refetechPosts();
   }, [postId, nickname]);
+
+  useEffect(() => {
+    if (deletedPostId !== null) {
+      refetchDeletePost();
+      setDeletedPostId(null);
+    }
+  }, [deletedPostId]);
 
   const renderPosts = () => {
     return posts.map((post) => (
@@ -44,13 +56,17 @@ const PostManagement = () => {
         >
           {post.nickname}
         </th>
-        <th>
-          <Link to={`/post/${post.id}`}>{post.title}</Link>
-        </th>
+        <th>{post.title}</th>
         <th>{formmateDate(post.createdAt)}</th>
         <th>{post.delete ? 'Yes' : 'No'}</th>
         <th>
-          <Button variant={'nomalButton'} size={'medium'} onClick={() => {}}>
+          <Button
+            variant={'nomalButton'}
+            size={'medium'}
+            onClick={() => {
+              setDeletedPostId(post.id);
+            }}
+          >
             {!post.delete ? '삭제' : '복원'}
           </Button>
         </th>

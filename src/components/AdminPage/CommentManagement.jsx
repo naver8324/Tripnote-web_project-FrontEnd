@@ -20,7 +20,7 @@ const CommentManagement = () => {
     currentPage,
     10,
   );
-  const { refetch: refetechDeleteComment } =
+  const { refetch: refetchDeleteComment } =
     useDeletingComment(deletedCommentId);
 
   const [comments, setComments] = useState(null);
@@ -37,7 +37,7 @@ const CommentManagement = () => {
 
   useEffect(() => {
     if (deletedCommentId !== null) {
-      refetechDeleteComment();
+      refetchDeleteComment();
       setDeletedCommentId(null);
     }
   }, [deletedCommentId]);

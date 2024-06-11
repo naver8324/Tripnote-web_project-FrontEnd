@@ -1,10 +1,10 @@
 import useAxios from '../useAxios.js';
 
 // 전체 회원
-const useDeletingComment = (commentId) => {
+const useDeletingPost = (postId) => {
   const { responseData, error, loading, fetchData } = useAxios({
     method: 'DELETE',
-    url: `api/admin/comments/${commentId}`,
+    url: `api/admin/posts/${postId}`,
     data: null,
     shouldFetch: false,
   });
@@ -12,4 +12,4 @@ const useDeletingComment = (commentId) => {
   return { response: responseData, error, loading, refetch: fetchData };
 };
 
-export default useDeletingComment;
+export default useDeletingPost;
