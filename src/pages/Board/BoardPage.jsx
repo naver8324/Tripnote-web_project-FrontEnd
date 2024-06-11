@@ -30,16 +30,20 @@ export default function BoardPage() {
   const { searchByTag } = useSearchByTag({}, sortOption, currentPage, 4);
 
   const handleChangeTab = (tab) => {
-    setCurrentPage(1);
     setSortOption(tab);
+    if (pageState.startsWith('#')) {
+      loadPostByTag(null, pageState.substring(1), tab);
+    } else {
+      setCurrentPage(1);
+    }
   };
 
-  useEffect(() => {
-    if (posts && posts.content) {
-      setLocalPosts(posts.content);
-      console.log('localPosts:', posts.content);
-    }
-  }, [posts]);
+  // useEffect(() => {
+  //   if (posts && posts.content) {
+  //     setLocalPosts(posts.content);
+  //     console.log('localPosts:', posts.content);
+  //   }
+  // }, [posts]);
 
   useEffect(() => {
     if (regionTags) {
@@ -53,17 +57,17 @@ export default function BoardPage() {
     }
   }, [themeTags]);
 
-  const loadPostByTag = async (e) => {
+  const loadPostByTag = async (e, tagName, sortOptionOverride) => {
     const tag = {
-      name: e.target.innerText.replace('#', ''),
+      name: tagName || e.target.innerText.replace('#', ''),
       city: pageState === '지역별 후기',
     };
     setLocalPosts(null);
 
     try {
-      const data = await searchByTag(tag, sortOption, currentPage, 4);
+      const data = await searchByTag(tag, sortOptionOverride || sortOption, currentPage, 4);
       setLocalPosts(data.content);
-      setPageState(e.target.innerText);
+      setPageState(`#${tag.name}`);
       console.log('localpost', localPosts, 'pagestate', pageState);
     } catch (err) {
       console.error('Failed to load posts by tag:', err);
@@ -73,7 +77,8 @@ export default function BoardPage() {
   const handlePageChange = (event, page) => {
     setCurrentPage(page);
   };
-  console.log(sortOption);
+
+  console.log('sortOption', sortOption);
   return (
     <section className="min-h-screen mt-40 w-[840px] mx-auto flex flex-col text-title">
       <nav className="flex items-center justify-between w-full mb-8">
@@ -89,7 +94,7 @@ export default function BoardPage() {
             <>
               {localPosts === null ? (
                 <Spinner />
-              ) : localPosts.length ? (
+              ) : Array.isArray(localPosts) && localPosts.length ? (
                 localPosts.map((localPost, index) => (
                   <PostCard
                     key={`${localPost.id}-${index}`}
@@ -122,7 +127,7 @@ export default function BoardPage() {
                     size="small"
                     key={region.id}
                     className={`text-xs px-2 ${pageState === `#${region.name}` ? 'bg-title text-white' : ''}`}
-                    onClick={loadPostByTag}
+                    onClick={(e) => loadPostByTag(e, region.name)}
                   >
                     #{region.name}
                   </Button>
@@ -138,7 +143,7 @@ export default function BoardPage() {
                     size="small"
                     key={theme.id}
                     className={`text-xs px-2 ${pageState === `#${theme.name}` ? 'bg-title text-white' : ''}`}
-                    onClick={loadPostByTag}
+                    onClick={(e) => loadPostByTag(e, theme.name)}
                   >
                     #{theme.name}
                   </Button>
