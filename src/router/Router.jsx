@@ -16,6 +16,8 @@ import PostPage from '../pages/Board/PostPage';
 import { PrivateRoute, PublicRoute } from '../Hooks/useAuth';
 import FindPassword from '../pages/login/FindPasswordPage';
 import KakaoRedirect from '../pages/login/KakaoRedirect';
+import AdminPage from "../pages/AdminPage/AdminPage.jsx";
+import AdminLogin from "../pages/login/AdminLogin.jsx";
 
 // import KakaoCallback from '../Hooks/user/KakaoCallback';
 
@@ -43,6 +45,7 @@ const router = createBrowserRouter([
           { path: 'mypage/profile', element: <ProfilePage /> },
           { path: 'mypage/checkedpassword', element: <CheckedPasswordPage /> },
           { path: 'post/:postId', element: <PostPage /> },
+          { path: 'admin', element: <AdminPage /> },
         ],
       },
       { path: 'findpassword', element: <FindPassword /> },
@@ -52,6 +55,7 @@ const router = createBrowserRouter([
       { path: 'editBoard', element: <EditBoardPage /> },
       // { path: 'oauth', element: <Oauth /> },
       // { path: 'oauth/kakao/callback', element: <OauthCallback /> }, // OauthCallback 경로 추가
+      { path: 'admin/login', element: <AdminLogin /> },
     ],
   },
 ]);
