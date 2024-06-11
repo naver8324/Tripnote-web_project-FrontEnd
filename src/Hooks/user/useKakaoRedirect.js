@@ -1,18 +1,18 @@
 import useAxios from '../useAxios';
 import useAuthStore from '../../store/useAuthStore';
 
-const useKakaoRedirect = () => {
+const useKakaoRedirect = (code) => {
   const setIsAuth = useAuthStore((state) => state.setIsAuth);
   const { fetchData, error, loading } = useAxios({
     method: 'GET',
-    url: `api/member/kakao/login`,
+    url: `api/member/kakao/login?code=${code}`,
     shouldFetch: false,
   });
 
-  const kakaoRedirect = async (code) => {
+  const kakaoRedirect = async () => {
     try {
       console.log('fsdfsadlkflcmslkdsgh');
-      const response = await fetchData({ params: { code } });
+      const response = await fetchData();
 
       const accessToken = response.data.jwtToken;
       localStorage.setItem('kakaoToken', response.data.kakaoToken);
