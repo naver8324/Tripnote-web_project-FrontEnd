@@ -4,22 +4,23 @@ import Spinner from '../../components/commons/Spinner';
 import NoData from '../Board/NoData';
 import Pagination from '../../components/commons/Pagination';
 import useMemberPosts from '../../Hooks/posts/useMemberPosts';
+import useGetMyReview from '../../Hooks/mypage/useGetMyReview';
 
 export default function MyPageContent() {
   const [currentPage, setCurrentPage] = useState(1);
-  const { posts, error, loading, refetch } = useMemberPosts(
-    '최신순',
+  const { reviews, error, loading, refetch } = useGetMyReview(
     currentPage,
     4,
   );
-  const [localPosts, setLocalPosts] = useState(null);
+
+  console.log('review', reviews);
+  const [localPosts, setLocalPosts] = useState([]);
 
   useEffect(() => {
-    if (posts && posts.content) {
-      setLocalPosts(posts.content);
-      console.log('localPosts:', posts.content);
+    if (reviews && reviews.content) {
+      setLocalPosts(reviews.content);
     }
-  }, [posts]);
+  }, [reviews]);
 
   const handlePageChange = (event, page) => {
     setCurrentPage(page);
@@ -29,7 +30,7 @@ export default function MyPageContent() {
     <section className="flex flex-col text-title w-full mt-5">
       <div className="flex flex-1 w-full mb-16">
         <div className="flex-1 pr-4 space-y-8">
-          {localPosts === null ? (
+          {reviews === null ? (
             <Spinner />
           ) : localPosts.length ? (
             localPosts.map((localPost, index) => (
@@ -42,7 +43,7 @@ export default function MyPageContent() {
             <Pagination
               currentPage={currentPage}
               totalPage={Math.ceil(
-                posts ? posts.totalElements / posts.pageable.pageSize : 0,
+                reviews ? reviews.totalElements / reviews.size : 0,
               )}
               onPageChange={handlePageChange}
             />
