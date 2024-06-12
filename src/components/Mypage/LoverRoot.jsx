@@ -2,11 +2,11 @@ import React from 'react';
 import NaverMap from '../Map/NaverMap';
 
 const LoverRoot = () => {
-  const routeId = 5;
+  const routeId = 7;
 
   return (
     <div>
-      <NaverMap routeId={7} />
+      <NaverMap routeId={routeId} />
     </div>
   );
 };
