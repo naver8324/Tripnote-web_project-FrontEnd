@@ -4,7 +4,7 @@ const SpotPlusCard = ({ spot, onAddClick, onRemoveClick, isAdded }) => {
   return (
     <div
       key={spot.id}
-      className="w-[330px] h-[110px] mt-4 flex cursor-pointer rounded-xl shadow-md"
+      className="w-[330px] h-[130px] mt-4 flex cursor-pointer rounded-xl shadow-md"
     >
       <img
         src={spot.imageUrl}
