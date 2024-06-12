@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { GoChevronDown } from 'react-icons/go';
-import { GoSearch } from 'react-icons/go';
+import { GoChevronDown, GoSearch } from 'react-icons/go';
+import { useNavigate } from 'react-router-dom';
+import useRegionSearchStore from '../../store/useRegionSearchStore';
 
 export default function Selector() {
   const mockRegionsTags = [
@@ -23,16 +24,32 @@ export default function Selector() {
     '제주',
   ];
 
+  const navigate = useNavigate();
+  const setSelectedRegion = useRegionSearchStore(
+    (state) => state.setSelectedRegion,
+  );
+
   const [inputValue, setInputValue] = useState('');
   const [dropdown, setDropdown] = useState(false);
 
+  const handleSelectRegion = (region) => {
+    setSelectedRegion(region);
+    setDropdown(false);
+    navigate('/root/recommend');
+  };
+
   return (
     <div className="w-72 font-medium top-0">
-      <div className="w-full p-2 flex items-center justify-between rounded bg-subBackground" onClick={() => setDropdown(!dropdown)}>
+      <div
+        className="w-full p-2 flex items-center justify-between rounded bg-subBackground"
+        onClick={() => setDropdown(!dropdown)}
+      >
         여행지 검색
         <GoChevronDown className={`text-xl ${dropdown && 'rotate-180'}`} />
       </div>
-      <ul className={`bg-subBackground mt-2 overflow-y-auto ${dropdown ? 'max-h-40' : 'max-h-0'}`}>
+      <ul
+        className={`bg-subBackground mt-2 overflow-y-auto ${dropdown ? 'max-h-40' : 'max-h-0'}`}
+      >
         <div className="flex items-center px-2 sticky top-0 bg-subBackground">
           <GoSearch className="text-gray-300" />
           <input
@@ -47,6 +64,7 @@ export default function Selector() {
           <li
             key={i}
             className={`text-ml text-title bg-white hover:bg-prime hover:text-white pl-2 ${region.startsWith(inputValue) ? 'block' : 'hidden'}`}
+            onClick={() => handleSelectRegion(region)}
           >
             {region}
           </li>
