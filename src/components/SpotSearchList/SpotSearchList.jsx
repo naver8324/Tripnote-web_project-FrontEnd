@@ -101,6 +101,7 @@ const SpotSearchList = ({ region }) => {
             <SpotCard
               key={spot.id}
               spot={spot}
+              isSelected={selectedSpotId === spot.id}
               onClick={() => handleSpotClick(spot)}
             />
           ))

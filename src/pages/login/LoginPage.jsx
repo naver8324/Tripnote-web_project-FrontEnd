@@ -111,7 +111,7 @@ export default function LoginPage() {
               alt="kakao login"
             />
           </Link>
-          <Link to="/">
+          {/* <Link to="/">
             <img
               className="w-14 h-auto rounded-lg"
               src={naver}
@@ -124,7 +124,7 @@ export default function LoginPage() {
               src={google}
               alt="google login"
             />
-          </Link>
+          </Link> */}
         </div>
       </div>
     </div>
