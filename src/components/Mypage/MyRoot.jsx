@@ -46,7 +46,6 @@ const MyRoot = () => {
     navigate('/editBoard', { state: { routeId } });
   };
 
-  console.log(routesData);
   return (
     <div className="w-[840px] mt-4 text-title">
       {routes.map((route) => (
@@ -84,10 +83,6 @@ const MyRoot = () => {
             >
               {route.postId !== null ? '후기 작성 완료' : '경로 후기 작성'}
             </Button>
-
-            {/* <Button onClick={() => handleRoutePost(route.routeId)} className="text-sm px-4 py-2 bg-prime text-white">
-              경로 후기 작성
-            </Button> */}
           </div>
         </div>
       ))}

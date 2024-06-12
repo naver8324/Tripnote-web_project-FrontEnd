@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Button from '../commons/Button';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { GoArrowLeft } from 'react-icons/go';
 import Editor from './Editor';
 import useSavePost from '../../Hooks/posts/useSavePost';
@@ -10,6 +10,11 @@ import useUpdatePost from '../../Hooks/posts/useUpdatePost';
 export default function BoardEditor() {
   const navigate = useNavigate();
   const location = useLocation();
+
+  // 작성 버튼 상태 기반으로 직접 url 접근을 제어
+  if (!location.state.routeId) {
+    return <Navigate to="/" replace />;
+  }
   const routeId = location.state?.routeId;
   const { createPost } = useSavePost(routeId);
   const { updatePost } = useUpdatePost();
