@@ -7,6 +7,8 @@ import {
 } from 'react-icons/go';
 import useRouteToggleLike from '../../Hooks/routes/useRouteToggleLike';
 import useRouteToggleBookmark from '../../Hooks/routes/useRouteToggleBookmark';
+import useAuthStore from '../../store/useAuthStore'; // 인증 상태를 가져오기 위해 추가
+import { ToastAlert } from '../commons/ToastAlert';
 
 const RouteInteraction = ({
   routeId,
@@ -18,15 +20,24 @@ const RouteInteraction = ({
   const { toggleLike, loading: likeLoading } = useRouteToggleLike(routeId);
   const { toggleBookmark, loading: bookmarkLoading } =
     useRouteToggleBookmark(routeId);
+  const isAuth = useAuthStore((state) => state.isAuth); // 인증 상태 가져오기
 
   const handleLike = async (e) => {
     e.stopPropagation(); // 이벤트 전파 중지
+    if (!isAuth) {
+      ToastAlert('로그인이 필요한 기능입니다', 'error');
+      return;
+    }
     await toggleLike();
     onToggleLike();
   };
 
   const handleBookmark = async (e) => {
     e.stopPropagation(); // 이벤트 전파 중지
+    if (!isAuth) {
+      ToastAlert('로그인이 필요한 기능입니다', 'error');
+      return;
+    }
     await toggleBookmark();
     onToggleBookmark();
   };
