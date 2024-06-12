@@ -5,11 +5,7 @@ const useMapSpotStore = create((set) => ({
   routes: [],
   selectedRouteIndex: null,
   center: { latitude: 37.5665, longitude: 126.978 },
-  polylineColors: [
-    'rgba(255, 0, 0, 0.7)',
-    'rgba(0, 255, 0, 0.7)',
-    'rgba(0, 0, 255, 0.7)',
-  ],
+  polylineColors: ['#F87171', '#6EE7B7', '#93C5FD'],
   openItems: [], // 아코디언 열림 상태 추가
 
   setMarkers: (newMarkers) => {

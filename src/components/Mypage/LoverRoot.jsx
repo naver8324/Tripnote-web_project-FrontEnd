@@ -6,7 +6,7 @@ const LoverRoot = () => {
 
   return (
     <div>
-      <NaverMap routeId={routeId} />
+      <NaverMap routeId={7} />
     </div>
   );
 };
