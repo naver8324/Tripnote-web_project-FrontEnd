@@ -3,7 +3,6 @@ import PostCard from '../../components/Board/PostCard';
 import Spinner from '../../components/commons/Spinner';
 import NoData from '../Board/NoData';
 import Pagination from '../../components/commons/Pagination';
-import useMemberPosts from '../../Hooks/posts/useMemberPosts';
 import useGetMyReview from '../../Hooks/mypage/useGetMyReview';
 
 export default function MyPageContent() {
@@ -13,7 +12,6 @@ export default function MyPageContent() {
     4,
   );
 
-  console.log('review', reviews);
   const [localPosts, setLocalPosts] = useState([]);
 
   useEffect(() => {
@@ -37,7 +35,7 @@ export default function MyPageContent() {
               <PostCard key={`${localPost.id}-${index}`} contents={localPost} />
             ))
           ) : (
-            <NoData message="후기 게시물이 없습니다." />
+            <NoData message="작성한 후기 게시물이 없습니다." />
           )}
           {localPosts !== null && localPosts.length > 0 && (
             <Pagination
