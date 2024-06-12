@@ -16,7 +16,7 @@ export default function MyPage() {
   };
   return (
     <>
-      <div className="m-40 min-h-[1200px] bg-white rounded-lg p-6 flex flex-col items-center">
+      <div className="mt-40 min-h-[1200px] bg-white rounded-lg p-6 flex flex-col items-center">
         <Profile />
         <button
           className="text-lg mb-4 flex items-center"
@@ -26,10 +26,10 @@ export default function MyPage() {
           프로필 관리
         </button>
         <Tabs>
-          <Tabs.Tab index={0}>나의 여행 루트</Tabs.Tab>
-          <Tabs.Tab index={1}>찜한 여행 루트</Tabs.Tab>
-          <Tabs.Tab index={2}>나의 여행 후기</Tabs.Tab>
-          <Tabs.Tab index={3}>찜한 여행 후기</Tabs.Tab>
+          <Tabs.Tab index={0}>내 여행 경로</Tabs.Tab>
+          <Tabs.Tab index={1}>북마크 여행 경로</Tabs.Tab>
+          <Tabs.Tab index={2}>내 여행 경로 후기</Tabs.Tab>
+          {/* <Tabs.Tab index={3}>찜한 여행 후기</Tabs.Tab> */}
 
           <Tabs.TabContent index={0}>
             <MyRoot />
@@ -40,9 +40,9 @@ export default function MyPage() {
           <Tabs.TabContent index={2}>
             <MyReview />
           </Tabs.TabContent>
-          <Tabs.TabContent index={3}>
+          {/* <Tabs.TabContent index={3}>
             <LoverReview />
-          </Tabs.TabContent>
+          </Tabs.TabContent> */}
         </Tabs>
       </div>
     </>

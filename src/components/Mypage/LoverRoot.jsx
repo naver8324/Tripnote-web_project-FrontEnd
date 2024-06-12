@@ -3,7 +3,7 @@ import NaverMap from '../Map/NaverMap';
 
 const LoverRoot = () => {
   return (
-    <div>
+    <div className='w-[840px]'>
       <NaverMap />
     </div>
   );
