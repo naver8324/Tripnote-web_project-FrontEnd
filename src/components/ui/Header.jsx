@@ -35,10 +35,13 @@ export default function Header() {
     setSearchQuery('');
     navigate('/');
 
-    const searchElement = document.getElementById('search');
-    if (searchElement) {
-      searchElement.scrollIntoView({ behavior: 'smooth' });
-    }
+    // Delay scrolling to ensure navigation completes first
+    setTimeout(() => {
+      const searchElement = document.getElementById('search');
+      if (searchElement) {
+        searchElement.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100); // You can adjust the timeout duration if needed
   };
 
   return (
@@ -48,13 +51,9 @@ export default function Header() {
           <img className="w-36 h-auto" src={logo} alt="trip note logo" />
         </Link>
         <nav className="flex items-center gap-4 font-medium">
-          <Link
-            onClick={handleSearchClick}
-            className="hover:text-prime"
-            to="/root/recommend"
-          >
+          <button onClick={handleSearchClick} className="hover:text-prime">
             경로 추천
-          </Link>
+          </button>
           <Link className="hover:text-prime" to="/root/create">
             경로 생성
           </Link>

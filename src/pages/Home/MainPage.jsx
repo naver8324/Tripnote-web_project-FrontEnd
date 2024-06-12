@@ -39,8 +39,6 @@ export default function MainPage() {
 
   const handleButtonClick = () => {
     setScrollSmooth();
-    ToastAlert('test', 'info');
-
   };
 
   return (
