@@ -25,9 +25,7 @@ export default function Selector() {
   ];
 
   const navigate = useNavigate();
-  const setSelectedRegion = useRegionSearchStore(
-    (state) => state.setSelectedRegion,
-  );
+  const { setSelectedRegion, redirectPath } = useRegionSearchStore();
 
   const [inputValue, setInputValue] = useState('');
   const [dropdown, setDropdown] = useState(false);
@@ -35,7 +33,9 @@ export default function Selector() {
   const handleSelectRegion = (region) => {
     setSelectedRegion(region);
     setDropdown(false);
-    navigate('/root/recommend');
+    if (redirectPath) {
+      navigate(redirectPath);
+    }
   };
 
   return (

@@ -2,16 +2,18 @@ import React from 'react';
 import logo from '../../assets/logo-green.png';
 import { Link, useNavigate } from 'react-router-dom';
 import useStore from '../../store/store';
-import useAuthStore from '../../store/useAuthStore'; // Zustand authStore import
+import useAuthStore from '../../store/useAuthStore';
 import useLogout from '../../Hooks/user/useLogout';
 import Button from '../commons/Button';
 import { ToastAlert } from '../commons/ToastAlert';
+import useRegionSearchStore from '../../store/useRegionSearchStore'; // Import 상태 관리
 
 export default function Header() {
   const setSearchQuery = useStore((state) => state.setSearchQuery);
   const navigate = useNavigate();
   const isAuth = useAuthStore((state) => state.isAuth);
   const { logout, loading } = useLogout();
+  const { setRedirectPath } = useRegionSearchStore(); // Add redirect path state
 
   const handleLoginClick = () => {
     navigate('/login');
@@ -33,15 +35,26 @@ export default function Header() {
 
   const handleSearchClick = () => {
     setSearchQuery('');
+    setRedirectPath('/root/recommend'); // Set redirect path for route recommendation
     navigate('/');
-
-    // Delay scrolling to ensure navigation completes first
     setTimeout(() => {
       const searchElement = document.getElementById('search');
       if (searchElement) {
         searchElement.scrollIntoView({ behavior: 'smooth' });
       }
-    }, 100); // You can adjust the timeout duration if needed
+    }, 100);
+  };
+
+  const handleCreateClick = () => {
+    setSearchQuery('');
+    setRedirectPath('/root/create'); // Set redirect path for route creation
+    navigate('/');
+    setTimeout(() => {
+      const searchElement = document.getElementById('search');
+      if (searchElement) {
+        searchElement.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100);
   };
 
   return (
@@ -54,9 +67,9 @@ export default function Header() {
           <button onClick={handleSearchClick} className="hover:text-prime">
             경로 추천
           </button>
-          <Link className="hover:text-prime" to="/root/create">
+          <button onClick={handleCreateClick} className="hover:text-prime">
             경로 생성
-          </Link>
+          </button>
           <Link className="hover:text-prime" to="/board">
             후기
           </Link>
