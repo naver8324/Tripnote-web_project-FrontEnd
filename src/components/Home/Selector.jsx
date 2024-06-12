@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { GoChevronDown, GoSearch } from 'react-icons/go';
 import { useNavigate } from 'react-router-dom';
 import useRegionSearchStore from '../../store/useRegionSearchStore';
-import useMapCreateStore from '../../store/useMapCreateStore'; // 추가
+import useMapCreateStore from '../../store/useMapCreateStore'; // import the updated store
+import useMapSpotStore from '../../store/useMapSpotStore';
 
 export default function Selector() {
   const mockRegionsTags = [
@@ -27,14 +28,15 @@ export default function Selector() {
 
   const navigate = useNavigate();
   const { setSelectedRegion, redirectPath } = useRegionSearchStore();
-  const setRegion = useMapCreateStore((state) => state.setRegion); // 추가
-
+  const setRegion = useMapCreateStore((state) => state.setRegion);
+  const setSpotRegion = useMapSpotStore((state) => state.setRegion2);
   const [inputValue, setInputValue] = useState('');
   const [dropdown, setDropdown] = useState(false);
 
   const handleSelectRegion = (region) => {
     setSelectedRegion(region);
     setRegion(region); // region 설정 시 데이터 초기화
+    setSpotRegion(region);
     setDropdown(false);
     if (redirectPath) {
       navigate(redirectPath);

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Input from '../commons/Input';
-import useSpotRoutes from '../../Hooks/routes/useSpotRoutes';
 import useSpots from '../../Hooks/spots/useSpots';
 import SpotPlusCard from './SpotPlusCard';
 import useMapCreateStore from '../../store/useMapCreateStore';
+import useConditionalSpotRoutes from '../../Hooks/routes/useConditionalSpotRoutes';
 
 const RootCreateSpotList = ({ region }) => {
   const setMarkers = useMapCreateStore((state) => state.setMarkers);
@@ -34,7 +34,7 @@ const RootCreateSpotList = ({ region }) => {
     responseData: routes,
     error: routeError,
     loading: routeLoading,
-  } = useSpotRoutes(selectedSpotId);
+  } = useConditionalSpotRoutes(selectedSpotId);
 
   useEffect(() => {
     if (routes && routes.length > 0) {

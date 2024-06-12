@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import SpotCard from './SpotCard';
 import useMapSpotStore from '../../store/useMapSpotStore';
 import Input from '../commons/Input';
-import useSpotRoutes from '../../Hooks/routes/useSpotRoutes';
 import useSpots from '../../Hooks/spots/useSpots';
+import useConditionalSpotRoutes from '../../Hooks/routes/useConditionalSpotRoutes';
 
 const SpotSearchList = ({ region }) => {
   const setMarkers = useMapSpotStore((state) => state.setMarkers);
@@ -38,7 +38,7 @@ const SpotSearchList = ({ region }) => {
     responseData: routes,
     error: routeError,
     loading: routeLoading,
-  } = useSpotRoutes(selectedSpotId);
+  } = useConditionalSpotRoutes(selectedSpotId);
 
   useEffect(() => {
     if (routes && routes.length > 0) {
