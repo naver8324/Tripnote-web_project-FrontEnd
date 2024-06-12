@@ -10,12 +10,14 @@ import useUpdatePost from '../../Hooks/posts/useUpdatePost';
 export default function BoardEditor() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { createPost } = useSavePost();
+  const routeId = location.state?.routeId;
+  const { createPost } = useSavePost(routeId);
   const { updatePost } = useUpdatePost();
 
   const editPost = location.state?.postDetail || { title: '', content: '' };
   const [title, setTitle] = useState(editPost.title);
   const [content, setContent] = useState(editPost.content);
+
 
   // 수정 모드 체크
   const isEditing = Boolean(location.state?.postDetail);

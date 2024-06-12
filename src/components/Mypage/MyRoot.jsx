@@ -7,8 +7,10 @@ import NoData from '../../pages/Board/NoData';
 import useDeleteRoute from '../../Hooks/routes/useDeleteRoute';
 import { ToastAlert } from '../commons/ToastAlert';
 import Pagination from '../commons/Pagination';
+import { useNavigate } from 'react-router-dom';
 
 const MyRoot = () => {
+  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1); // 페이지는 1부터 시작
   const [pageSize] = useState(4); // 한 페이지에 표시할 아이템 수
   const { routesData, error, loading, refetch } = useFetchRoutes();
@@ -30,7 +32,8 @@ const MyRoot = () => {
 
   if (loading) return <Spinner />;
   if (error) return <p>Error: {error}</p>;
-  if (!routesData || !routesData.content || routesData.content.length === 0) return <NoData message="생성된 경로가 없습니다." />;
+  if (!routesData || !routesData.content || routesData.content.length === 0)
+    return <NoData message="생성된 경로가 없습니다." />;
 
   const totalElements = routesData.totalElements;
   const totalPage = Math.ceil(totalElements / pageSize);
@@ -39,6 +42,11 @@ const MyRoot = () => {
   const endIdx = startIdx + pageSize;
   const routes = routesData.content.slice(startIdx, endIdx);
 
+  const handleRoutePost = (routeId) => {
+    navigate('/editBoard', { state: { routeId } });
+  };
+
+  console.log(routesData);
   return (
     <div className="w-[840px] mt-4 text-title">
       {routes.map((route) => (
@@ -69,9 +77,17 @@ const MyRoot = () => {
             ))}
           </div>
           <div className="flex space-x-2 p-2">
-            <Button className="text-sm px-4 py-2 bg-prime text-white">
-              경로 후기 작성
+            <Button
+              onClick={() => handleRoutePost(route.routeId)}
+              className={`text-sm px-4 py-2 ${route.postId !== null ? 'bg-gray-200 cursor-not-allowed' : 'bg-prime text-white'}`}
+              disabled={!!route.postId}
+            >
+              {route.postId !== null ? '후기 작성 완료' : '경로 후기 작성'}
             </Button>
+
+            {/* <Button onClick={() => handleRoutePost(route.routeId)} className="text-sm px-4 py-2 bg-prime text-white">
+              경로 후기 작성
+            </Button> */}
           </div>
         </div>
       ))}

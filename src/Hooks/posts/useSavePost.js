@@ -1,7 +1,7 @@
 import useAxios from '../useAxios';
 import { ToastAlert } from '../../components/commons/ToastAlert';
 //user4
-const useSavePost = (routeId=29) => {
+const useSavePost = (routeId) => {
   const { responseData, error, loading, fetchData } = useAxios({
     method: 'POST',
     url: `/api/member/posts?routeId=${routeId}`,

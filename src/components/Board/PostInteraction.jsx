@@ -44,8 +44,8 @@ export default function PostInteraction({
     setUserBookmark((prev) => !prev);
   };
 
-  const debounceHandleLike = useDebounce(handleLike, 500);
-  const debounceHandleBookmark = useDebounce(handleBookmark, 500);
+  const debounceHandleLike = useDebounce(handleLike, 300);
+  const debounceHandleBookmark = useDebounce(handleBookmark, 300);
 
   const { comments } = useGetComment(id);
   useEffect(() => {
