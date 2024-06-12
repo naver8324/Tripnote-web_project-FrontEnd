@@ -3,20 +3,20 @@ import useUserStore from '../store/useUserStore';
 import profile from '../assets/profile.png';
 
 const Profile = () => {
-  const nickname = useUserStore((state) => state.nickname);
+  const nickname = localStorage.getItem('userNickname');
 
   // userId 값을 nickname으로 설정
   const userId = nickname;
 
   return (
-    <>
+    <div className='flex space-x-2'>
       <img
         src={profile}
         alt="기본 이미지"
-        className="rounded-full w-20 h-20 object-cover mb-4"
+        className="rounded-full w-8 h-8 object-cover mb-4"
       />
-      <h3 className="text-5xl mb-4">{userId}</h3>
-    </>
+      <h3 className="text-2xl mb-2">{userId}</h3>
+    </div>
   );
 };
 

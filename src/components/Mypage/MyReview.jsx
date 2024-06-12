@@ -4,9 +4,9 @@ import MyPageContent from '../../pages/MyPage/MyPageContent';
 
 const MyReview = () => {
   return (
-    <>
+    <div className='w-[840px]'>
       <MyPageContent />
-    </>
+    </div>
   );
 };
 

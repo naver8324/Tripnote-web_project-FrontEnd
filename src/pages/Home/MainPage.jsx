@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import mainImg from '../../assets/travel.jpg';
 import elicelogo from '../../assets/elicelogo.png';
 import seoul from '../../assets/seoul.jpg';
@@ -6,13 +6,12 @@ import suwon from '../../assets/suwon.jpg';
 import busan from '../../assets/busan.jpg';
 import daejeon from '../../assets/daejeon.jpg';
 import './MainPage.css';
-import { GoSearch } from 'react-icons/go';
 import ImageCard from '../../components/Home/ImageCard';
 import useStore from '../../store/store';
 import Button from '../../components/commons/Button';
-import Input from '../../components/commons/Input';
 import Selector from '../../components/Home/Selector';
 import { ToastAlert } from '../../components/commons/ToastAlert';
+import useRegionSearchStore from '../../store/useRegionSearchStore'; // 추가
 
 const regions = [
   { imgSrc: seoul, name: '서울' },
@@ -24,9 +23,10 @@ const regions = [
 export default function MainPage() {
   const searchRef = useRef();
   const searchQuery = useStore((state) => state.searchQuery);
+  const { setRedirectPath } = useRegionSearchStore(); // 추가
 
   const setScrollSmooth = () => {
-    if (searchRef) {
+    if (searchRef.current) {
       searchRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   };
@@ -38,9 +38,8 @@ export default function MainPage() {
   }, [searchQuery]);
 
   const handleButtonClick = () => {
+    setRedirectPath('/root/recommend'); // 추가
     setScrollSmooth();
-    ToastAlert('test', 'info');
-
   };
 
   return (
@@ -80,7 +79,6 @@ export default function MainPage() {
       </div>
       <div id="search" ref={searchRef} className="inner flex flex-col gap-8">
         <form className="relative flex">
-          {/* <Input variant="searchInput" placeholder="여행지를 검색해보세요!" /> */}
           <Selector />
         </form>
         <p className="text-title text-xl font-semibold mt-4">

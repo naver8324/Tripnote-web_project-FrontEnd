@@ -19,12 +19,14 @@ const RouteInteraction = ({
   const { toggleBookmark, loading: bookmarkLoading } =
     useRouteToggleBookmark(routeId);
 
-  const handleLike = async () => {
+  const handleLike = async (e) => {
+    e.stopPropagation(); // 이벤트 전파 중지
     await toggleLike();
     onToggleLike();
   };
 
-  const handleBookmark = async () => {
+  const handleBookmark = async (e) => {
+    e.stopPropagation(); // 이벤트 전파 중지
     await toggleBookmark();
     onToggleBookmark();
   };

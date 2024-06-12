@@ -61,7 +61,7 @@ export default function BarRootSpot() {
         <p className="m-5 text-xl">스팟 중심 추천 경로</p>
         {routes.map((route, index) => (
           <AccordionItem
-            key={route.routeId}
+            key={route.integratedRouteId}
             value={`item-${index + 1}`}
             className="p-4 m-4 shadow-lg rounded-lg"
           >
@@ -69,11 +69,13 @@ export default function BarRootSpot() {
               className="flex justify-between items-center cursor-pointer"
               onClick={() => handleRouteClick(index)}
             >
-              <p className={`text-3xl ${textColors[index]}`}>
+              <p
+                className={`text-3xl ${textColors[index % textColors.length]}`}
+              >
                 {`추천 경로 ${index + 1}`}
               </p>
               <RouteInteraction
-                routeId={route.routeId}
+                routeId={route.integratedRouteId}
                 liked={likeStates[index]}
                 bookmarked={bookmarkStates[index]}
                 onToggleLike={() => handleToggleLike(index)}
@@ -87,7 +89,9 @@ export default function BarRootSpot() {
                 }}
               >
                 <ChevronDown
-                  className={`h-8 w-8 transition-transform duration-200 ${openItems.includes(`item-${index + 1}`) ? 'rotate-180' : ''}`}
+                  className={`h-8 w-8 transition-transform duration-200 ${
+                    openItems.includes(`item-${index + 1}`) ? 'rotate-180' : ''
+                  }`}
                 />
               </AccordionTrigger>
             </div>
