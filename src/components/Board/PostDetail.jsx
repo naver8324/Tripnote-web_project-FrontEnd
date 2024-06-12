@@ -6,6 +6,7 @@ import Button from '../commons/Button';
 import useDeletePost from '../../Hooks/posts/useDeletePost';
 import { ToastAlert } from '../commons/ToastAlert';
 import { useNavigate } from 'react-router-dom';
+import NaverMap from '../Map/NaverMap';
 
 export default function PostDetail({ postDetail }) {
   const {
@@ -19,6 +20,7 @@ export default function PostDetail({ postDetail }) {
     likedAt,
     markedAt,
     reportedAt,
+    routeId
   } = postDetail;
   const userNickname = localStorage.getItem('userNickname');
   const navigate = useNavigate();
@@ -38,12 +40,13 @@ export default function PostDetail({ postDetail }) {
   const handleEditPost = () => {
     navigate(`/editBoard`, { state: { postDetail } });
   };
-  console.log('id', id);
+  console.log('postdetail', postDetail);
   return (
     <div className="w-[900px] center pb-10 max-lg:px-[5vw]">
       <div className="mt-12">
         <div className="">
-          <h1 className="text-2xl font-semibold">{title}</h1>
+          <NaverMap routeId={routeId}/>
+          <h1 className="text-2xl font-semibold mt-10">{title}</h1>
           <div className="flex gap-2 items-center justify-between mt-4">
             <div className="flex space-x-2 items-center  text-title">
               <img src={mockImg} alt="" className="w-6 h-6 rounded-full" />

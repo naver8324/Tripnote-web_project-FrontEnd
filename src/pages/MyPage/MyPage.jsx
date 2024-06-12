@@ -29,7 +29,7 @@ export default function MyPage() {
           <Tabs.Tab index={0}>내 여행 경로</Tabs.Tab>
           <Tabs.Tab index={1}>북마크 여행 경로</Tabs.Tab>
           <Tabs.Tab index={2}>내 여행 경로 후기</Tabs.Tab>
-          {/* <Tabs.Tab index={3}>찜한 여행 후기</Tabs.Tab> */}
+          <Tabs.Tab index={3}>북마크 여행 후기</Tabs.Tab>
 
           <Tabs.TabContent index={0}>
             <MyRoot />
@@ -40,9 +40,9 @@ export default function MyPage() {
           <Tabs.TabContent index={2}>
             <MyReview />
           </Tabs.TabContent>
-          {/* <Tabs.TabContent index={3}>
+          <Tabs.TabContent index={3}>
             <LoverReview />
-          </Tabs.TabContent> */}
+          </Tabs.TabContent>
         </Tabs>
       </div>
     </>

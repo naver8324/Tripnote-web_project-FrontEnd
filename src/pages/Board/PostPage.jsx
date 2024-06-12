@@ -8,7 +8,7 @@ import { ToastAlert } from '../../components/commons/ToastAlert';
 
 export default function PostPage() {
   const { postId } = useParams();
-  const { detailPost, error, loading } = useDetailPost(postId);
+  const { detailPost, error, loading} = useDetailPost(postId);
   const [postDetail, setPostDetail] = useState(null);
 
   useEffect(() => {
