@@ -12,11 +12,7 @@ const EmailVerification = ({ email, setEmail, isVerified, setIsVerified }) => {
   const [emailErrorColor, setEmailErrorColor] = useState('red-500');
   const { duplicateCheckEmail, loading: duplicateCheckEmailLoading, error: duplicateCheckEmailError } = useDuplicateCheckEmail();
   const { SendEmail, loading: sendLoading, error: sendError } = useSendEmail();
-  const {
-    checkEmail,
-    loading: checkLoading,
-    error: checkError,
-  } = useCheckedEmail();
+  const { checkEmail, loading: checkLoading, error: checkError } = useCheckedEmail();
 
   useEffect(() => {
     let countdown;
