@@ -28,7 +28,7 @@ const SpotDndCard = ({ spot, index, moveSpot, removeSpot }) => {
     <div
       ref={ref}
       style={{ opacity: isDragging ? 0.5 : 1 }}
-      className="spot-card w-[330px] h-[110px] mt-4 flex cursor-pointer rounded-xl shadow-md animate-fade-in relative border-2 border-transparent"
+      className="spot-card w-[330px] h-[130px] mt-4 flex cursor-pointer rounded-xl shadow-md animate-fade-in relative border-2 border-transparent"
     >
       {isDragging && (
         <div className="absolute inset-0 bg-yellow-100 opacity-50 rounded-xl border-2 border-yellow-500"></div>

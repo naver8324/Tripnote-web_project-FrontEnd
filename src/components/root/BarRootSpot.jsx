@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Accordion,
   AccordionItem,
@@ -9,7 +9,7 @@ import { ChevronDown } from 'lucide-react';
 import useMapSpotStore from '../../store/useMapSpotStore';
 import RouteInteraction from '../SpotSearchList/RouteInteraction';
 
-export default function BarRootSpot() {
+const BarRootSpot = () => {
   const routes = useMapSpotStore((state) => state.routes);
   const setSelectedRouteIndex = useMapSpotStore(
     (state) => state.setSelectedRouteIndex,
@@ -17,14 +17,14 @@ export default function BarRootSpot() {
   const openItems = useMapSpotStore((state) => state.openItems);
   const setOpenItems = useMapSpotStore((state) => state.setOpenItems);
 
-  const textColors = ['text-red-400', 'text-green-400', 'text-blue-400'];
+  const [likeStates, setLikeStates] = useState([]);
+  const [bookmarkStates, setBookmarkStates] = useState([]);
+  const textColors = ['text-red-400', 'text-green-400', 'text-blue-400']; // 텍스트 색상 배열 추가
 
-  const [likeStates, setLikeStates] = useState(
-    routes.map((route) => route.likedAt),
-  );
-  const [bookmarkStates, setBookmarkStates] = useState(
-    routes.map((route) => route.markedAt),
-  );
+  useEffect(() => {
+    setLikeStates(routes.map((route) => route.likedAt));
+    setBookmarkStates(routes.map((route) => route.markedAt));
+  }, [routes]);
 
   const handleRouteClick = (index) => {
     setSelectedRouteIndex(index);
@@ -40,19 +40,15 @@ export default function BarRootSpot() {
   };
 
   const handleToggleLike = (index) => {
-    setLikeStates((prev) => {
-      const newStates = [...prev];
-      newStates[index] = !newStates[index];
-      return newStates;
-    });
+    setLikeStates((prev) =>
+      prev.map((state, i) => (i === index ? !state : state)),
+    );
   };
 
   const handleToggleBookmark = (index) => {
-    setBookmarkStates((prev) => {
-      const newStates = [...prev];
-      newStates[index] = !newStates[index];
-      return newStates;
-    });
+    setBookmarkStates((prev) =>
+      prev.map((state, i) => (i === index ? !state : state)),
+    );
   };
 
   return (
@@ -71,9 +67,7 @@ export default function BarRootSpot() {
             >
               <p
                 className={`text-3xl ${textColors[index % textColors.length]}`}
-              >
-                {`추천 경로 ${index + 1}`}
-              </p>
+              >{`추천 경로 ${index + 1}`}</p>
               <RouteInteraction
                 routeId={route.integratedRouteId}
                 liked={likeStates[index]}
@@ -95,7 +89,6 @@ export default function BarRootSpot() {
                 />
               </AccordionTrigger>
             </div>
-
             <AccordionContent>
               <div className="mt-4 rounded-xl">
                 {route.spots.map((spot) => (
@@ -115,4 +108,6 @@ export default function BarRootSpot() {
       </Accordion>
     </div>
   );
-}
+};
+
+export default BarRootSpot;
