@@ -5,7 +5,7 @@ import GhostButton from '../../components/commons/GhostButton';
 import useSignup from '../../Hooks/user/useSignup';
 import { ToastAlert } from '../../components/commons/ToastAlert';
 import EmailVerification from '../../components/Email/EmailVerification';
-import axios from 'axios';
+import useCheckNickname from "../../Hooks/user/useCheckNickname.js";
 
 export default function SignupPage() {
   const navigate = useNavigate();
@@ -20,6 +20,8 @@ export default function SignupPage() {
   const [emailErrorColor, setEmailErrorColor] = useState('red-500');
   const [isVerified, setIsVerified] = useState(false); // 이메일 인증 상태 추가
   const { signup, loading, error } = useSignup();
+  const { checkNickname, loading: CheckNicknameLoading, error: CheckNicknameError } = useCheckNickname();
+
   const [nicknameLoading, setNicknameLoading] = useState(false);
   const [nicknameCheckError, setNicknameCheckError] = useState('');
 
@@ -36,10 +38,10 @@ export default function SignupPage() {
         setNicknameLoading(false);
         return false;
       }
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_BASE_URL}api/member/check-nickname?nickname=${nickname}`,
-      );
-      if (response.data) {
+
+      const response = await checkNickname(nickname);
+
+      if (response === true) {
         setNicknameError('이미 사용 중인 닉네임입니다.');
         setNicknameErrorColor('red-500');
         setNicknameLoading(false);

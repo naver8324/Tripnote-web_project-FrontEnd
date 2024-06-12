@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import useSendEmail from '../../Hooks/email/useSendEmail';
 import useCheckedEmail from '../../Hooks/email/useCheckedEmail';
 import { ToastAlert } from '../commons/ToastAlert';
+import useDuplicateCheckEmail from "../../Hooks/user/useDuplicateCheckEmail.js";
 
 const EmailVerification = ({ email, setEmail, isVerified, setIsVerified }) => {
   const [verificationCode, setVerificationCode] = useState('');
@@ -10,6 +10,7 @@ const EmailVerification = ({ email, setEmail, isVerified, setIsVerified }) => {
   const [timer, setTimer] = useState(0);
   const [emailError, setEmailError] = useState('');
   const [emailErrorColor, setEmailErrorColor] = useState('red-500');
+  const { duplicateCheckEmail, loading: duplicateCheckEmailLoading, error: duplicateCheckEmailError } = useDuplicateCheckEmail();
   const { SendEmail, loading: sendLoading, error: sendError } = useSendEmail();
   const {
     checkEmail,
@@ -37,10 +38,8 @@ const EmailVerification = ({ email, setEmail, isVerified, setIsVerified }) => {
       return;
     }
     try {
-      const response = await axios.get(
-        `http://34.64.39.102:8080/api/member/check-email?email=${email}`,
-      );
-      if (response.data) {
+      const response = await duplicateCheckEmail(email);
+      if (response === true) {
         setEmailError('이미 사용 중인 이메일입니다.');
         setEmailErrorColor('red-500');
       } else {
@@ -50,6 +49,7 @@ const EmailVerification = ({ email, setEmail, isVerified, setIsVerified }) => {
         // 인증번호 발송
         ToastAlert('이메일 인증번호를 전송중입니다.', 'info');
         const emailResponse = await SendEmail(email);
+        console.log(emailResponse);
 
         setVerificationSent(true);
         setTimer(180); // 3분 카운트다운
