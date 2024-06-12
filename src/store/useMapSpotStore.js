@@ -32,6 +32,7 @@ const useMapSpotStore = create((set) => ({
     console.log('setOpenItems:', newOpenItems);
     set({ openItems: newOpenItems });
   },
+  setRegion2: (region) => set({ region, routes: [], markers: [] }),
 }));
 
 export default useMapSpotStore;

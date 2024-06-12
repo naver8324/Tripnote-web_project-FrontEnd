@@ -1,9 +1,12 @@
 import React from 'react';
 import useMapSpotStore from '../../store/useMapSpotStore';
+import noimage from '../../assets/noimage.png';
 
 const SpotCard = ({ spot, onClick, isSelected, showAddButton = false }) => {
   const addSpot = useMapSpotStore((state) => state.addSpotToRoute);
-
+  const onErrorImg = (e) => {
+    e.target.src = noimage;
+  };
   const handleAddClick = (e) => {
     e.stopPropagation();
     addSpot(spot);
@@ -16,7 +19,11 @@ const SpotCard = ({ spot, onClick, isSelected, showAddButton = false }) => {
     >
       <img
         src={spot.imageUrl}
-        alt={spot.location}
+        onError={(e) => {
+          e.target.onerror = null; // 무한 루프 방지
+          e.target.src = noimage;
+        }}
+        alt={noimage}
         className="w-1/3 h-full object-cover rounded-xl"
       />
       <div className="w-2/3 h-full p-2">
