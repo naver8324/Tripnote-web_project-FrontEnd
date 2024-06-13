@@ -2,6 +2,26 @@ import React, { useState, useEffect } from 'react';
 import Button from '../../components/commons/Button';
 import useHashTag from '../../Hooks/posts/useHashTag';
 
+const regionNameMapping = {
+  서울: 'seoul',
+  부산: 'busan',
+  대구: 'daegu',
+  인천: 'incheon',
+  광주: 'gwangju',
+  대전: 'daejeon',
+  울산: 'ulsan',
+  세종: 'sejong',
+  경기: 'gyeonggi',
+  강원: 'gangwon',
+  충북: 'chungbuk',
+  충남: 'chungnam',
+  경북: 'gyeongbuk',
+  경남: 'gyeongnam',
+  전북: 'jeonbuk',
+  전남: 'jeonnam',
+  제주: 'jeju',
+};
+
 export default function RootArea({ onSelectRegion }) {
   const { Hashtags: regionTags } = useHashTag(true);
   const [localRegionTags, setLocalRegionTags] = useState([]);
@@ -25,7 +45,12 @@ export default function RootArea({ onSelectRegion }) {
 
   const handleRegionClick = (region) => {
     if (typeof onSelectRegion === 'function') {
-      onSelectRegion(region.name);
+      const regionKey = regionNameMapping[region.name];
+      if (regionKey) {
+        onSelectRegion(regionKey);
+      } else {
+        console.error('Region key not found for:', region.name);
+      }
     } else {
       console.error('onSelectRegion is not a function');
     }

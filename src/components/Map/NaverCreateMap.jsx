@@ -23,6 +23,8 @@ export default function NaverCreateMap({ className }) {
       setNaverMap(map);
 
       window.naver.maps.Event.addListener(map, 'click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
         const newMarker = {
           latitude: e.coord.lat(),
           longitude: e.coord.lng(),

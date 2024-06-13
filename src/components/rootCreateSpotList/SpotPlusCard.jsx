@@ -1,14 +1,19 @@
 import React from 'react';
+import noimage from '../../assets/noimage.png';
 
 const SpotPlusCard = ({ spot, onAddClick, onRemoveClick, isAdded }) => {
   return (
     <div
       key={spot.id}
-      className="w-[330px] h-[110px] mt-4 flex cursor-pointer rounded-xl shadow-md"
+      className="w-[330px] h-[130px] mt-4 flex cursor-pointer rounded-xl shadow-md"
     >
       <img
         src={spot.imageUrl}
-        alt={spot.location}
+        onError={(e) => {
+          e.target.onerror = null; // 무한 루프 방지
+          e.target.src = noimage;
+        }}
+        alt={noimage}
         className="w-1/3 h-full object-cover rounded-l-xl"
       />
       <div className="w-2/3 h-full p-2">

@@ -4,7 +4,6 @@ import {
   updateMarkers,
   updatePolylines,
 } from './naverMapHelpers';
-import useMapSpotStore from '../../store/useMapSpotStore';
 
 export default function NaverSpotMap({
   className,
@@ -12,7 +11,7 @@ export default function NaverSpotMap({
   center,
   selectedRouteIndex,
   routes,
-  polylineColors, // 폴리라인 색상에 대한 새로운 props
+  polylineColors,
 }) {
   const mapRef = useRef(null);
   const [naverMap, setNaverMap] = useState(null);
@@ -28,58 +27,57 @@ export default function NaverSpotMap({
       };
       const map = new window.naver.maps.Map(mapRef.current, mapOptions);
       setNaverMap(map);
-
-      if (routes && routes.length > 0) {
-        routes.forEach((route, index) => {
-          const routeMarkers = route.spots.map((spot) => ({
-            latitude: spot.lat,
-            longitude: spot.lng,
-          }));
-          updateMarkers(map, routeMarkers);
-          updatePolylines(map, routeMarkers, [polylineColors[index]]); // 폴리라인 색상 전달
-        });
-      }
     });
 
     return cleanup;
-  }, [routes, polylineColors]);
+  }, []);
 
   useEffect(() => {
     if (naverMap) {
-      console.log('selectedRouteIndex:', selectedRouteIndex);
-      if (selectedRouteIndex !== null && routes && routes[selectedRouteIndex]) {
+      if (
+        routes &&
+        routes.length > 0 &&
+        selectedRouteIndex !== null &&
+        routes[selectedRouteIndex]
+      ) {
         const selectedMarkers = routes[selectedRouteIndex].spots.map(
           (spot) => ({
             latitude: spot.lat,
             longitude: spot.lng,
           }),
         );
-        console.log('Selected route markers:', selectedMarkers);
         updateMarkers(naverMap, selectedMarkers);
         updatePolylines(naverMap, selectedMarkers, [
           polylineColors[selectedRouteIndex],
-        ]); // 폴리라인 색상 전달
-      } else {
-        const allMarkers = routes.flatMap((route) =>
-          route.spots.map((spot) => ({
-            latitude: spot.lat,
-            longitude: spot.lng,
-          })),
-        );
-        console.log('All route markers:', allMarkers);
-        updateMarkers(naverMap, allMarkers);
-        updatePolylines(naverMap, allMarkers, polylineColors); // 모든 경로의 폴리라인 색상 전달
-      }
+        ]);
 
-      if (center) {
+        if (selectedMarkers.length > 0) {
+          const newCenter = new window.naver.maps.LatLng(
+            selectedMarkers[0].latitude,
+            selectedMarkers[0].longitude,
+          );
+          naverMap.setCenter(newCenter);
+        }
+      } else if (markers && markers.length === 1) {
+        updateMarkers(naverMap, markers);
         const newCenter = new window.naver.maps.LatLng(
-          center.latitude,
-          center.longitude,
+          markers[0].latitude,
+          markers[0].longitude,
         );
         naverMap.setCenter(newCenter);
       }
     }
-  }, [markers, center, selectedRouteIndex, routes, polylineColors]);
+  }, [naverMap, selectedRouteIndex, routes, polylineColors, markers]);
+
+  useEffect(() => {
+    if (naverMap && center) {
+      const newCenter = new window.naver.maps.LatLng(
+        center.latitude,
+        center.longitude,
+      );
+      naverMap.setCenter(newCenter);
+    }
+  }, [naverMap, center]);
 
   return <div id="map" className={`h-auto ${className}`} ref={mapRef}></div>;
 }

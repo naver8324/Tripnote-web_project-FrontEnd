@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import useAxios from '../useAxios';
 import useAuthStore from '../../store/useAuthStore';
+import { useNavigate } from 'react-router-dom';
 
 const useLogout = () => {
   const [loading, setLoading] = useState(false);
@@ -11,6 +12,7 @@ const useLogout = () => {
     url: '/api/member/logout',
     shouldFetch: false,
   });
+  const navigate = useNavigate();
 
   const logout = async () => {
     setLoading(true);
@@ -41,6 +43,7 @@ const useLogout = () => {
       localStorage.removeItem('userNickname');
       setIsAuth(false);
       setLoading(false);
+      navigate('/');
     }
   };
 

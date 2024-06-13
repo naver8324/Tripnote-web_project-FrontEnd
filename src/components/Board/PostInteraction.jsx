@@ -54,7 +54,6 @@ export default function PostInteraction({
     }
   }, [comments]);
 
-
   return (
     <div className="mt-10 p-4 border-t border-b border-gray flex justify-between items-center gap-4">
       <div className="flex space-x-4">

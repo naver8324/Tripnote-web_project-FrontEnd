@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import SpotCard from './SpotCard';
 import useMapSpotStore from '../../store/useMapSpotStore';
 import Input from '../commons/Input';
-import useSpotRoutes from '../../Hooks/routes/useSpotRoutes';
 import useSpots from '../../Hooks/spots/useSpots';
+import useConditionalSpotRoutes from '../../Hooks/routes/useConditionalSpotRoutes';
 
 const SpotSearchList = ({ region }) => {
   const setMarkers = useMapSpotStore((state) => state.setMarkers);
@@ -11,34 +11,31 @@ const SpotSearchList = ({ region }) => {
   const setSelectedRouteIndex = useMapSpotStore(
     (state) => state.setSelectedRouteIndex,
   );
-  const setOpenItems = useMapSpotStore((state) => state.setOpenItems); // 상태 추가
+  const setOpenItems = useMapSpotStore((state) => state.setOpenItems);
   const setClickedSpotName = useMapSpotStore(
     (state) => state.setClickedSpotName,
-  ); // 상태 추가
+  );
+  const setCenter = useMapSpotStore((state) => state.setCenter);
 
   const [selectedSpotId, setSelectedSpotId] = useState(null);
-  const [center, setCenter] = useState(null);
   const [searchInput, setSearchInput] = useState('');
   const [searchLocation, setSearchLocation] = useState('');
 
-  // 초기 로드 시 region 값만으로 스팟 데이터를 가져오는 useSpots 훅 사용
   const {
     spots: initialSpots,
     error: initialError,
     loading: initialLoading,
   } = useSpots(region);
-  // 검색 시 사용될 스팟 데이터를 가져오는 useSpots 훅 사용
   const {
     spots: searchedSpots,
     error: searchError,
     loading: searchLoading,
   } = useSpots(region, searchLocation);
-
   const {
     responseData: routes,
     error: routeError,
     loading: routeLoading,
-  } = useSpotRoutes(selectedSpotId);
+  } = useConditionalSpotRoutes(selectedSpotId);
 
   useEffect(() => {
     if (routes && routes.length > 0) {
@@ -46,28 +43,35 @@ const SpotSearchList = ({ region }) => {
         route.spots.map((spot) => ({
           latitude: spot.lat,
           longitude: spot.lng,
-          name: spot.location, // 스팟 이름 추가
+          name: spot.location,
         })),
       );
-      console.log('Route markers:', routeMarkers);
       setMarkers(routeMarkers);
-      setRoutes(routes); // 전역 상태로 루트 설정
+      setRoutes(routes);
       setCenter({
         latitude: routeMarkers[0].latitude,
         longitude: routeMarkers[0].longitude,
       });
-      setSelectedRouteIndex(null); // 모든 경로를 표시하도록 설정
+    } else if (selectedSpotId) {
+      const spot = initialSpots.find((spot) => spot.id === selectedSpotId);
+      if (spot) {
+        setMarkers([
+          { latitude: spot.lat, longitude: spot.lng, name: spot.location },
+        ]);
+        setCenter({ latitude: spot.lat, longitude: spot.lng });
+      }
     }
-  }, [routes, setMarkers, setRoutes]);
+  }, [routes, setMarkers, setRoutes, setCenter, selectedSpotId, initialSpots]);
 
   const handleSpotClick = (spot) => {
-    console.log('handleSpotClick:', spot);
     setSelectedSpotId(spot.id);
-    const newCenter = { latitude: spot.lat, longitude: spot.lng };
-    setCenter(newCenter);
-    setSelectedRouteIndex(null); // 특정 스팟을 선택하면 모든 경로를 표시
-    setOpenItems([]); // 모든 아코디언 항목 닫기
-    setClickedSpotName(spot.location); // 클릭한 스팟 이름 설정
+    setClickedSpotName(spot.location);
+    setCenter({
+      latitude: spot.lat,
+      longitude: spot.lng,
+    });
+    setOpenItems([]);
+    setSelectedRouteIndex(routes.length > 0 ? 0 : null);
   };
 
   const handleInputChange = (event) => {

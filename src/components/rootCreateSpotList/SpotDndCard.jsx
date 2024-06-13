@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
+import noimage from '../../assets/noimage.png';
 
 const SpotDndCard = ({ spot, index, moveSpot, removeSpot }) => {
   const ref = useRef(null);
@@ -28,14 +29,18 @@ const SpotDndCard = ({ spot, index, moveSpot, removeSpot }) => {
     <div
       ref={ref}
       style={{ opacity: isDragging ? 0.5 : 1 }}
-      className="spot-card w-[330px] h-[110px] mt-4 flex cursor-pointer rounded-xl shadow-md animate-fade-in relative border-2 border-transparent"
+      className="spot-card w-[330px] h-[130px] mt-4 flex cursor-pointer rounded-xl shadow-md animate-fade-in relative border-2 border-transparent"
     >
       {isDragging && (
         <div className="absolute inset-0 bg-yellow-100 opacity-50 rounded-xl border-2 border-yellow-500"></div>
       )}
       <img
         src={spot.imageUrl}
-        alt={spot.location}
+        onError={(e) => {
+          e.target.onerror = null; // 무한 루프 방지
+          e.target.src = noimage;
+        }}
+        alt={noimage}
         className="w-1/3 h-full object-cover rounded-l-xl"
       />
       <div className="w-2/3 h-full p-2">
