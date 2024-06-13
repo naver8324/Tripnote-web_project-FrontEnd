@@ -157,12 +157,12 @@ const ProfileSet = () => {
         </div>
         <div>
           <label className="block text-subTitle">닉네임</label>
-          <div className="flex items-center">
+          <div className="flex items-center mb-8">
             <input
               type="text"
               value={nickname}
               onChange={handleNicknameChange}
-              className="w-3/4 h-14 px-3 py-2 border border-gray-300 mb-4 text-xl rounded-lg"
+              className="w-3/4 h-14 px-3 py-2 border border-gray-300 text-xl rounded-lg"
             />
             <button
               type="button"
