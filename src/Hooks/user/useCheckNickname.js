@@ -1,34 +1,27 @@
-import { useState } from 'react';
 import useAxios from '../useAxios';
 
 const useCheckNickname = () => {
-  const [nickname, setNickname] = useState('');
-  const [isDuplicate, setIsDuplicate] = useState(false);
-
-  const { fetchData, responseData, loading, error } = useAxios({
+  const { fetchData, loading, error } = useAxios({
     method: 'GET',
     url: '/api/member/check-nickname',
     shouldFetch: false,
   });
 
-  const handleCheckNickname = async () => {
+  const checkNickname = async (nickname) => {
     try {
-      await fetchData({}, `/api/member/check-nickname?nickname=${nickname}`);
-      setIsDuplicate(responseData?.isDuplicate || false);
+      const response = await fetchData(
+          {nickname},
+          `/api/member/check-nickname`,
+          'GET');
+
+      //중복 여부 false/true 반환
+      return response.data;
     } catch (err) {
       console.error('Error checking nickname:', err);
     }
   };
 
-  return {
-    nickname,
-    setNickname,
-    isDuplicate,
-    handleCheckNickname,
-    loading,
-    error,
-    responseData,
-  };
+  return {checkNickname, loading, error};
 };
 
 export default useCheckNickname;

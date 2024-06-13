@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import EmailVerification from '../../components/Email/EmailVerification';
+import FindPassword from "../../components/Email/FindPassword.jsx";
 
-const FindPassword = () => {
+const FindPasswordPage = () => {
   const [email, setEmail] = useState('');
   const [isVerified, setIsVerified] = useState(false);
 
@@ -12,19 +12,14 @@ const FindPassword = () => {
         <p className="flex justify-center mb-4">
           이메일 인증을 하시면 임시 비밀번호를 보내드립니다.
         </p>
-        <EmailVerification
+        <FindPassword
           email={email}
           setEmail={setEmail}
           setIsVerified={setIsVerified}
         />
-        {isVerified && (
-          <div className="flex justify-center mt-4">
-            <p>임시 비밀번호는 Email로 보내드렸습니다.</p>
-          </div>
-        )}
       </div>
     </div>
   );
 };
 
-export default FindPassword;
+export default FindPasswordPage;
