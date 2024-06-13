@@ -198,7 +198,7 @@ export default function BarRootCreate() {
         onRequestClose={() => setIsConfirmModalOpen(false)}
         onConfirm={handleConfirm}
         onCancel={handleCancel}
-        title={`로그인`}
+        title={`로그인 확인`}
         message={`경로생성에는 로그인이 필요합니다. <br/>
           로그인하시겠습니까?`}
       />

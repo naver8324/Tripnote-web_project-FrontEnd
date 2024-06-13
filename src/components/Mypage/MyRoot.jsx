@@ -8,6 +8,7 @@ import useDeleteRoute from '../../Hooks/routes/useDeleteRoute';
 import { ToastAlert } from '../commons/ToastAlert';
 import Pagination from '../commons/Pagination';
 import { useNavigate } from 'react-router-dom';
+import CustomConfirmModal from '../Modal/CustomConfirmModal';
 
 const MyRoot = () => {
   const navigate = useNavigate();
@@ -18,6 +19,8 @@ const MyRoot = () => {
     pageSize,
   );
   const deleteRoute = useDeleteRoute();
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [selectedRouteId, setSelectedRouteId] = useState(null);
 
   useEffect(() => {
     updateParams({ page: currentPage, size: pageSize });
@@ -27,14 +30,22 @@ const MyRoot = () => {
     setCurrentPage(page);
   };
 
-  const handleDeleteRoute = async (routeId) => {
+  const handleDeleteRoute = async () => {
     try {
-      await deleteRoute(routeId);
+      await deleteRoute(selectedRouteId);
       ToastAlert('경로가 삭제되었습니다.', 'success');
       refetch();
     } catch (error) {
       ToastAlert('경로 삭제 실패', 'error');
+    } finally {
+      setIsConfirmModalOpen(false);
+      setSelectedRouteId(null);
     }
+  };
+
+  const openConfirmModal = (routeId) => {
+    setSelectedRouteId(routeId);
+    setIsConfirmModalOpen(true);
   };
 
   if (loading) return <Spinner />;
@@ -59,7 +70,7 @@ const MyRoot = () => {
         <div className="border-b my-8" key={route.routeId}>
           <div className="flex items-center justify-between">
             <h2 className="text-2xl">{route.name}</h2>
-            <button onClick={() => handleDeleteRoute(route.routeId)}>
+            <button onClick={() => openConfirmModal(route.routeId)}>
               <GoTrash className="text-red-400 text-2xl" />
             </button>
           </div>
@@ -100,6 +111,14 @@ const MyRoot = () => {
           onPageChange={handlePageChange}
         />
       )}
+      <CustomConfirmModal
+        isOpen={isConfirmModalOpen}
+        onRequestClose={() => setIsConfirmModalOpen(false)}
+        onConfirm={handleDeleteRoute}
+        onCancel={() => setIsConfirmModalOpen(false)}
+        title={`삭제 확인`}
+        message={`정말로 이 경로를 삭제하시겠습니까?`}
+      />
     </div>
   );
 };
