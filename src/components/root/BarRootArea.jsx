@@ -106,7 +106,17 @@ export default function BarRootArea({ selectedRegion }) {
                 onClick={() => handleRouteClick(index)}
               >
                 <p
-                  className={`text-3xl ${index % 3 === 0 ? 'text-red-400' : index % 3 === 1 ? 'text-green-400' : 'text-blue-400'}`}
+                  className={`text-3xl ${
+                    index % 5 === 0
+                      ? 'text-red-400'
+                      : index % 5 === 1
+                        ? 'text-orange-400'
+                        : index % 5 === 2
+                          ? 'text-yellow-400'
+                          : index % 5 === 3
+                            ? 'text-green-400'
+                            : 'text-blue-400'
+                  }`}
                 >
                   {`추천 경로 ${index + 1}`}
                 </p>
