@@ -12,7 +12,7 @@ export default function NaverSpotMap({
   center,
   selectedRouteIndex,
   routes,
-  polylineColors, // 폴리라인 색상에 대한 새로운 props
+  polylineColors,
 }) {
   const mapRef = useRef(null);
   const [naverMap, setNaverMap] = useState(null);
@@ -31,55 +31,43 @@ export default function NaverSpotMap({
 
       if (routes && routes.length > 0) {
         routes.forEach((route, index) => {
-          const routeMarkers = route.spots.map((spot) => ({
-            latitude: spot.lat,
-            longitude: spot.lng,
-          }));
-          updateMarkers(map, routeMarkers);
-          updatePolylines(map, routeMarkers, [polylineColors[index]]); // 폴리라인 색상 전달
+          if (index === selectedRouteIndex) {
+            const routeMarkers = route.spots.map((spot) => ({
+              latitude: spot.lat,
+              longitude: spot.lng,
+            }));
+            updateMarkers(map, routeMarkers);
+            updatePolylines(map, routeMarkers, [polylineColors[index]]);
+          }
         });
       }
     });
 
     return cleanup;
-  }, [routes, polylineColors]);
+  }, [routes, selectedRouteIndex, polylineColors]);
 
   useEffect(() => {
-    if (naverMap) {
-      console.log('selectedRouteIndex:', selectedRouteIndex);
-      if (selectedRouteIndex !== null && routes && routes[selectedRouteIndex]) {
-        const selectedMarkers = routes[selectedRouteIndex].spots.map(
-          (spot) => ({
-            latitude: spot.lat,
-            longitude: spot.lng,
-          }),
-        );
-        console.log('Selected route markers:', selectedMarkers);
-        updateMarkers(naverMap, selectedMarkers);
-        updatePolylines(naverMap, selectedMarkers, [
-          polylineColors[selectedRouteIndex],
-        ]); // 폴리라인 색상 전달
-      } else {
-        const allMarkers = routes.flatMap((route) =>
-          route.spots.map((spot) => ({
-            latitude: spot.lat,
-            longitude: spot.lng,
-          })),
-        );
-        console.log('All route markers:', allMarkers);
-        updateMarkers(naverMap, allMarkers);
-        updatePolylines(naverMap, allMarkers, polylineColors); // 모든 경로의 폴리라인 색상 전달
-      }
-
-      if (center) {
-        const newCenter = new window.naver.maps.LatLng(
-          center.latitude,
-          center.longitude,
-        );
-        naverMap.setCenter(newCenter);
-      }
+    if (naverMap && routes && selectedRouteIndex !== null) {
+      const selectedMarkers = routes[selectedRouteIndex].spots.map((spot) => ({
+        latitude: spot.lat,
+        longitude: spot.lng,
+      }));
+      updateMarkers(naverMap, selectedMarkers);
+      updatePolylines(naverMap, selectedMarkers, [
+        polylineColors[selectedRouteIndex],
+      ]);
     }
-  }, [markers, center, selectedRouteIndex, routes, polylineColors]);
+  }, [naverMap, selectedRouteIndex, routes, polylineColors]);
+
+  useEffect(() => {
+    if (naverMap && center) {
+      const newCenter = new window.naver.maps.LatLng(
+        center.latitude,
+        center.longitude,
+      );
+      naverMap.setCenter(newCenter);
+    }
+  }, [naverMap, center]);
 
   return <div id="map" className={`h-auto ${className}`} ref={mapRef}></div>;
 }

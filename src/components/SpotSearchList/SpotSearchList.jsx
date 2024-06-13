@@ -8,6 +8,9 @@ import useConditionalSpotRoutes from '../../Hooks/routes/useConditionalSpotRoute
 const SpotSearchList = ({ region }) => {
   const setMarkers = useMapSpotStore((state) => state.setMarkers);
   const setRoutes = useMapSpotStore((state) => state.setRoutes);
+  const selectedRouteIndex = useMapSpotStore(
+    (state) => state.selectedRouteIndex,
+  );
   const setSelectedRouteIndex = useMapSpotStore(
     (state) => state.setSelectedRouteIndex,
   );
@@ -56,7 +59,7 @@ const SpotSearchList = ({ region }) => {
         latitude: routeMarkers[0].latitude,
         longitude: routeMarkers[0].longitude,
       });
-      setSelectedRouteIndex(null); // 모든 경로를 표시하도록 설정
+      // 여기에서 setSelectedRouteIndex(null)을 제거합니다.
     }
   }, [routes, setMarkers, setRoutes]);
 
@@ -65,9 +68,9 @@ const SpotSearchList = ({ region }) => {
     setSelectedSpotId(spot.id);
     const newCenter = { latitude: spot.lat, longitude: spot.lng };
     setCenter(newCenter);
-    setSelectedRouteIndex(null); // 특정 스팟을 선택하면 모든 경로를 표시
     setOpenItems([]); // 모든 아코디언 항목 닫기
     setClickedSpotName(spot.location); // 클릭한 스팟 이름 설정
+    setSelectedRouteIndex(0); // 첫 번째 경로를 기본으로 선택
   };
 
   const handleInputChange = (event) => {
