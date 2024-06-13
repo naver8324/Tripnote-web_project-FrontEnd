@@ -70,10 +70,10 @@ const ProfileSet = () => {
 
   const handleSave = async () => {
     const data = {
-      nickname,
+      newNickname: nickname,
     };
     if (password.length >= 8) {
-      data.password = password;
+      data.newPassword = password;
     }
     try {
       await updateInfo(data);
