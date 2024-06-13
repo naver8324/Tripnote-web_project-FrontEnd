@@ -4,7 +4,6 @@ import {
   updateMarkers,
   updatePolylines,
 } from './naverMapHelpers';
-import useMapSpotStore from '../../store/useMapSpotStore';
 
 export default function NaverSpotMap({
   className,
@@ -28,36 +27,47 @@ export default function NaverSpotMap({
       };
       const map = new window.naver.maps.Map(mapRef.current, mapOptions);
       setNaverMap(map);
-
-      if (routes && routes.length > 0) {
-        routes.forEach((route, index) => {
-          if (index === selectedRouteIndex) {
-            const routeMarkers = route.spots.map((spot) => ({
-              latitude: spot.lat,
-              longitude: spot.lng,
-            }));
-            updateMarkers(map, routeMarkers);
-            updatePolylines(map, routeMarkers, [polylineColors[index]]);
-          }
-        });
-      }
     });
 
     return cleanup;
-  }, [routes, selectedRouteIndex, polylineColors]);
+  }, []);
 
   useEffect(() => {
-    if (naverMap && routes && selectedRouteIndex !== null) {
-      const selectedMarkers = routes[selectedRouteIndex].spots.map((spot) => ({
-        latitude: spot.lat,
-        longitude: spot.lng,
-      }));
-      updateMarkers(naverMap, selectedMarkers);
-      updatePolylines(naverMap, selectedMarkers, [
-        polylineColors[selectedRouteIndex],
-      ]);
+    if (naverMap) {
+      if (
+        routes &&
+        routes.length > 0 &&
+        selectedRouteIndex !== null &&
+        routes[selectedRouteIndex]
+      ) {
+        const selectedMarkers = routes[selectedRouteIndex].spots.map(
+          (spot) => ({
+            latitude: spot.lat,
+            longitude: spot.lng,
+          }),
+        );
+        updateMarkers(naverMap, selectedMarkers);
+        updatePolylines(naverMap, selectedMarkers, [
+          polylineColors[selectedRouteIndex],
+        ]);
+
+        if (selectedMarkers.length > 0) {
+          const newCenter = new window.naver.maps.LatLng(
+            selectedMarkers[0].latitude,
+            selectedMarkers[0].longitude,
+          );
+          naverMap.setCenter(newCenter);
+        }
+      } else if (markers && markers.length === 1) {
+        updateMarkers(naverMap, markers);
+        const newCenter = new window.naver.maps.LatLng(
+          markers[0].latitude,
+          markers[0].longitude,
+        );
+        naverMap.setCenter(newCenter);
+      }
     }
-  }, [naverMap, selectedRouteIndex, routes, polylineColors]);
+  }, [naverMap, selectedRouteIndex, routes, polylineColors, markers]);
 
   useEffect(() => {
     if (naverMap && center) {
