@@ -4,18 +4,17 @@ import Pagination from '../commons/Pagination';
 import useGetMyMarkedRoute from '../../Hooks/mypage/useGetMyMarkedRoute';
 import NoData from '../../pages/Board/NoData';
 import NaverMap from '../Map/NaverMap';
+import noimage from '../../assets/noimage.png';
 
 const LoverRoot = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 4;
-  const { markedRoute, error, loading, refetch, updateParams } = useGetMyMarkedRoute(
-    currentPage,
-    pageSize,
-  );
+  const { markedRoute, error, loading, refetch, updateParams } =
+    useGetMyMarkedRoute(currentPage, pageSize);
 
   useEffect(() => {
     updateParams({ page: currentPage, size: pageSize });
-  }, [currentPage])
+  }, [currentPage]);
 
   const handlePageChange = (event, page) => {
     setCurrentPage(page);
@@ -51,7 +50,11 @@ const LoverRoot = () => {
                   <div className="relative group w-[100px] h-[100px] mt-4">
                     <img
                       src={spot.imageUrl}
-                      alt={spot.location}
+                      onError={(e) => {
+                        e.target.onerror = null; // 무한 루프 방지
+                        e.target.src = noimage;
+                      }}
+                      alt={noimage}
                       className="w-full h-full object-cover rounded-md"
                     />
                     <div className="absolute inset-0 bg-black bg-opacity-70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import useUserStore from '../store/useUserStore';
 import useMemberInfo from '../Hooks/user/useMemberInfo';
 import useInfoUpdate from '../Hooks/user/useInfoUpdate';
+import useCheckNickname from '../Hooks/user/useCheckNickname';
 import { ToastAlert } from './commons/ToastAlert';
 
 const ProfileSet = () => {
@@ -15,8 +16,16 @@ const ProfileSet = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errors, setErrors] = useState({ nickname: '', password: '' });
+  const [nicknameError, setNicknameError] = useState('');
+  const [nicknameLoading, setNicknameLoading] = useState(false);
+  const [isNicknameChecked, setIsNicknameChecked] = useState(false);
   const { memberInfo } = useMemberInfo();
-  const { updateInfo } = useInfoUpdate(); // 새로운 훅 사용
+  const { updateInfo } = useInfoUpdate();
+  const {
+    checkNickname,
+    loading: CheckNicknameLoading,
+    error: CheckNicknameError,
+  } = useCheckNickname();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,6 +43,7 @@ const ProfileSet = () => {
 
   const handleNicknameChange = (e) => {
     setNickname(e.target.value);
+    setIsNicknameChecked(false);
     if (e.target.value.length < 2) {
       setErrors((prevErrors) => ({
         ...prevErrors,
@@ -44,9 +54,39 @@ const ProfileSet = () => {
     }
   };
 
+  const handleCheckNickname = async () => {
+    setNicknameLoading(true);
+    setNicknameError('');
+    try {
+      if (nickname.length < 2 || nickname.length > 10) {
+        setNicknameError('닉네임은 2글자 이상 10글자 이하이어야 합니다.');
+        setNicknameLoading(false);
+        return false;
+      }
+
+      const response = await checkNickname(nickname);
+
+      if (response === true) {
+        setNicknameError('이미 사용 중인 닉네임입니다.');
+        setNicknameLoading(false);
+        return false;
+      } else {
+        setNicknameError('사용 가능한 닉네임입니다.');
+        setNicknameLoading(false);
+        setIsNicknameChecked(true);
+        return true;
+      }
+    } catch (error) {
+      console.error('Error while checking nickname:', error);
+      setNicknameError('닉네임 확인 중 오류가 발생했습니다.');
+      setNicknameLoading(false);
+      return false;
+    }
+  };
+
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
-    if (e.target.value.length < 8) {
+    if (e.target.value.length < 8 && e.target.value.length > 0) {
       setErrors((prevErrors) => ({
         ...prevErrors,
         password: '비밀번호는 영문과 숫자를 포함하여 8~20자여야 합니다.',
@@ -95,6 +135,7 @@ const ProfileSet = () => {
 
   const isFormValid = () => {
     return (
+      isNicknameChecked &&
       nickname.length >= 2 &&
       (password.length === 0 || password.length >= 8) &&
       (password.length === 0 || password === confirmPassword)
@@ -116,13 +157,30 @@ const ProfileSet = () => {
         </div>
         <div>
           <label className="block text-subTitle">닉네임</label>
-          <input
-            type="text"
-            value={nickname}
-            onChange={handleNicknameChange}
-            className="w-full h-14 px-3 py-2 border border-gray-300 mb-4 text-xl rounded-lg"
-          />
+          <div className="flex items-center">
+            <input
+              type="text"
+              value={nickname}
+              onChange={handleNicknameChange}
+              className="w-3/4 h-14 px-3 py-2 border border-gray-300 mb-4 text-xl rounded-lg"
+            />
+            <button
+              type="button"
+              onClick={handleCheckNickname}
+              disabled={nicknameLoading}
+              className="w-1/4 h-14 px-4 py-2 ml-2 bg-prime text-white rounded-lg"
+            >
+              확인
+            </button>
+          </div>
           {errors.nickname && <p className="text-red-500">{errors.nickname}</p>}
+          {nicknameError && (
+            <p
+              className={`text-${nicknameError.includes('사용 가능한') ? 'prime' : 'red-500'}`}
+            >
+              {nicknameError}
+            </p>
+          )}
         </div>
         <div>
           <label className="block text-subTitle">비밀번호</label>
@@ -132,6 +190,9 @@ const ProfileSet = () => {
             onChange={handlePasswordChange}
             className="w-full h-14 px-3 py-2 border border-gray-300 mb-4 text-xl rounded-lg"
           />
+          <p className="text-prime">
+            (비밀번호를 비워두시면 닉네임만 변경됩니다.)
+          </p>
         </div>
         <div>
           <label className="block text-subTitle">비밀번호 확인</label>
