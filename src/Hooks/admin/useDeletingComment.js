@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import useAxios from '../useAxios.js';
 
 // 전체 회원
