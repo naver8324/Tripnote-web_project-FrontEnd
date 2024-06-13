@@ -8,6 +8,7 @@ import useTabStore from '../store/useTabStore';
 import NaverSpotMap from '../components/Map/NaverSpotMap';
 import useMapSpotStore from '../store/useMapSpotStore';
 import NaverRegionMap from '../components/Map/NaverRegionMap';
+import useMapRegionStore from '../store/useMapRegionStore';
 
 export default function RootRecommendationPage() {
   const { activeIndex, setActiveIndex } = useTabStore();
@@ -19,6 +20,16 @@ export default function RootRecommendationPage() {
   );
   const center = useMapSpotStore((state) => state.center);
   const [selectedRegion, setSelectedRegion] = React.useState(null);
+
+  const regionMarkers = useMapRegionStore((state) => state.markers);
+  const regionPolylineColors = useMapRegionStore(
+    (state) => state.polylineColors,
+  );
+  const regionRoutes = useMapRegionStore((state) => state.routes);
+  const regionSelectedRouteIndex = useMapRegionStore(
+    (state) => state.selectedRouteIndex,
+  );
+  const regionCenter = useMapRegionStore((state) => state.center);
 
   const handleSelectRegion = (regionKey) => {
     setSelectedRegion(regionKey);
@@ -64,10 +75,12 @@ export default function RootRecommendationPage() {
         />
       ) : (
         <NaverRegionMap
-          markers={markers}
+          markers={regionMarkers}
           className={'w-screen'}
-          selectedRouteIndex={selectedRouteIndex}
-          center={center}
+          polylineColors={regionPolylineColors}
+          routes={regionRoutes}
+          selectedRouteIndex={regionSelectedRouteIndex}
+          center={regionCenter}
         />
       )}
     </div>

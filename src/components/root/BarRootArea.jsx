@@ -21,6 +21,9 @@ export default function BarRootArea({ selectedRegion }) {
   const setMarkers = useMapRegionStore((state) => state.setMarkers);
   const setRoutes = useMapRegionStore((state) => state.setRoutes);
   const setCenter = useMapRegionStore((state) => state.setCenter);
+  const setSelectedRouteIndex = useMapRegionStore(
+    (state) => state.setSelectedRouteIndex,
+  );
 
   const [likeStates, setLikeStates] = useState([]);
   const [bookmarkStates, setBookmarkStates] = useState([]);
@@ -51,12 +54,14 @@ export default function BarRootArea({ selectedRegion }) {
           latitude: routeMarkers[0].latitude,
           longitude: routeMarkers[0].longitude,
         });
+        setSelectedRouteIndex(0); // 첫 번째 경로를 기본 선택
       }
     }
-  }, [routes, setMarkers, setRoutes, setCenter]);
+  }, [routes, setMarkers, setRoutes, setCenter, setSelectedRouteIndex]);
 
   const handleRouteClick = (index) => {
     setOpenItems([`item-${index + 1}`]);
+    setSelectedRouteIndex(index);
   };
 
   const handleToggle = (value) => {
