@@ -18,6 +18,11 @@ export default function RootRecommendationPage() {
     (state) => state.selectedRouteIndex,
   );
   const center = useMapSpotStore((state) => state.center);
+  const [selectedRegion, setSelectedRegion] = React.useState(null);
+
+  const handleSelectRegion = (regionKey) => {
+    setSelectedRegion(regionKey);
+  };
 
   return (
     <div className="mt-[118px] w-full bg-subTitle flex mx-auto">
@@ -28,7 +33,7 @@ export default function RootRecommendationPage() {
             <Tabs.Tab index={1}>지역 추천 Best 5</Tabs.Tab>
 
             <Tabs.TabContent index={1}>
-              <RootArea />
+              <RootArea onSelectRegion={handleSelectRegion} />
             </Tabs.TabContent>
             <Tabs.TabContent index={0}>
               <RootSpot />
@@ -37,7 +42,11 @@ export default function RootRecommendationPage() {
         </div>
       </div>
       <div className="w-[360px] bg-white">
-        {activeIndex === 0 ? <BarRootSpot /> : <BarRootArea />}
+        {activeIndex === 0 ? (
+          <BarRootSpot />
+        ) : (
+          <BarRootArea selectedRegion={selectedRegion} />
+        )}
       </div>
 
       {activeIndex === 0 ? (

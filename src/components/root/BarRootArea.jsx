@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import RootArea from './RootArea';
 import NoData from './../../pages/Board/NoData';
 import useConditionalRegionRoutes from '../../Hooks/routes/useConditionalRegionRoutes';
 import {
@@ -12,8 +11,7 @@ import { ChevronDown } from 'lucide-react';
 import RouteInteraction from '../SpotSearchList/RouteInteraction';
 import useMapRegionStore from '../../store/useMapRegionStore';
 
-export default function BarRootArea() {
-  const [selectedRegion, setSelectedRegion] = useState(null);
+export default function BarRootArea({ selectedRegion }) {
   const {
     responseData: routes,
     error,
@@ -24,17 +22,18 @@ export default function BarRootArea() {
   const setRoutes = useMapRegionStore((state) => state.setRoutes);
   const setCenter = useMapRegionStore((state) => state.setCenter);
 
-  const handleSelectRegion = (region) => {
-    setSelectedRegion(region);
-    fetchData();
-  };
-
   const [likeStates, setLikeStates] = useState([]);
   const [bookmarkStates, setBookmarkStates] = useState([]);
   const [openItems, setOpenItems] = useState([]);
 
   useEffect(() => {
-    if (routes) {
+    if (selectedRegion) {
+      fetchData();
+    }
+  }, [selectedRegion]);
+
+  useEffect(() => {
+    if (Array.isArray(routes)) {
       setLikeStates(routes.map((route) => route.likedAt));
       setBookmarkStates(routes.map((route) => route.markedAt));
 
@@ -89,7 +88,7 @@ export default function BarRootArea() {
       {!loading && (!routes || routes.length === 0) && (
         <NoData message={'No data!'} />
       )}
-      {routes && routes.length > 0 && (
+      {Array.isArray(routes) && routes.length > 0 && (
         <Accordion
           type="multiple"
           value={openItems}
@@ -98,7 +97,7 @@ export default function BarRootArea() {
           <p className="m-5 text-xl">지역 중심 추천 경로</p>
           {routes.map((route, index) => (
             <AccordionItem
-              key={route.routeId}
+              key={route.integratedRouteId}
               value={`item-${index + 1}`}
               className="p-4 m-4 shadow-lg rounded-lg"
             >
@@ -112,7 +111,7 @@ export default function BarRootArea() {
                   {`추천 경로 ${index + 1}`}
                 </p>
                 <RouteInteraction
-                  routeId={route.routeId}
+                  routeId={route.integratedRouteId}
                   liked={likeStates[index]}
                   bookmarked={bookmarkStates[index]}
                   onToggleLike={() => handleToggleLike(index)}
