@@ -11,8 +11,11 @@ export default function BoardEditor() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const routeIdState = location.state?.routeId;
+  const postDetailState = location.state?.postDetail;
+
   // 작성 버튼 상태 기반으로 직접 url 접근을 제어
-  if (!location.state.routeId) {
+  if (!routeIdState && !postDetailState) {
     return <Navigate to="/" replace />;
   }
   const routeId = location.state?.routeId;

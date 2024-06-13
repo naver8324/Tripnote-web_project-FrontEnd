@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import useFetchRoutes from '../../Hooks/routes/useFetchRoutes';
 import Spinner from '../commons/Spinner';
 import Button from '../commons/Button';
@@ -8,39 +8,57 @@ import useDeleteRoute from '../../Hooks/routes/useDeleteRoute';
 import { ToastAlert } from '../commons/ToastAlert';
 import Pagination from '../commons/Pagination';
 import { useNavigate } from 'react-router-dom';
+import CustomConfirmModal from '../Modal/CustomConfirmModal';
 
 const MyRoot = () => {
   const navigate = useNavigate();
-  const [currentPage, setCurrentPage] = useState(1); // 페이지는 1부터 시작
-  const [pageSize] = useState(4); // 한 페이지에 표시할 아이템 수
-  const { routesData, error, loading, refetch } = useFetchRoutes();
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 4;
+  const { routesData, error, loading, refetch, updateParams } = useFetchRoutes(
+    currentPage,
+    pageSize,
+  );
   const deleteRoute = useDeleteRoute();
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [selectedRouteId, setSelectedRouteId] = useState(null);
+
+  useEffect(() => {
+    updateParams({ page: currentPage, size: pageSize });
+  }, [currentPage]);
 
   const handlePageChange = (event, page) => {
     setCurrentPage(page);
   };
 
-  const handleDeleteRoute = async (routeId) => {
+  const handleDeleteRoute = async () => {
     try {
-      await deleteRoute(routeId);
+      await deleteRoute(selectedRouteId);
       ToastAlert('경로가 삭제되었습니다.', 'success');
       refetch();
     } catch (error) {
       ToastAlert('경로 삭제 실패', 'error');
+    } finally {
+      setIsConfirmModalOpen(false);
+      setSelectedRouteId(null);
     }
+  };
+
+  const openConfirmModal = (routeId) => {
+    setSelectedRouteId(routeId);
+    setIsConfirmModalOpen(true);
   };
 
   if (loading) return <Spinner />;
   if (error) return <p>Error: {error}</p>;
   if (!routesData || !routesData.content || routesData.content.length === 0)
-    return <NoData message="생성된 경로가 없습니다." />;
+    return (
+      <div className="w-[840px]">
+        <NoData message="생성된 경로가 없습니다." />
+      </div>
+    );
 
   const totalElements = routesData.totalElements;
   const totalPage = Math.ceil(totalElements / pageSize);
-
-  const startIdx = (currentPage - 1) * pageSize;
-  const endIdx = startIdx + pageSize;
-  const routes = routesData.content.slice(startIdx, endIdx);
 
   const handleRoutePost = (routeId) => {
     navigate('/editBoard', { state: { routeId } });
@@ -48,11 +66,11 @@ const MyRoot = () => {
 
   return (
     <div className="w-[840px] mt-4 text-title">
-      {routes.map((route) => (
+      {routesData.content.map((route) => (
         <div className="border-b my-8" key={route.routeId}>
           <div className="flex items-center justify-between">
             <h2 className="text-2xl">{route.name}</h2>
-            <button onClick={() => handleDeleteRoute(route.routeId)}>
+            <button onClick={() => openConfirmModal(route.routeId)}>
               <GoTrash className="text-red-400 text-2xl" />
             </button>
           </div>
@@ -93,6 +111,14 @@ const MyRoot = () => {
           onPageChange={handlePageChange}
         />
       )}
+      <CustomConfirmModal
+        isOpen={isConfirmModalOpen}
+        onRequestClose={() => setIsConfirmModalOpen(false)}
+        onConfirm={handleDeleteRoute}
+        onCancel={() => setIsConfirmModalOpen(false)}
+        title={`삭제 확인`}
+        message={`정말로 이 경로를 삭제하시겠습니까?`}
+      />
     </div>
   );
 };

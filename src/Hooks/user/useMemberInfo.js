@@ -13,11 +13,14 @@ const useMemberInfo = () => {
   const memberInfo = async () => {
     try {
       const response = await fetchData();
+      const userEmail = response.data.email;
       const userNickname = response.data.nickname;
+
+      localStorage.setItem('userEmail', userEmail);
       localStorage.setItem('userNickname', userNickname);
 
-      setEmail(response.data.email);
-      setNickname(response.data.nickname);
+      setEmail(userEmail);
+      setNickname(userNickname);
       console.log(response.data);
       return response.data;
     } catch (err) {

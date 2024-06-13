@@ -4,11 +4,12 @@ import useMapCreateStore from '../../store/useMapCreateStore';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import Modal from '../Modal/Modal';
-import useHashTag from '../../Hooks/posts/useHashTag'; // 추가
+import useHashTag from '../../Hooks/posts/useHashTag';
 import { ToastAlert } from '../commons/ToastAlert';
 import { useNavigate } from 'react-router-dom';
 import useCreateRoute from '../../Hooks/routes/useCreateRoute';
 import NextSpotRecommend from "../SpotSearchList/NextSpotRecommend.jsx";
+import CustomConfirmModal from '../Modal/CustomConfirmModal';
 
 export default function BarRootCreate() {
   const navigate = useNavigate();
@@ -16,14 +17,15 @@ export default function BarRootCreate() {
   const setRouteSpots = useMapCreateStore((state) => state.setRouteSpots);
   const setMarkers = useMapCreateStore((state) => state.setMarkers);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false); // 추가
   const [selectedHashtags, setSelectedHashtags] = useState([]);
   const [routeName, setRouteName] = useState('');
   const {
     Hashtags: themeTags,
     error: themeError,
     loading: themeLoading,
-  } = useHashTag(false); // 테마 해시태그
-  const { createRoute, loading: createLoading } = useCreateRoute(); // 추가
+  } = useHashTag(false);
+  const { createRoute } = useCreateRoute();
 
   const moveSpot = (fromIndex, toIndex) => {
     const updatedSpots = [...routeSpots];
@@ -82,7 +84,6 @@ export default function BarRootCreate() {
 
     try {
       await createRoute(routeData);
-      // 경로 생성 성공 후 상태 초기화
       setRouteSpots([]);
       setMarkers([]);
       setSelectedHashtags([]);
@@ -91,8 +92,29 @@ export default function BarRootCreate() {
       ToastAlert('경로 추가가 완료되었습니다', 'success');
       navigate('/mypage');
     } catch (error) {
-      ToastAlert('경로 저장 중 오류가 발생했습니다', 'error');
+      if (error.response && error.response.status === 401) {
+        setIsConfirmModalOpen(true);
+      } else {
+        ToastAlert('경로 저장 중 오류가 발생했습니다', 'error');
+      }
     }
+  };
+
+  const handleConfirm = () => {
+    const routeData = {
+      name: routeName,
+      spotIds: routeSpots.map((spot) => spot.id),
+      hashtagIds: selectedHashtags.map(
+        (tag) => themeTags.find((t) => `#${t.name}` === tag).id,
+      ),
+    };
+    localStorage.setItem('routeData', JSON.stringify(routeData));
+    setIsConfirmModalOpen(false);
+    navigate('/login');
+  };
+
+  const handleCancel = () => {
+    setIsConfirmModalOpen(false);
   };
 
   const isSaveEnabled = routeName.length > 0 && selectedHashtags.length > 0;
@@ -177,7 +199,15 @@ export default function BarRootCreate() {
           </div>
         </Modal>
       )}
-      {/* 다음 추천 여행지 컴포넌트 위치*/}
+      <CustomConfirmModal
+        isOpen={isConfirmModalOpen}
+        onRequestClose={() => setIsConfirmModalOpen(false)}
+        onConfirm={handleConfirm}
+        onCancel={handleCancel}
+        title={`로그인 확인`}
+        message={`경로생성에는 로그인이 필요합니다. <br/>
+          로그인하시겠습니까?`}
+      />
     </DndProvider>
   );
 }
