@@ -7,7 +7,8 @@ import Modal from '../Modal/Modal';
 import useHashTag from '../../Hooks/posts/useHashTag'; // 추가
 import { ToastAlert } from '../commons/ToastAlert';
 import { useNavigate } from 'react-router-dom';
-import useCreateRoute from '../../Hooks/routes/useCreateRoute'; // 추가
+import useCreateRoute from '../../Hooks/routes/useCreateRoute';
+import NextSpotRecommend from "../SpotSearchList/NextSpotRecommend.jsx";
 
 export default function BarRootCreate() {
   const navigate = useNavigate();
@@ -109,6 +110,11 @@ export default function BarRootCreate() {
             removeSpot={removeSpot}
           />
         ))}
+        {routeSpots.length > 0 && (
+          <NextSpotRecommend
+            spotId = {routeSpots[routeSpots.length - 1].id}
+          />
+        )}
         <div className="flex justify-end m-4">
           <button
             className={`mt-4 px-4 py-2 text-white rounded-lg ${
@@ -171,6 +177,7 @@ export default function BarRootCreate() {
           </div>
         </Modal>
       )}
+      {/* 다음 추천 여행지 컴포넌트 위치*/}
     </DndProvider>
   );
 }
