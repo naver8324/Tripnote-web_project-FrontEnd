@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useUserStore from '../store/useUserStore';
 import useMemberInfo from '../Hooks/user/useMemberInfo';
-import useInfoUpdate from '../Hooks/user/useInfoUpdate'; // 새로운 훅 임포트
-import { toast } from 'react-toastify';
+import useInfoUpdate from '../Hooks/user/useInfoUpdate';
 import { ToastAlert } from './commons/ToastAlert';
 
 const ProfileSet = () => {
@@ -78,6 +77,9 @@ const ProfileSet = () => {
     }
     try {
       await updateInfo(data);
+
+      await memberInfo();
+      setNickname(nickname);
       ToastAlert('정보 수정이 완료되었습니다.', 'success');
       console.log('Profile saved:', data);
       resetUser();
