@@ -54,7 +54,6 @@ export default function PostInteraction({
     }
   }, [comments]);
 
-
   return (
     <div className="mt-10 p-4 border-t border-b border-gray flex justify-between items-center gap-4">
       <div className="flex space-x-4">
@@ -72,8 +71,8 @@ export default function PostInteraction({
           {userBookmark ? <GoBookmarkFill /> : <GoBookmark />}
         </button>
       </div>
-      <div className="border border-grey-300 rounded-full w-8 h-8 flex justify-center items-center">
-        <p className="text-xs">{commentsCount}</p>
+      <div className=" w-8 h-8 flex justify-center items-center">
+        {/* <p className="text-xs">{commentsCount}</p> */}
       </div>
     </div>
   );
