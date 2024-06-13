@@ -19,7 +19,7 @@ export default function RootRecommendationPage() {
     (state) => state.selectedRouteIndex,
   );
   const center = useMapSpotStore((state) => state.center);
-  const [selectedRegion, setSelectedRegion] = React.useState(null);
+  const [selectedRegion, setSelectedRegion] = React.useState('seoul');
 
   const regionMarkers = useMapRegionStore((state) => state.markers);
   const regionPolylineColors = useMapRegionStore(
@@ -30,9 +30,11 @@ export default function RootRecommendationPage() {
     (state) => state.selectedRouteIndex,
   );
   const regionCenter = useMapRegionStore((state) => state.center);
+  const setRegionCenter = useMapRegionStore((state) => state.setCenter);
 
-  const handleSelectRegion = (regionKey) => {
+  const handleSelectRegion = (regionKey, regionCenter) => {
     setSelectedRegion(regionKey);
+    setRegionCenter(regionCenter);
   };
 
   useEffect(() => {

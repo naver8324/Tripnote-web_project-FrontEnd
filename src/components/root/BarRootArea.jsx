@@ -140,12 +140,21 @@ export default function BarRootArea({ selectedRegion }) {
                   }}
                 >
                   <ChevronDown
-                    className={`h-8 w-8 transition-transform duration-200 ${openItems.includes(`item-${index + 1}`) ? 'rotate-180' : ''}`}
+                    className={`h-8 w-8 transition-transform duration-200 ${
+                      openItems.includes(`item-${index + 1}`)
+                        ? 'rotate-180'
+                        : ''
+                    }`}
                   />
                 </AccordionTrigger>
               </div>
 
-              <AccordionContent>
+              <AccordionContent
+                className="overflow-hidden transition-all duration-500"
+                data-state={
+                  openItems.includes(`item-${index + 1}`) ? 'open' : 'closed'
+                }
+              >
                 <div className="mt-4 rounded-xl">
                   {route.spots.map((spot) => (
                     <div
