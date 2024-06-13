@@ -72,8 +72,8 @@ export default function PostInteraction({
           {userBookmark ? <GoBookmarkFill /> : <GoBookmark />}
         </button>
       </div>
-      <div className="border border-grey-300 rounded-full w-8 h-8 flex justify-center items-center">
-        <p className="text-xs">{commentsCount}</p>
+      <div className=" w-8 h-8 flex justify-center items-center">
+        {/* <p className="text-xs">{commentsCount}</p> */}
       </div>
     </div>
   );

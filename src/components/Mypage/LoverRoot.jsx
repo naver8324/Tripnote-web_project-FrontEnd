@@ -16,7 +16,7 @@ const LoverRoot = () => {
   if (loading) return <Spinner />;
   if (error) return <p>Error: {error}</p>;
   if (!markedRoute || !markedRoute.content || markedRoute.content.length === 0)
-    return <NoData message="북마크한 경로가 없습니다." />;
+    return <div className='w-[840px]'><NoData message="생성된 경로가 없습니다." /></div>;
 
   const totalElements = routesData.totalElements;
   const totalPage = Math.ceil(totalElements / pageSize);
