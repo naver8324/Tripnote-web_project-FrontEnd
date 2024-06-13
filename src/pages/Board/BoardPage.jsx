@@ -4,7 +4,6 @@ import Button from '../../components/commons/Button';
 import Navigation from '../../components/Board/Navigation';
 import PostCard from '../../components/Board/PostCard';
 import { useNavigate } from 'react-router-dom';
-import useMemberPosts from '../../Hooks/posts/useMemberPosts';
 import { ToastAlert } from '../../components/commons/ToastAlert';
 import useHashTag from '../../Hooks/posts/useHashTag';
 import Spinner from '../../components/commons/Spinner';
@@ -17,33 +16,19 @@ export default function BoardPage() {
   const navigate = useNavigate();
   const [sortOption, setSortOption] = useState('최신순');
   const [currentPage, setCurrentPage] = useState(1);
-  const { posts, error, loading } = useMemberPosts(
-    sortOption,
-    currentPage,
-    4,
-  );
   const [localPosts, setLocalPosts] = useState(null);
   const { Hashtags: regionTags } = useHashTag(true);
   const { Hashtags: themeTags } = useHashTag(false);
   const [localRegionTags, setLocalRegionTags] = useState([]);
   const [localThemeTags, setLocalThemeTags] = useState([]);
-  const { searchByTag } = useSearchByTag({}, sortOption, currentPage, 4);
+  const { searchByTag, responseData, loading } = useSearchByTag();
 
-  const handleChangeTab = (tab) => {
-    setSortOption(tab);
-    if (pageState.startsWith('#')) {
-      loadPostByTag(null, pageState.substring(1), tab);
-    } else {
-      setCurrentPage(1);
+  useEffect(() => {
+    if (responseData && responseData.content) {
+      setLocalPosts(responseData.content);
+      console.log('localPosts:', responseData.content);
     }
-  };
-
-  // useEffect(() => {
-  //   if (posts && posts.content) {
-  //     setLocalPosts(posts.content);
-  //     console.log('localPosts:', posts.content);
-  //   }
-  // }, [posts]);
+  }, [responseData]);
 
   useEffect(() => {
     if (regionTags) {
@@ -57,28 +42,46 @@ export default function BoardPage() {
     }
   }, [themeTags]);
 
-  const loadPostByTag = async (e, tagName, sortOptionOverride) => {
+  const loadPostByTag = async (tagName, sortOptionOverride, pageOverride) => {
     const tag = {
-      name: tagName || e.target.innerText.replace('#', ''),
+      name: tagName || pageState.substring(1),
       city: pageState === '지역별 후기',
     };
     setLocalPosts(null);
 
     try {
-      const data = await searchByTag(tag, sortOptionOverride || sortOption, currentPage, 4);
+      const data = await searchByTag(tag, sortOptionOverride || sortOption, pageOverride || currentPage, 4);
       setLocalPosts(data.content);
       setPageState(`#${tag.name}`);
-      console.log('localpost', localPosts, 'pagestate', pageState);
+      console.log('sort', sortOptionOverride, 'pagestate', pageState);
     } catch (err) {
       console.error('Failed to load posts by tag:', err);
     }
   };
 
-  const handlePageChange = (event, page) => {
-    setCurrentPage(page);
+  const handleChangeTab = (tab) => {
+    setSortOption(tab);
+    setCurrentPage(1);
+    loadPostByTag(pageState.startsWith('#') ? pageState.substring(1) : null, tab, 1);
   };
 
-  console.log('sortOption', sortOption);
+  const handlePageChange = (event, page) => {
+    setCurrentPage(page);
+    loadPostByTag(pageState.startsWith('#') ? pageState.substring(1) : null, sortOption, page);
+  };
+
+  useEffect(() => {
+    loadPostByTag(pageState.startsWith('#') ? pageState.substring(1) : null, sortOption, currentPage);
+  }, [currentPage, sortOption]);
+
+  const handleTagClick = (e, tagName) => {
+    setSortOption('최신순');
+    setCurrentPage(1);
+    loadPostByTag(tagName, '최신순', 1);
+  };
+
+  const totalPage = responseData ? Math.ceil(responseData.totalElements / 4) : 0;
+
   return (
     <section className="min-h-screen mt-40 w-[840px] mx-auto flex flex-col text-title">
       <nav className="flex items-center justify-between w-full mb-8">
@@ -92,7 +95,7 @@ export default function BoardPage() {
             onTabChange={handleChangeTab}
           >
             <>
-              {localPosts === null ? (
+              {loading ? (
                 <Spinner />
               ) : Array.isArray(localPosts) && localPosts.length ? (
                 localPosts.map((localPost, index) => (
@@ -109,9 +112,7 @@ export default function BoardPage() {
           {localPosts !== null && localPosts.length > 0 && (
             <Pagination
               currentPage={currentPage}
-              totalPage={Math.ceil(
-                posts ? posts.totalElements / posts.pageable.pageSize : 0,
-              )}
+              totalPage={totalPage}
               onPageChange={handlePageChange}
             />
           )}
@@ -127,7 +128,7 @@ export default function BoardPage() {
                     size="small"
                     key={region.id}
                     className={`text-xs px-2 ${pageState === `#${region.name}` ? 'bg-title text-white' : ''}`}
-                    onClick={(e) => loadPostByTag(e, region.name)}
+                    onClick={(e) => handleTagClick(e, region.name)}
                   >
                     #{region.name}
                   </Button>
@@ -143,7 +144,7 @@ export default function BoardPage() {
                     size="small"
                     key={theme.id}
                     className={`text-xs px-2 ${pageState === `#${theme.name}` ? 'bg-title text-white' : ''}`}
-                    onClick={(e) => loadPostByTag(e, theme.name)}
+                    onClick={(e) => handleTagClick(e, theme.name)}
                   >
                     #{theme.name}
                   </Button>
