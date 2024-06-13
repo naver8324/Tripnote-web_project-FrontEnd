@@ -4,9 +4,7 @@ import noimage from '../../assets/noimage.png';
 
 const SpotCard = ({ spot, onClick, isSelected, showAddButton = false }) => {
   const addSpot = useMapSpotStore((state) => state.addSpotToRoute);
-  const onErrorImg = (e) => {
-    e.target.src = noimage;
-  };
+
   const handleAddClick = (e) => {
     e.stopPropagation();
     addSpot(spot);

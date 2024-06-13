@@ -1,4 +1,5 @@
 import React from 'react';
+import noimage from '../../assets/noimage.png';
 
 const SpotPlusCard = ({ spot, onAddClick, onRemoveClick, isAdded }) => {
   return (
@@ -8,7 +9,11 @@ const SpotPlusCard = ({ spot, onAddClick, onRemoveClick, isAdded }) => {
     >
       <img
         src={spot.imageUrl}
-        alt={spot.location}
+        onError={(e) => {
+          e.target.onerror = null; // 무한 루프 방지
+          e.target.src = noimage;
+        }}
+        alt={noimage}
         className="w-1/3 h-full object-cover rounded-l-xl"
       />
       <div className="w-2/3 h-full p-2">
