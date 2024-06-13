@@ -21,6 +21,9 @@ export default function BarRootArea({ selectedRegion }) {
   const setMarkers = useMapRegionStore((state) => state.setMarkers);
   const setRoutes = useMapRegionStore((state) => state.setRoutes);
   const setCenter = useMapRegionStore((state) => state.setCenter);
+  const setSelectedRouteIndex = useMapRegionStore(
+    (state) => state.setSelectedRouteIndex,
+  );
 
   const [likeStates, setLikeStates] = useState([]);
   const [bookmarkStates, setBookmarkStates] = useState([]);
@@ -51,12 +54,14 @@ export default function BarRootArea({ selectedRegion }) {
           latitude: routeMarkers[0].latitude,
           longitude: routeMarkers[0].longitude,
         });
+        setSelectedRouteIndex(0); // 첫 번째 경로를 기본 선택
       }
     }
-  }, [routes, setMarkers, setRoutes, setCenter]);
+  }, [routes, setMarkers, setRoutes, setCenter, setSelectedRouteIndex]);
 
   const handleRouteClick = (index) => {
     setOpenItems([`item-${index + 1}`]);
+    setSelectedRouteIndex(index);
   };
 
   const handleToggle = (value) => {
@@ -108,14 +113,14 @@ export default function BarRootArea({ selectedRegion }) {
                 <p
                   className={`text-3xl ${
                     index % 5 === 0
-                      ? 'text-red-400'
+                      ? 'text-green-500'
                       : index % 5 === 1
-                        ? 'text-orange-400'
+                        ? 'text-blue-500'
                         : index % 5 === 2
-                          ? 'text-yellow-400'
+                          ? 'text-purple-500'
                           : index % 5 === 3
-                            ? 'text-green-400'
-                            : 'text-blue-400'
+                            ? 'text-yellow-500'
+                            : 'text-red-500'
                   }`}
                 >
                   {`추천 경로 ${index + 1}`}
@@ -135,12 +140,21 @@ export default function BarRootArea({ selectedRegion }) {
                   }}
                 >
                   <ChevronDown
-                    className={`h-8 w-8 transition-transform duration-200 ${openItems.includes(`item-${index + 1}`) ? 'rotate-180' : ''}`}
+                    className={`h-8 w-8 transition-transform duration-200 ${
+                      openItems.includes(`item-${index + 1}`)
+                        ? 'rotate-180'
+                        : ''
+                    }`}
                   />
                 </AccordionTrigger>
               </div>
 
-              <AccordionContent>
+              <AccordionContent
+                className="overflow-hidden transition-all duration-500"
+                data-state={
+                  openItems.includes(`item-${index + 1}`) ? 'open' : 'closed'
+                }
+              >
                 <div className="mt-4 rounded-xl">
                   {route.spots.map((spot) => (
                     <div

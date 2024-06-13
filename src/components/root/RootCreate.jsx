@@ -1,6 +1,8 @@
-import Selector from '../Home/Selector';
+import React, { useEffect } from 'react';
 import RootCreateSpotList from '../rootCreateSpotList/RootCreateSpotList';
 import useRegionSearchStore from '../../store/useRegionSearchStore';
+import useMapCreateStore from '../../store/useMapCreateStore';
+import NaverCreateMap from '../Map/NaverCreateMap';
 
 const regionMap = {
   서울: 'SEOUL',
@@ -24,7 +26,13 @@ const regionMap = {
 
 export default function RootCreate() {
   const selectedRegion = useRegionSearchStore((state) => state.selectedRegion);
+  const setRegion = useMapCreateStore((state) => state.setRegion);
   const regionCode = regionMap[selectedRegion] || 'SEOUL';
+
+  useEffect(() => {
+    setRegion(regionCode);
+  }, [regionCode, setRegion]);
+
   return (
     <>
       <RootCreateSpotList region={regionCode} />

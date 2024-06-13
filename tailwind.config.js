@@ -25,8 +25,8 @@ export default {
         },
       },
       animation: {
-        'accordion-down': 'accordion-down 1s ease-out',
-        'accordion-up': 'accordion-up 1s ease-out',
+        'accordion-down': 'accordion-down 0.5s ease-out',
+        'accordion-up': 'accordion-up 0.5s ease-out',
         'fade-in': 'fade-in 0.5s ease-in-out',
       },
     },

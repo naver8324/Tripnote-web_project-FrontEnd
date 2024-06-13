@@ -19,7 +19,13 @@ const BarRootSpot = () => {
 
   const [likeStates, setLikeStates] = useState([]);
   const [bookmarkStates, setBookmarkStates] = useState([]);
-  const textColors = ['text-red-400', 'text-green-400', 'text-blue-400']; // 텍스트 색상 배열 추가
+  const textColors = [
+    'text-green-500',
+    'text-blue-500',
+    'text-purple-500',
+    'text-yellow-500',
+    'text-red-500',
+  ]; // 텍스트 색상 배열 추가
 
   useEffect(() => {
     setLikeStates(routes.map((route) => route.likedAt));
