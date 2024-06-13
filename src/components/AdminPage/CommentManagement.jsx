@@ -38,6 +38,17 @@ const CommentManagement = () => {
   useEffect(() => {
     if (deletedCommentId !== null) {
       refetchDeleteComment();
+
+      setComments((prevComments) =>
+        prevComments.map((comment) =>
+          comment.id === deletedCommentId
+            ? {
+                ...comment,
+                deleted: !comment.deleted,
+              }
+            : comment,
+        ),
+      );
       setDeletedCommentId(null);
     }
   }, [deletedCommentId]);
@@ -57,7 +68,7 @@ const CommentManagement = () => {
         </th>
         <th>{comment.content}</th>
         <th>{formmateDate(comment.createdAt)}</th>
-        <th>{comment.delete ? 'Yes' : 'No'}</th>
+        <th>{comment.deleted ? 'Yes' : 'No'}</th>
         <th>
           <Button
             variant={'nomalButton'}
