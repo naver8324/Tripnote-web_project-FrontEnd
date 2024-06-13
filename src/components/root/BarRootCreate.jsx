@@ -198,7 +198,8 @@ export default function BarRootCreate() {
         onRequestClose={() => setIsConfirmModalOpen(false)}
         onConfirm={handleConfirm}
         onCancel={handleCancel}
-        message={`로그인(회원가입)을 해야 저장할 수 있습니다.
+        title={`로그인 확인`}
+        message={`경로생성에는 로그인이 필요합니다. <br/>
           로그인하시겠습니까?`}
       />
     </DndProvider>

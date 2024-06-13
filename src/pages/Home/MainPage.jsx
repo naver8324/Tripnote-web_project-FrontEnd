@@ -12,6 +12,7 @@ import Button from '../../components/commons/Button';
 import Selector from '../../components/Home/Selector';
 import { ToastAlert } from '../../components/commons/ToastAlert';
 import useRegionSearchStore from '../../store/useRegionSearchStore'; // 추가
+import mainGif from '../../assets/maingif.gif'
 
 const regions = [
   { imgSrc: seoul, name: '서울' },
@@ -72,7 +73,7 @@ export default function MainPage() {
         </div>
         <div className="">
           <img
-            src="https://blog.kakaocdn.net/dn/btCi15/btsdlrcp0jU/MWKagCKTeNvkzkP0j7auHk/img.gif"
+            src={mainGif}
             alt="임시 피카츄 gif"
           />
         </div>
