@@ -108,14 +108,14 @@ export default function BarRootArea({ selectedRegion }) {
                 <p
                   className={`text-3xl ${
                     index % 5 === 0
-                      ? 'text-red-400'
+                      ? 'text-green-500'
                       : index % 5 === 1
-                        ? 'text-orange-400'
+                        ? 'text-blue-500'
                         : index % 5 === 2
-                          ? 'text-yellow-400'
+                          ? 'text-purple-500'
                           : index % 5 === 3
-                            ? 'text-green-400'
-                            : 'text-blue-400'
+                            ? 'text-yellow-500'
+                            : 'text-red-500'
                   }`}
                 >
                   {`추천 경로 ${index + 1}`}

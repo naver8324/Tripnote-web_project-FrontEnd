@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Tabs from '../components/Tabs/Tabs';
 import RootSpot from '../components/root/RootSpot';
 import RootArea from '../components/root/RootArea';
@@ -10,7 +10,7 @@ import useMapSpotStore from '../store/useMapSpotStore';
 import NaverRegionMap from '../components/Map/NaverRegionMap';
 
 export default function RootRecommendationPage() {
-  const { activeIndex } = useTabStore();
+  const { activeIndex, setActiveIndex } = useTabStore();
   const markers = useMapSpotStore((state) => state.markers);
   const polylineColors = useMapSpotStore((state) => state.polylineColors);
   const routes = useMapSpotStore((state) => state.routes);
@@ -23,6 +23,10 @@ export default function RootRecommendationPage() {
   const handleSelectRegion = (regionKey) => {
     setSelectedRegion(regionKey);
   };
+
+  useEffect(() => {
+    setActiveIndex(0); // 스팟 중심 추천 탭이 항상 먼저 보이도록 설정
+  }, [setActiveIndex]);
 
   return (
     <div className="mt-[118px] w-full bg-subTitle flex mx-auto">

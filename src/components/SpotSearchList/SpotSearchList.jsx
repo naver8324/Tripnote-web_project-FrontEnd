@@ -64,14 +64,17 @@ const SpotSearchList = ({ region }) => {
   }, [routes, setMarkers, setRoutes, setCenter, selectedSpotId, initialSpots]);
 
   const handleSpotClick = (spot) => {
+    const validRoutes = routes || [];
+
+    // 우선 순서를 변경하여 경로와 중심을 먼저 설정
     setSelectedSpotId(spot.id);
     setClickedSpotName(spot.location);
+    setSelectedRouteIndex(validRoutes.length > 0 ? 0 : null);
     setCenter({
       latitude: spot.lat,
       longitude: spot.lng,
     });
     setOpenItems([]);
-    setSelectedRouteIndex(routes.length > 0 ? 0 : null);
   };
 
   const handleInputChange = (event) => {
