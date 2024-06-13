@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Spinner from '../commons/Spinner';
 import Pagination from '../commons/Pagination';
 import useGetMyMarkedRoute from '../../Hooks/mypage/useGetMyMarkedRoute';
@@ -7,8 +7,15 @@ import NaverMap from '../Map/NaverMap';
 
 const LoverRoot = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize] = useState(4);
-  const { markedRoute, error, loading, refetch } = useGetMyMarkedRoute();
+  const pageSize = 4;
+  const { markedRoute, error, loading, refetch, updateParams } = useGetMyMarkedRoute(
+    currentPage,
+    pageSize,
+  );
+
+  useEffect(() => {
+    updateParams({ page: currentPage, size: pageSize });
+  }, [currentPage])
 
   const handlePageChange = (event, page) => {
     setCurrentPage(page);
@@ -23,17 +30,13 @@ const LoverRoot = () => {
       </div>
     );
 
-  const totalElements = routesData.totalElements;
+  const totalElements = markedRoute.totalElements;
   const totalPage = Math.ceil(totalElements / pageSize);
-
-  const startIdx = (currentPage - 1) * pageSize;
-  const endIdx = startIdx + pageSize;
-  const routes = markedRoute.content.slice(startIdx, endIdx);
+  const routes = markedRoute?.content;
 
   return (
     <div className="w-[840px]">
       <div className=" flex flex-col mt-4 text-title">
-        <NaverMap routeId={8} />
         {routes.map((route) => (
           <div className="border-b my-8" key={route.routeId}>
             <div className="flex items-center justify-between">

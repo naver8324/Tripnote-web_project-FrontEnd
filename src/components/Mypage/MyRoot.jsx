@@ -13,7 +13,10 @@ const MyRoot = () => {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 4;
-  const { routesData, error, loading, refetch, updateParams } = useFetchRoutes(currentPage, pageSize);
+  const { routesData, error, loading, refetch, updateParams } = useFetchRoutes(
+    currentPage,
+    pageSize,
+  );
   const deleteRoute = useDeleteRoute();
 
   useEffect(() => {
@@ -37,7 +40,11 @@ const MyRoot = () => {
   if (loading) return <Spinner />;
   if (error) return <p>Error: {error}</p>;
   if (!routesData || !routesData.content || routesData.content.length === 0)
-    return <div className='w-[840px]'><NoData message="생성된 경로가 없습니다." /></div>;
+    return (
+      <div className="w-[840px]">
+        <NoData message="생성된 경로가 없습니다." />
+      </div>
+    );
 
   const totalElements = routesData.totalElements;
   const totalPage = Math.ceil(totalElements / pageSize);

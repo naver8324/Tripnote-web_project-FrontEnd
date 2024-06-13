@@ -18,7 +18,13 @@ const useFetchRoutes = (initialPage = 1, size = 10) => {
     setParams((prevParams) => ({ ...prevParams, ...newParams }));
   };
 
-  return { routesData: responseData || [], error, loading, refetch: fetchData, updateParams };
+  return {
+    routesData: responseData || [],
+    error,
+    loading,
+    refetch: fetchData,
+    updateParams,
+  };
 };
 
 export default useFetchRoutes;
