@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import useAuthStore from '../store/useAuthStore';
-import usePasswordCheckStore from '../store/usePasswordCheckStore';
 import { jwtDecode } from 'jwt-decode';
 
 const useAuth = () => {
@@ -25,9 +24,6 @@ const useAuth = () => {
 
 export const PrivateRoute = ({ isSocialOnly }) => {
   const isAuth = useAuthStore((state) => state.isAuth);
-  const isPasswordChecked = usePasswordCheckStore(
-    (state) => state.isPasswordChecked,
-  );
   const token = localStorage.getItem('accessToken');
   const location = useLocation();
   const navigate = useNavigate();
@@ -51,22 +47,11 @@ export const PrivateRoute = ({ isSocialOnly }) => {
         navigate('/login');
         return;
       }
-
-      if (location.pathname === '/mypage/profile' && !isPasswordChecked) {
-        navigate('/mypage/checkedpassword');
-      }
     } catch (error) {
       console.error('Invalid token:', error);
       navigate('/login');
     }
-  }, [
-    isAuth,
-    token,
-    isSocialOnly,
-    isPasswordChecked,
-    location.pathname,
-    navigate,
-  ]);
+  }, [isAuth, token, isSocialOnly, location.pathname, navigate]);
 
   return isAuth ? <Outlet /> : null;
 };

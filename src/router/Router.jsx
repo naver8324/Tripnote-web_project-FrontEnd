@@ -56,7 +56,6 @@ const router = createBrowserRouter([
       { path: 'root/recommend', element: <RootRecommendationPage /> },
       { path: 'root/create', element: <RootCreatePage /> },
       { path: 'editBoard', element: <EditBoardPage /> },
-      // { path: 'oauth/kakao/callback', element: <OauthCallback /> }, // OauthCallback 경로 추가
       { path: 'admin/login', element: <AdminLogin /> },
     ],
   },

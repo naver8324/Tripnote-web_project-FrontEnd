@@ -134,12 +134,11 @@ const ProfileSet = () => {
   };
 
   const isFormValid = () => {
-    return (
-      isNicknameChecked &&
-      nickname.length >= 2 &&
-      (password.length === 0 || password.length >= 8) &&
-      (password.length === 0 || password === confirmPassword)
-    );
+    const isNicknameValid = isNicknameChecked && nickname.length >= 2;
+    const isPasswordValid =
+      password.length === 0 ||
+      (password.length >= 8 && password === confirmPassword);
+    return isNicknameValid || isPasswordValid;
   };
 
   return (
