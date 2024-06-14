@@ -28,12 +28,8 @@ export default function LoginPage() {
   };
 
   const handleLoginClick = async () => {
-    console.log('Login button clicked');
-    console.log(email, password);
-
     try {
       await login(email, password);
-      console.log('Login successful, navigating to main');
       ToastAlert('로그인 되었습니다.', 'success');
 
       navigate(redirectUrl);
@@ -45,10 +41,7 @@ export default function LoginPage() {
   const handleKakaoLoginClick = async () => {
     try {
       await kakaoLogin(redirectUrl); // redirectUrl을 전달합니다.
-      console.log('카카오 로그인 리다이렉트 성공');
-    } catch (err) {
-      console.log('카카오 리다이렉트 실패', err);
-    }
+    } catch (err) {}
   };
 
   return (

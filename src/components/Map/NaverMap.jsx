@@ -14,9 +14,7 @@ const NaverMap = ({ className, routeId }) => {
 
   // Load the Naver Map script
   useEffect(() => {
-    console.log('Loading Naver Map script');
     const cleanup = loadNaverMapScript(() => {
-      console.log('Naver Map script loaded');
       // The map initialization will happen in another useEffect
     });
 
@@ -26,14 +24,12 @@ const NaverMap = ({ className, routeId }) => {
   // Initialize the Naver Map after the component has rendered
   useEffect(() => {
     if (mapRef.current && window.naver && window.naver.maps) {
-      console.log('Initializing Naver Map');
       const mapOptions = {
         center: new window.naver.maps.LatLng(37.5665, 126.978), // 기본 중심 좌표
         zoom: 12,
       };
       const map = new window.naver.maps.Map(mapRef.current, mapOptions);
       setNaverMap(map);
-      console.log('Naver Map initialized', map);
     } else {
       console.error('mapRef.current or window.naver.maps is not available');
     }

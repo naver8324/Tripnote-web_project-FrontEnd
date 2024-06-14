@@ -17,9 +17,7 @@ const useDeleteMember = () => {
                 '/api/admin/delete-member', // URL
                 'DELETE' // method
             );
-            console.log(response);
         }catch (err) {
-            console.log("use에서 에러발행", err);
             throw err; // 에러를 호출자에게 전파
         }
     }

@@ -17,9 +17,7 @@ const useDeletingComment = () => {
           `api/admin/comments/${commentId}`, // URL
           'DELETE' // method
       );
-      console.log(response);
     }catch (err) {
-      console.log(err);
       throw err; // 에러를 호출자에게 전파
     }
   }

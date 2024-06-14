@@ -37,7 +37,6 @@ const CommentManagement = () => {
 
         try {
             await DeletingComment(comment);
-            console.log("delete post success");
             refetchComments();
             const deleteComment = comments.find((fetchComment) => fetchComment.id === comment.id).deleted;
             if(!deleteComment){

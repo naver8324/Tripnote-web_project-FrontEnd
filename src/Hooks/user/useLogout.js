@@ -22,7 +22,6 @@ const useLogout = () => {
       const response = await fetchData();
 
       if (response.status === 200) {
-        console.log('Logout successful');
       } else {
         console.error('Logout failed:', response.data);
         setError({

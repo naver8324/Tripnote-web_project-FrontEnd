@@ -19,9 +19,6 @@ const useKakaoRedirect = (code) => {
       localStorage.setItem('accessToken', accessToken);
       localStorage.setItem('provider', 'kakao');
 
-      console.log('Login successful');
-      console.log(accessToken);
-
       setIsAuth(true);
       await memberInfo(); // 이메일과 닉네임을 로컬 스토리지에 저장
 

@@ -45,7 +45,6 @@ const UserManagement = () => {
         try {
             await deleteMember(memberEmail);
             setFunctionActive(functionActive + 1);
-            console.log("response: ", 'Delete successful');
             ToastAlert(`관리자에 의해 ${memberEmail} 회원이 탈퇴되었습니다.`, 'success');
 
             // 삭제 요청 후 getMemberData 함수 호출하여 데이터 새로 조회
@@ -59,7 +58,6 @@ const UserManagement = () => {
         try {
             await restoreMember(memberEmail);
             setFunctionActive(functionActive + 1);
-            console.log("response: ", 'Restore successful');
             ToastAlert(`관리자에 의해 ${memberEmail} 회원이 복구되었습니다.`, 'success');
 
             // 복구 요청 후 getMemberData 함수 호출하여 데이터 새로 조회

@@ -23,8 +23,6 @@ const useAxios = ({
   ) => {
     setLoading(true);
     try {
-      console.log('Requesting:', fetchMethod, fetchUrl);
-      console.log('Params:', fetchParams);
       let finalUrl = fetchUrl;
       if (
         (fetchMethod.toUpperCase() === 'GET' ||

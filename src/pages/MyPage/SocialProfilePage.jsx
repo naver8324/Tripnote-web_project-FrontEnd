@@ -94,7 +94,6 @@ const SocialProfilePage = () => {
       await memberInfo();
       setNickname(nickname);
       ToastAlert('정보 수정이 완료되었습니다.', 'success');
-      console.log('Profile saved:', data);
       resetUser();
       navigate('/mypage');
     } catch (err) {

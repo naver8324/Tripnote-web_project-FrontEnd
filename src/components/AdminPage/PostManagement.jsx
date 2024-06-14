@@ -39,7 +39,6 @@ const PostManagement = () => {
 
     try {
       await DeletingPost(post);
-      console.log("delete post success");
       refetechPosts();
       const deletePost = posts.find((fetchPost) => fetchPost.id === post.id).deleted;
       if(!deletePost){

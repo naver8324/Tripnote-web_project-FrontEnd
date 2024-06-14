@@ -6,7 +6,6 @@ export const loadNaverMapScript = (callback) => {
   document.head.appendChild(script);
 
   script.onload = () => {
-    console.log('Naver Map script loaded successfully');
     if (typeof callback === 'function') {
       callback();
     }

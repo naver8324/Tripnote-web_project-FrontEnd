@@ -14,7 +14,6 @@ const useSignup = () => {
         data: { email, password, nickname },
       });
 
-      console.log('Signup successful:', response.data);
       return response.data;
     } catch (err) {
       console.error('Signup failed:', err);

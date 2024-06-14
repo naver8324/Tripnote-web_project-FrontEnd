@@ -20,7 +20,7 @@ const KakaoCallback = () => {
           const dynamicUrl = `/api/member/kakao/login?code=${code}`; // 동적 URL 생성
           const response = await fetchData({}, dynamicUrl, 'GET');
           const data = response.data;
-          console.log(data);
+
           localStorage.setItem('accessToken', data.access_token); // 액세스 토큰을 로컬 스토리지에 저장
           navigate('/dashboard'); // 로그인 성공 후 리다이렉트할 경로
         } catch (error) {

@@ -14,9 +14,7 @@ export default function KakaoRedirect() {
   const handleKakaoRedirect = async () => {
     try {
       await kakaoRedirect();
-      console.log('kakao Login successful, navigating to main');
       navigate(redirectUrl);
-      console.log(redirectUrl);
     } catch (err) {
       console.error('kakao redirect error: ', err);
     }

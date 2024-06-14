@@ -77,8 +77,6 @@ export default function SignupPage() {
   };
 
   const handleSignup = async () => {
-    console.log('가입하기 클릭됨');
-
     // 닉네임 중복 확인
     const isNicknameAvailable = await handleCheckNickname();
     if (!isNicknameAvailable) {
@@ -110,7 +108,6 @@ export default function SignupPage() {
       await signup(email, password, nickname);
       ToastAlert('회원가입이 완료되었습니다.', 'success');
 
-      console.log('Signup successful, navigating to login');
       navigate(`/login?redirecturl=${redirectUrl}`);
     } catch (error) {
       console.error('Signup failed:', error);
