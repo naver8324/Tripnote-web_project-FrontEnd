@@ -72,7 +72,11 @@ export default function MainPage() {
           </div>
         </div>
         <div className="">
-          <img src={mainGif} alt="경로 추천 gif" />
+          <img
+            src={mainGif}
+            alt="tripnote시연영상"
+            loading='lazy'
+          />
         </div>
       </div>
       <div id="search" ref={searchRef} className="inner flex flex-col gap-8">
@@ -98,7 +102,7 @@ export default function MainPage() {
       </div>
       <div className="h-96 flex flex-col justify-center items-center gap-16">
         <h1 className="text-title text-3xl font-semibold">PARTNERS</h1>
-        <img src={elicelogo} alt="elice logo" className="w-40" />
+        <img loading='lazy' src={elicelogo} alt="elice logo" className="w-40" />
       </div>
     </div>
   );
