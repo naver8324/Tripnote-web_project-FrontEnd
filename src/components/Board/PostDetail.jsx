@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import mockImg from '../../assets/profile.png';
 import { formmateDate } from '../../utils/date';
 import PostInteraction from './PostInteraction';
@@ -7,6 +7,7 @@ import useDeletePost from '../../Hooks/posts/useDeletePost';
 import { ToastAlert } from '../commons/ToastAlert';
 import { useNavigate } from 'react-router-dom';
 import NaverMap from '../Map/NaverMap';
+import CustomConfirmModal from '../Modal/CustomConfirmModal';
 
 export default function PostDetail({ postDetail }) {
   const {
@@ -20,10 +21,12 @@ export default function PostDetail({ postDetail }) {
     likedAt,
     markedAt,
     reportedAt,
-    routeId
+    routeId,
   } = postDetail;
   const userNickname = localStorage.getItem('userNickname');
   const navigate = useNavigate();
+
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
 
   const deletePost = useDeletePost();
   // 게시글 삭제 함수
@@ -37,6 +40,10 @@ export default function PostDetail({ postDetail }) {
     }
   };
 
+  const openConfirmModal = () => {
+    setIsConfirmModalOpen(true);
+  }
+
   const handleEditPost = () => {
     navigate(`/editBoard`, { state: { postDetail } });
   };
@@ -45,10 +52,10 @@ export default function PostDetail({ postDetail }) {
     <div className="w-[900px] center pb-10 max-lg:px-[5vw]">
       <div className="mt-12">
         <div className="">
-          <NaverMap routeId={routeId}/>
+          {/* <NaverMap routeId={routeId} /> */}
           <h1 className="text-2xl font-semibold mt-10">{title}</h1>
-          <div className="flex gap-2 items-center justify-between mt-4">
-            <div className="flex space-x-2 items-center  text-title">
+          <div className="flex gap-2 items-center justify-between mt-8">
+            <div className="flex space-x-2 items-center text-title">
               <img src={mockImg} alt="" className="w-6 h-6 rounded-full" />
               <p className="text-lg opacity-70">
                 {`${nickname} · ${formmateDate(createdAt)}`}
@@ -59,7 +66,7 @@ export default function PostDetail({ postDetail }) {
                 <Button className=" text-title" onClick={handleEditPost}>
                   수정
                 </Button>
-                <Button className="text-red-400" onClick={handleDeletePost}>
+                <Button className="bg-red-400 text-white" onClick={openConfirmModal}>
                   삭제
                 </Button>
               </div>
@@ -67,12 +74,12 @@ export default function PostDetail({ postDetail }) {
           </div>
           <hr className="border-b border-prime inline-block w-full" />
         </div>
-        <div className="m-3 leading-7">
+        <div className="my-8 leading-7">
           <p
             className="text-xl"
             dangerouslySetInnerHTML={{ __html: content }}
           />
-          <div className="flex space-x-3 mt-7">
+          <div className="flex space-x-2 mt-7">
             {hashtagResponseDTOList?.map((hashtag) => (
               <span
                 key={hashtag.id}
@@ -83,6 +90,7 @@ export default function PostDetail({ postDetail }) {
             ))}
           </div>
         </div>
+          <NaverMap routeId={routeId} />
         <PostInteraction
           id={id}
           likes={likes}
@@ -91,6 +99,14 @@ export default function PostDetail({ postDetail }) {
           reportedAt={reportedAt}
         />
       </div>
+      <CustomConfirmModal
+        isOpen={isConfirmModalOpen}
+        onRequestClose={() => setIsConfirmModalOpen(false)}
+        onConfirm={handleDeletePost}
+        onCancel={() => setIsConfirmModalOpen(false)}
+        title={`삭제 확인`}
+        message={`정말로 게시물을 삭제하시겠습니까?`}
+      />
     </div>
   );
 }

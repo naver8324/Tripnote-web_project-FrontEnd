@@ -31,7 +31,7 @@ export default function Navigation({ routes, defaultIndex = 0, children, onTabCh
               key={`${route}-${i}`}
               className={
                 'p-4 px-5 ' +
-                (navIndex === i ? 'text-title' : 'text-gray-300')
+                (navIndex === i ? 'text-title font-semibold' : 'text-gray-300')
               }
               onClick={(e) => {changePage(e.target, i)}}
             >

@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 export function ToastAlert(message, type = 'default') {
   const options = {
     position: 'top-center',
-    autoClose: 2000,
+    autoClose: 1500,
     hideProgressBar: false,
     closeOnClick: true,
     pauseOnHover: true,

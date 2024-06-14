@@ -93,6 +93,7 @@ export default function Comments({ postDetail }) {
         </Button>
       </div>
       <div>
+        
         {comments && comments.content && comments.content.length > 0 ? (
           <>
             {comments.content.slice(0, displayCount).map((commentData) => (
@@ -141,9 +142,7 @@ export default function Comments({ postDetail }) {
                         content: e.target.value,
                       })
                     }
-                    onKeyDown={(e) =>
-                      handleKeyDown(e, handleSaveUpdateComment)
-                    }
+                    onKeyDown={(e) => handleKeyDown(e, handleSaveUpdateComment)}
                     className="resize-none outline-none w-full h-[60px] overflow-auto bg-gray-100 rounded-md pr-[80px]"
                   ></textarea>
                 ) : (
