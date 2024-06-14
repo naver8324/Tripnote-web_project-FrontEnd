@@ -17,6 +17,7 @@ import ReviewSlider from '../../components/Home/ReviewSlider';
 import MainTop from '../../components/Home/MainTop';
 import ReviewCard from '../../components/Home/ReviewCard';
 import reviewImg1 from '../../assets/review1.jpg';
+import ScrollToTopButton from '../../components/ui/ScrollToTopButton';
 
 const regions = [
   { imgSrc: seoul, name: '서울' },
@@ -199,6 +200,7 @@ export default function MainPage() {
             className="w-40"
           />
         </div>
+        <ScrollToTopButton />
       </div>
     </>
   );
