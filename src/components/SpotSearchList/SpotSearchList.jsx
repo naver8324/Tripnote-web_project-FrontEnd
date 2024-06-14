@@ -88,7 +88,7 @@ const SpotSearchList = ({ region }) => {
 
   return (
     <form
-      className="relative mt-4 flex-col justify-center"
+      className="relative mt-4 flex-col justify-center h-full"
       onSubmit={handleSearch}
     >
       <div className="pt-4 pb-4 pl-3 flex">
@@ -99,20 +99,24 @@ const SpotSearchList = ({ region }) => {
           onChange={handleInputChange}
         />
       </div>
-      {initialLoading && <p>Loading initial spots...</p>}
-      {initialError && <p>Error loading initial spots: {initialError}</p>}
-      {searchLoading && <p>Loading search results...</p>}
-      {searchError && <p>{searchError}</p>}
-      {(searchLocation ? searchedSpots : initialSpots)?.length > 0
-        ? (searchLocation ? searchedSpots : initialSpots).map((spot) => (
-            <SpotCard
-              key={spot.id}
-              spot={spot}
-              isSelected={selectedSpotId === spot.id}
-              onClick={() => handleSpotClick(spot)}
-            />
-          ))
-        : !searchLoading && <p>검색 결과가 없습니다.</p>}
+      <div className="overflow-y-auto h-screen">
+        {' '}
+        {/* 스크롤 가능한 div */}
+        {initialLoading && <p>Loading initial spots...</p>}
+        {initialError && <p>Error loading initial spots: {initialError}</p>}
+        {searchLoading && <p>Loading search results...</p>}
+        {searchError && <p>{searchError}</p>}
+        {(searchLocation ? searchedSpots : initialSpots)?.length > 0
+          ? (searchLocation ? searchedSpots : initialSpots).map((spot) => (
+              <SpotCard
+                key={spot.id}
+                spot={spot}
+                isSelected={selectedSpotId === spot.id}
+                onClick={() => handleSpotClick(spot)}
+              />
+            ))
+          : !searchLoading && <p>검색 결과가 없습니다.</p>}
+      </div>
     </form>
   );
 };
