@@ -8,6 +8,7 @@ import useHashTag from '../../Hooks/posts/useHashTag';
 import { ToastAlert } from '../commons/ToastAlert';
 import { useNavigate } from 'react-router-dom';
 import useCreateRoute from '../../Hooks/routes/useCreateRoute';
+import NextSpotRecommend from "../SpotSearchList/NextSpotRecommend.jsx";
 import CustomConfirmModal from '../Modal/CustomConfirmModal';
 
 export default function BarRootCreate() {
@@ -131,6 +132,11 @@ export default function BarRootCreate() {
             removeSpot={removeSpot}
           />
         ))}
+        {routeSpots.length > 0 && (
+          <NextSpotRecommend
+            spotId = {routeSpots[routeSpots.length - 1].id}
+          />
+        )}
         <div className="flex justify-end m-4">
           <button
             className={`mt-4 px-4 py-2 text-white rounded-lg ${
@@ -178,7 +184,7 @@ export default function BarRootCreate() {
               className={`px-4 py-2 rounded-lg mr-2 ${
                 isSaveEnabled
                   ? 'bg-green-400 text-white hover:bg-prime'
-                  : 'bg-gray-300'
+                  : 'bg-gray-400'
               }`}
               disabled={!isSaveEnabled}
             >

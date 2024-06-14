@@ -2,19 +2,18 @@ import useAxios from '../useAxios';
 import useAuthStore from '../../store/useAuthStore';
 import useUserStore from '../../store/useUserStore';
 import useMemberInfo from './useMemberInfo';
-import useCreateRoute from '../../Hooks/routes/useCreateRoute'; // 추가
+import useCreateRoute from '../../Hooks/routes/useCreateRoute';
 import { ToastAlert } from '../../components/commons/ToastAlert';
 
 const useLogin = () => {
   const setIsAuth = useAuthStore((state) => state.setIsAuth);
-  const { setEmail, setNickname } = useUserStore();
-  const { memberInfo } = useMemberInfo();
   const { fetchData, error, loading } = useAxios({
     method: 'POST',
     url: '/login',
     shouldFetch: false,
   });
-  const { createRoute } = useCreateRoute(); // 추가
+  const { createRoute } = useCreateRoute();
+  const { memberInfo } = useMemberInfo();
 
   const login = async (email, password) => {
     const routeData = localStorage.getItem('routeData');
@@ -30,7 +29,7 @@ const useLogin = () => {
 
       setIsAuth(true); // Zustand 상태 업데이트
 
-      await memberInfo();
+      await memberInfo(); // 이메일과 닉네임을 로컬 스토리지에 저장
 
       if (routeData) {
         try {

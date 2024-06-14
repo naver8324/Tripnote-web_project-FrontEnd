@@ -1,5 +1,6 @@
 import useAxios from '../useAxios';
 import useAuthStore from '../../store/useAuthStore';
+import useMemberInfo from './useMemberInfo';
 
 const useKakaoRedirect = (code) => {
   const setIsAuth = useAuthStore((state) => state.setIsAuth);
@@ -8,26 +9,26 @@ const useKakaoRedirect = (code) => {
     url: `api/member/kakao/login?code=${code}`,
     shouldFetch: false,
   });
+  const { memberInfo } = useMemberInfo();
 
   const kakaoRedirect = async () => {
     try {
-      console.log('fsdfsadlkflcmslkdsgh');
       const response = await fetchData();
 
       const accessToken = response.data.jwtToken;
-      localStorage.setItem('kakaoToken', response.data.kakaoToken);
       localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('provider', 'kakao');
 
       console.log('Login successful');
       console.log(accessToken);
-      console.log(localStorage.getItem('kakaoToken'));
 
-      setIsAuth(true); // Zustand 상태 업데이트
+      setIsAuth(true);
+      await memberInfo(); // 이메일과 닉네임을 로컬 스토리지에 저장
 
       return accessToken;
     } catch (err) {
       console.error('Error:', err);
-      throw err; // 에러를 호출자에게 전파
+      throw err;
     }
   };
 

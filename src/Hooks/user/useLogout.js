@@ -19,7 +19,6 @@ const useLogout = () => {
     setError(null);
 
     try {
-      // API 호출로 로그아웃 요청
       const response = await fetchData();
 
       if (response.status === 200) {
@@ -38,9 +37,11 @@ const useLogout = () => {
         error: err.message,
       });
     } finally {
-      // 로그아웃이 성공하든 실패하든, 로컬 스토리지에서 어세스 토큰 제거 및 인증 상태 업데이트
       localStorage.removeItem('accessToken');
       localStorage.removeItem('userNickname');
+      localStorage.removeItem('userEmail');
+      localStorage.removeItem('provider');
+
       setIsAuth(false);
       setLoading(false);
       navigate('/');

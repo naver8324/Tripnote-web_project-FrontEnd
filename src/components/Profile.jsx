@@ -1,21 +1,21 @@
 import React from 'react';
-import useUserStore from '../store/useUserStore';
 import profile from '../assets/profile.png';
 
 const Profile = () => {
   const nickname = localStorage.getItem('userNickname');
-
-  // userId 값을 nickname으로 설정
-  const userId = nickname;
+  const email = localStorage.getItem('userEmail');
 
   return (
-    <div className='flex space-x-2'>
+    <div className="flex space-x-2 flex-col justify-center items-center">
       <img
         src={profile}
         alt="기본 이미지"
-        className="rounded-full w-8 h-8 object-cover mb-4"
+        className="rounded-full w-12 h-12 object-cover mb-4"
       />
-      <h3 className="text-2xl mb-2">{userId}</h3>
+      <div>
+        <h3 className="text-4xl mb-2">{nickname}</h3>
+      </div>
+      <div className="text-2xl mb-2">{email}</div>
     </div>
   );
 };

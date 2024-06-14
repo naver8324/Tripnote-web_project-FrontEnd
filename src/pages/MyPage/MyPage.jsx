@@ -12,8 +12,14 @@ export default function MyPage() {
   const navigate = useNavigate();
 
   const handleProfileClick = () => {
-    navigate('/mypage/checkedpassword');
+    const provider = localStorage.getItem('provider');
+    if (provider === 'kakao') {
+      navigate('/mypage/socialprofile');
+    } else {
+      navigate('/mypage/checkedpassword');
+    }
   };
+
   return (
     <>
       <div className="mt-40 min-h-[1200px] bg-white rounded-lg p-6 flex flex-col items-center">
