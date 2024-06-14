@@ -40,10 +40,13 @@ const PostManagement = () => {
     try {
       await DeletingPost(post);
       console.log("delete post success");
-      ToastAlert(`${post.id}번 게시글이 삭제되었습니다.`, 'success');
       refetechPosts();
       const deletePost = posts.find((fetchPost) => fetchPost.id === post.id).deleted;
-      console.log("삭제된 게시글 삭제여부: ", deletePost);
+      if(!deletePost){
+        ToastAlert(`${post.id}번 게시글이 삭제되었습니다.`, 'success');
+        return;
+      }
+      ToastAlert(`${post.id}번 게시글이 복구되었습니다.`, 'success');
     } catch (error) {
       console.error('delete post failed:', error);
     }
@@ -88,10 +91,10 @@ const PostManagement = () => {
     </div>
       <div className=" flex flex-col">
         <div className="text-xl font-bold flex flex-wrap border-b border-grey p-2 mt-4 ">
-          <div className="flex-1 text-center">Num</div>
-          <div className="flex-1 text-center">작성자</div>
-          <div className="flex-1 text-center">제목</div>
-          <div className="flex-1 text-center">생성일</div>
+          <div className="flex-[0.2] text-center">Num</div>
+          <div className="flex-[0.5] text-center">작성자</div>
+          <div className="flex-[1.2] text-center">제목</div>
+          <div className="flex-[0.8] text-center">생성일</div>
           <div className="flex-1 text-center">삭제 여부</div>
         </div>
 
@@ -100,15 +103,15 @@ const PostManagement = () => {
         ) : posts.length ? (
           posts.map((post) => (
             <div key={post.id} className="flex flex-wrap items-center justify-around border-b border-grey p-2">
-              <div className="flex-1 text-center">{post.id}</div>
-              <div className="flex-1 text-center cursor-pointer"
+              <div className="flex-[0.2] text-center">{post.id}</div>
+              <div className="flex-[0.5] text-center cursor-pointer"
                 onClick={() => {
                 setTypedNickname(post.nickname);
                 setNickname(null);
                 setPostId(post.id);
               }}>{post.nickname}</div>
-              <div className="flex-1 text-center">{post.title}</div>
-              <div className="flex-1 text-center">{formmateDate(post.createdAt)}</div>
+              <div className="flex-[1.2] text-center">{post.title}</div>
+              <div className="flex-[0.8] text-center">{formmateDate(post.createdAt)}</div>
               <div className="flex-1 text-center flex justify-between items-center">
                 <div className="flex-1 text-center">{post.deleted ? 'Yes' : 'No'}</div>
                 <Button
