@@ -20,7 +20,7 @@ const useCheckedPassword = () => {
         ToastAlert('비밀번호를 확인해주세요', 'error');
       }
     } catch (err) {
-      ToastAlert('오류가 발생했습니다. 다시 시도해주세요.', 'error');
+      ToastAlert(' 다시 시도해주세요.', 'error');
     }
   };
 
