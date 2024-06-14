@@ -39,7 +39,6 @@ export default function Editor({ postTitle, postContent, setPostTitle, setPostCo
 
       const presignedUrlData = presignedUrlResponse.data;
       const { presignedUrl, key } = presignedUrlData;
-      console.log(presignedUrl);
 
       const uploadResponse = await axios.put(presignedUrl, file, {
         headers: {
@@ -77,7 +76,6 @@ export default function Editor({ postTitle, postContent, setPostTitle, setPostCo
 
         Promise.all(promises)
           .then((urls) => {
-            console.log('Uploaded image URLs:', urls);
             setImages((prevImages) => [...prevImages, ...urls]);
 
             const range = QuillRef.current?.getEditor().getSelection()?.index;

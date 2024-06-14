@@ -22,6 +22,7 @@ const LoverReview = () => {
 
   const handlePageChange = (event, page) => {
     setCurrentPage(page);
+    window.scrollTo(0, 0);
   };
 
   return (

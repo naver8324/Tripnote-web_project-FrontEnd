@@ -69,7 +69,7 @@ const NaverMap = ({ className, routeId }) => {
   if (error) return <div>Error: {error.message}</div>;
 
   return (
-    <div id="map" className={`w-full h-96 ${className}`} ref={mapRef}></div>
+    <div id="map" className={`w-full h-80 ${className}`} ref={mapRef}></div>
   );
 };
 

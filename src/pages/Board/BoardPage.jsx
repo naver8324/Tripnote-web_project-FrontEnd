@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import Input from '../../components/commons/Input';
 import Button from '../../components/commons/Button';
 import Navigation from '../../components/Board/Navigation';
 import PostCard from '../../components/Board/PostCard';
 import { useNavigate } from 'react-router-dom';
-import { ToastAlert } from '../../components/commons/ToastAlert';
 import useHashTag from '../../Hooks/posts/useHashTag';
 import Spinner from '../../components/commons/Spinner';
 import NoData from './NoData';
@@ -26,7 +24,6 @@ export default function BoardPage() {
   useEffect(() => {
     if (responseData && responseData.content) {
       setLocalPosts(responseData.content);
-      console.log('localPosts:', responseData.content);
     }
   }, [responseData]);
 
@@ -53,7 +50,6 @@ export default function BoardPage() {
       const data = await searchByTag(tag, sortOptionOverride || sortOption, pageOverride || currentPage, 4);
       setLocalPosts(data.content);
       setPageState(`#${tag.name}`);
-      console.log('sort', sortOptionOverride, 'pagestate', pageState);
     } catch (err) {
       console.error('Failed to load posts by tag:', err);
     }
@@ -85,11 +81,10 @@ export default function BoardPage() {
 
   return (
     <section className="min-h-screen mt-40 w-[840px] mx-auto flex flex-col text-title">
-      <nav className="flex items-center justify-between w-full mb-8">
+      <nav className="flex items-center justify-between w-full my-4">
         <h1 className="searchResult text-3xl font-semibold">{pageState}</h1>
-        {/* <Input variant="searchInput" /> */}
       </nav>
-      <div className="flex flex-1 w-full mb-16">
+      <div className="flex flex-1 w-full mb-16 space-x-3">
         <div className="flex-1 pr-4 space-y-8 h-[1000px] mb-40">
           <Navigation
             routes={['최신순', '인기순']}
@@ -118,17 +113,17 @@ export default function BoardPage() {
             />
           )}
         </div>
-        <div className="min-w-[40%] lg:min-w-[255px] max-w-min border-l border-t border-grey pl-8 pt-8 mt-[87px] max-md:hidden">
-          <div className="flex flex-col gap-10">
+        <div className="min-w-[40%] lg:min-w-[255px] max-w-min bg-subBackground h-auto px-8 pt-8 mt-[87px] max-md:hidden">
+          <div className="flex flex-col gap-10 text-title">
             <div>
-              <h1 className="font-medium text-m mb-6">지역별 후기</h1>
+              <h1 className="font-semibold text-m mb-6">지역별 후기</h1>
               <div className="flex gap-3 flex-wrap">
                 {localRegionTags.map((region) => (
                   <Button
                     variant="roundButton"
                     size="small"
                     key={region.id}
-                    className={`text-xs px-2 ${pageState === `#${region.name}` ? 'bg-title text-white' : ''}`}
+                    className={`shadow-sm text-xs px-2 ${pageState === `#${region.name}` ? 'bg-title text-white' : ''}`}
                     onClick={(e) => handleTagClick(e, region.name)}
                   >
                     #{region.name}
@@ -137,14 +132,14 @@ export default function BoardPage() {
               </div>
             </div>
             <div>
-              <h1 className="font-medium text-m mb-6">테마별 후기</h1>
+              <h1 className="font-semibold  text-m mb-6">테마별 후기</h1>
               <div className="flex gap-3 flex-wrap">
                 {localThemeTags.map((theme) => (
                   <Button
                     variant="roundButton"
                     size="small"
                     key={theme.id}
-                    className={`text-xs px-2 ${pageState === `#${theme.name}` ? 'bg-title text-white' : ''}`}
+                    className={`shadow-sm text-xs px-2 ${pageState === `#${theme.name}` ? 'bg-title text-white' : ''}`}
                     onClick={(e) => handleTagClick(e, theme.name)}
                   >
                     #{theme.name}

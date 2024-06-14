@@ -8,6 +8,7 @@ import { formmateDate } from '../../utils/date';
 import useDeleteComment from '../../Hooks/posts/useDeleteComment';
 import useUpdateComment from '../../Hooks/posts/useUpdateComment';
 import useDebounce from '../../Hooks/useDebounce';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 export default function Comments({ postDetail }) {
   const { id } = postDetail;
@@ -95,62 +96,73 @@ export default function Comments({ postDetail }) {
       <div>
         {comments && comments.content && comments.content.length > 0 ? (
           <>
-            {comments.content.slice(0, displayCount).map((commentData) => (
-              <div
-                key={commentData.id}
-                className="my-4 p-4 text-sm rounded-md border border-gray-300"
-              >
-                <div className="flex justify-between">
-                  <div className="flex gap-3 mb-4 text-title">
-                    <p className="line-clamp-1">{commentData.nickname}</p>
-                    <p className="opacity-70">
-                      {formmateDate(commentData.createdAt)}
-                    </p>
-                  </div>
-                  {userNickname === commentData.nickname && (
-                    <div className="space-x-2">
-                      <Button
-                        size="small"
-                        className="hover:bg-red-400 hover:text-white"
-                        onClick={() => {
-                          if (updateComment.id === commentData.id) {
-                            handleSaveUpdateComment();
-                          } else {
-                            handleUpdateComment(commentData);
-                          }
-                        }}
-                      >
-                        {updateComment.id === commentData.id ? '저장' : '수정'}
-                      </Button>
-                      <Button
-                        size="small"
-                        className="hover:bg-red-400 hover:text-white"
-                        onClick={() => handleDeleteComment(commentData.id)}
-                      >
-                        삭제
-                      </Button>
+            <TransitionGroup>
+              {comments.content.slice(0, displayCount).map((commentData) => (
+                <CSSTransition
+                  key={commentData.id}
+                  timeout={300}
+                  classNames={{
+                    enter: 'opacity-0',
+                    enterActive: 'animate-fadeIn',
+                    exit: 'opacity-100',
+                    exitActive: 'animate-fadeOut',
+                  }}
+                >
+                  <div
+                    key={commentData.id}
+                    className="my-4 p-4 text-sm rounded-md border border-gray-300"
+                  >
+                    <div className="flex justify-between">
+                      <div className="flex gap-3 mb-4 text-title">
+                        <p className="line-clamp-1">{commentData.nickname}</p>
+                        <p className="opacity-70">
+                          {formmateDate(commentData.createdAt)}
+                        </p>
+                      </div>
+                      {userNickname === commentData.nickname && (
+                        <div className="space-x-2">
+                          <Button
+                            size="small"
+                            className="hover:bg-red-400 hover:text-white"
+                            onClick={() => {
+                              if (updateComment.id === commentData.id) {
+                                handleSaveUpdateComment();
+                              } else {
+                                handleUpdateComment(commentData);
+                              }
+                            }}
+                          >
+                            {updateComment.id === commentData.id ? '저장' : '수정'}
+                          </Button>
+                          <Button
+                            size="small"
+                            className="hover:bg-red-400 hover:text-white"
+                            onClick={() => handleDeleteComment(commentData.id)}
+                          >
+                            삭제
+                          </Button>
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-                {updateComment.id === commentData.id ? (
-                  <textarea
-                    value={updateComment.content}
-                    onChange={(e) =>
-                      setUpdateComment({
-                        ...updateComment,
-                        content: e.target.value,
-                      })
-                    }
-                    onKeyDown={(e) =>
-                      handleKeyDown(e, handleSaveUpdateComment)
-                    }
-                    className="resize-none outline-none w-full h-[60px] overflow-auto bg-gray-100 rounded-md pr-[80px]"
-                  ></textarea>
-                ) : (
-                  <p>{commentData.content}</p>
-                )}
-              </div>
-            ))}
+                    {updateComment.id === commentData.id ? (
+                      <textarea
+                        value={updateComment.content}
+                        onChange={(e) =>
+                          setUpdateComment({
+                            ...updateComment,
+                            content: e.target.value,
+                          })
+                        }
+                        onKeyDown={(e) => handleKeyDown(e, handleSaveUpdateComment)}
+                        className="resize-none outline-none w-full h-[60px] overflow-auto bg-gray-100 rounded-md pr-[80px]"
+                      ></textarea>
+                    ) : (
+                      <p>{commentData.content}</p>
+                    )}
+                  </div>
+                </CSSTransition>
+              ))}
+            </TransitionGroup>
             {displayCount < comments.content.length && (
               <div className="text-center mt-4">
                 <Button

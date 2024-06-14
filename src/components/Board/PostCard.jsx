@@ -28,25 +28,25 @@ export default function PostCard({ contents }) {
       to={postUrl}
       className="flex gap-8 items-center border-b border-grey pb-5 mb-4"
     >
-      <div className="w-full">
-        <div className="flex gap-2 items-center mb-7">
+      <div className="w-full text-title">
+        <div className="flex gap-2 items-center mb-3">
           <img
             src={profile}
             alt="profile image"
-            className="w-6 h-6 rounded-full"
+            className="w-4 h-4 rounded-full"
           />
-          <p className="line-clamp-1">{nickname}</p>
-          <p className="min-w-fit">{formmateDate(createdAt)}</p>
+          <p className="line-clamp-1 text-sm">{nickname}</p>
+          <p className="min-w-fit text-sm">{formmateDate(createdAt)}</p>
         </div>
-        <h1 className="text-xl">{title}</h1>
+        <h1 className="text-xl font-semibold mx-3 line-clamp-1">{title}</h1>
         {/* <p
           className="my-3 leading-6 line-clamp-3 max-sm:hidden md:max-[1100px]:hidden"
           dangerouslySetInnerHTML={{ __html: content }}
         /> */}
-        <p className="my-3 leading-6 line-clamp-3 max-sm:hidden md:max-[1100px]:hidden">
+        <p className="m-3 leading-6 line-clamp-3 max-sm:hidden md:max-[1100px]:hidden">
           {textContent}
         </p>
-        <div className="flex gap-2 mt-3 flex-wrap">
+        <div className="flex gap-2 mt-5 ml-3 flex-wrap">
           {hashtagResponseDTOList?.map((hashtag) => (
             <span
               key={hashtag.id}
