@@ -29,20 +29,16 @@ const errorHandler = (err) => {
           message = `예기치 않은 오류가 발생하였습니다.`;
       }
       err.message = message;
-      ToastAlert(message, 'error');
     } else if (err.request) {
       const message = '응답이 없습니다'; // 요청이 이루어졌으나 응답이 없음
       err.message = message;
-      ToastAlert(message, 'error');
     } else {
       const message = '오류가 발생했습니다'; // 요청 설정 중 오류 발생
       err.message = message;
-      ToastAlert(message, 'error');
     }
   } else {
     const message = '네트워크 오류'; // 네트워크 오류
     err.message = message;
-    ToastAlert(message, 'error');
   }
   return Promise.reject(err);
 };

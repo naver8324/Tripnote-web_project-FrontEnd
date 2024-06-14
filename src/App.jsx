@@ -26,15 +26,12 @@ function App() {
         try {
           await memberInfo();
           setIsAuth(true);
-          console.log('Initial member info fetch successful');
         } catch (error) {
           setIsAuth(false);
-          console.log('Initial member info fetch failed, redirecting to login');
           navigate('/login');
         }
       } else {
         setIsAuth(false);
-        console.log('No token found, user not authenticated');
       }
     };
 
@@ -46,18 +43,14 @@ function App() {
     if (token) {
       try {
         const decodedToken = jwtDecode(token);
-        console.log('Decoded Token:', decodedToken); // 디코딩된 토큰 출력
         const currentTime = Date.now() / 1000;
 
         if (decodedToken.exp < currentTime) {
           setIsAuth(false);
-          console.log('Token expired, redirecting to login');
           navigate('/login');
         } else {
           setIsAuth(true);
-          console.log('Token valid, user authenticated');
           if (decodedToken.provider === 'kakao') {
-            console.log('Kakao user logged in');
           }
         }
       } catch (error) {
@@ -67,9 +60,7 @@ function App() {
       }
     } else {
       setIsAuth(false);
-      console.log(
-        'No token found during pathname change, user not authenticated',
-      );
+      
     }
   }, [location.pathname, setIsAuth, navigate]);
 

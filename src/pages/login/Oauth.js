@@ -14,7 +14,6 @@
 //   try {
 //     await fetchData();
 //     // 응답 데이터를 사용하여 추가 처리를 수행합니다.
-//     console.log('Login successful:', responseData);
 //     // window.location.href = '/http://34.64.39.102:8080/oauth/kakao/callback';
 //   } catch (err) {
 //     console.error('Login failed:', err);
@@ -39,9 +38,7 @@ export async function kakaoLogin() {
     if (response.status === 302 || response.status === 301) {
       // 리다이렉트 URL로 수동으로 이동
       window.location.href = response.headers.location;
-      console.log(response.config.headers);
     } else {
-      console.log(response.data);
     }
   } catch (error) {
     if (

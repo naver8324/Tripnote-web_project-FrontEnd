@@ -4,6 +4,7 @@ import useUserStore from '../../store/useUserStore';
 import useMemberInfo from '../../Hooks/user/useMemberInfo';
 import useInfoUpdate from '../../Hooks/user/useInfoUpdate';
 import useCheckNickname from '../../Hooks/user/useCheckNickname';
+import useDeleteMember from '../../Hooks/user/useDeleteMember';
 import { ToastAlert } from '../../components/commons/ToastAlert';
 
 const SocialProfilePage = () => {
@@ -19,6 +20,7 @@ const SocialProfilePage = () => {
   const [isNicknameChecked, setIsNicknameChecked] = useState(false);
   const { memberInfo } = useMemberInfo();
   const { updateInfo } = useInfoUpdate();
+  const { deleteMember, loading: deleteLoading } = useDeleteMember();
   const {
     checkNickname,
     loading: CheckNicknameLoading,
@@ -92,11 +94,21 @@ const SocialProfilePage = () => {
       await memberInfo();
       setNickname(nickname);
       ToastAlert('정보 수정이 완료되었습니다.', 'success');
-      console.log('Profile saved:', data);
       resetUser();
       navigate('/mypage');
     } catch (err) {
       console.error('Error saving profile:', err);
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    if (window.confirm('정말로 회원 탈퇴하시겠습니까?')) {
+      try {
+        await deleteMember();
+        ToastAlert('회원 탈퇴가 완료되었습니다.', 'success');
+      } catch (err) {
+        console.error('Error deleting member:', err);
+      }
     }
   };
 
@@ -147,7 +159,9 @@ const SocialProfilePage = () => {
             )}
             {nicknameError && (
               <p
-                className={`text-${nicknameError.includes('사용 가능한') ? 'prime' : 'red-500'}`}
+                className={`text-${
+                  nicknameError.includes('사용 가능한') ? 'prime' : 'red-500'
+                }`}
               >
                 {nicknameError}
               </p>
@@ -158,7 +172,9 @@ const SocialProfilePage = () => {
               type="button"
               onClick={handleSave}
               disabled={!isFormValid()}
-              className={`w-full h-14 px-4 py-2 rounded-lg text-white ${isFormValid() ? 'bg-prime' : 'bg-gray-300'}`}
+              className={`w-full h-14 px-4 py-2 rounded-lg text-white ${
+                isFormValid() ? 'bg-prime' : 'bg-gray-300'
+              }`}
             >
               저장
             </button>
@@ -172,7 +188,9 @@ const SocialProfilePage = () => {
               </button>
               <button
                 type="button"
+                onClick={handleDeleteAccount}
                 className="w-1/2 h-14 px-4 py-2 bg-red-500 text-white rounded-lg"
+                disabled={deleteLoading}
               >
                 회원탈퇴
               </button>

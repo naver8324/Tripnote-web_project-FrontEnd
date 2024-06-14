@@ -22,13 +22,11 @@ export default function NaverCreateMap({ className }) {
       const map = new window.naver.maps.Map(mapRef.current, mapOptions);
       setNaverMap(map);
 
+      // 클릭 이벤트 리스너 추가
       window.naver.maps.Event.addListener(map, 'click', (e) => {
-        const newMarker = {
-          latitude: e.coord.lat(),
-          longitude: e.coord.lng(),
-          id: Date.now(),
-        };
-        setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
+        e.preventDefault();
+        e.stopPropagation();
+        // 클릭 이벤트를 막음
       });
     });
 

@@ -11,12 +11,15 @@ const useSearchByTag = () => {
   const searchByTag = async (tag, sortOption, page, size) => {
     const order = sortOption === '최신순' ? 'order' : 'likes';
     try {
-      const response = await fetchData({
-        data: [tag]
-      }, `/api/posts?order=${order}&page=${page}&size=${size}`);
+      const response = await fetchData(
+        {
+          data: [tag],
+        },
+        `/api/posts?order=${order}&page=${page}&size=${size}`,
+      );
       return response.data;
     } catch (err) {
-      ToastAlert('오류가 발생했습니다. 다시 시도해주세요.', 'error');
+      ToastAlert('다시 시도해주세요.', 'error');
       throw err;
     }
   };

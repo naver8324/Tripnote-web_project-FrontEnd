@@ -53,7 +53,6 @@ const EmailVerification = ({ email, setEmail, isVerified, setIsVerified }) => {
         // 인증번호 발송
         ToastAlert('이메일 인증번호를 전송중입니다.', 'info');
         const emailResponse = await SendEmail(email);
-        console.log(emailResponse);
 
         setVerificationSent(true);
         setTimer(180); // 3분 카운트다운

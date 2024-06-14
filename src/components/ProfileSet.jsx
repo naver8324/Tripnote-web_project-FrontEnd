@@ -4,6 +4,7 @@ import useUserStore from '../store/useUserStore';
 import useMemberInfo from '../Hooks/user/useMemberInfo';
 import useInfoUpdate from '../Hooks/user/useInfoUpdate';
 import useCheckNickname from '../Hooks/user/useCheckNickname';
+import useDeleteMember from '../Hooks/user/useDeleteMember';
 import { ToastAlert } from './commons/ToastAlert';
 
 const ProfileSet = () => {
@@ -21,11 +22,8 @@ const ProfileSet = () => {
   const [isNicknameChecked, setIsNicknameChecked] = useState(false);
   const { memberInfo } = useMemberInfo();
   const { updateInfo } = useInfoUpdate();
-  const {
-    checkNickname,
-    loading: CheckNicknameLoading,
-    error: CheckNicknameError,
-  } = useCheckNickname();
+  const { checkNickname } = useCheckNickname();
+  const { deleteMember, loading: deleteLoading } = useDeleteMember();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -117,15 +115,24 @@ const ProfileSet = () => {
     }
     try {
       await updateInfo(data);
-
       await memberInfo();
       setNickname(nickname);
       ToastAlert('정보 수정이 완료되었습니다.', 'success');
-      console.log('Profile saved:', data);
       resetUser();
       navigate('/mypage');
     } catch (err) {
       console.error('Error saving profile:', err);
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    if (window.confirm('정말로 회원 탈퇴하시겠습니까?')) {
+      try {
+        await deleteMember();
+        ToastAlert('회원 탈퇴가 완료되었습니다.', 'success');
+      } catch (err) {
+        console.error('Error deleting member:', err);
+      }
     }
   };
 
@@ -135,10 +142,8 @@ const ProfileSet = () => {
 
   const isFormValid = () => {
     return (
-      isNicknameChecked &&
-      nickname.length >= 2 &&
-      (password.length === 0 || password.length >= 8) &&
-      (password.length === 0 || password === confirmPassword)
+      (isNicknameChecked && nickname.length >= 2) ||
+      (password.length >= 8 && password === confirmPassword)
     );
   };
 
@@ -178,7 +183,9 @@ const ProfileSet = () => {
           {errors.nickname && <p className="text-red-500">{errors.nickname}</p>}
           {nicknameError && (
             <p
-              className={`text-${nicknameError.includes('사용 가능한') ? 'prime' : 'red-500'}`}
+              className={`text-${
+                nicknameError.includes('사용 가능한') ? 'prime' : 'red-500'
+              }`}
             >
               {nicknameError}
             </p>
@@ -211,7 +218,9 @@ const ProfileSet = () => {
             type="button"
             onClick={handleSave}
             disabled={!isFormValid()}
-            className={`w-full h-14 px-4 py-2 rounded-lg text-white ${isFormValid() ? 'bg-prime' : 'bg-gray-400'}`}
+            className={`w-full h-14 px-4 py-2 rounded-lg text-white ${
+              isFormValid() ? 'bg-prime' : 'bg-gray-400'
+            }`}
           >
             저장
           </button>
@@ -225,7 +234,9 @@ const ProfileSet = () => {
             </button>
             <button
               type="button"
+              onClick={handleDeleteAccount}
               className="w-1/2 h-14 px-4 py-2 bg-red-500 text-white rounded-lg"
+              disabled={deleteLoading}
             >
               회원탈퇴
             </button>

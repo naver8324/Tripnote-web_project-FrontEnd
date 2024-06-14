@@ -16,8 +16,6 @@ const useAdminLogin = () => {
             const accessToken = response.headers.authorization.split(' ')[1];
             localStorage.setItem('accessToken', accessToken);
 
-            console.log('Login successful');
-            console.log(accessToken);
 
             setIsAuth(true); // Zustand 상태 업데이트
 

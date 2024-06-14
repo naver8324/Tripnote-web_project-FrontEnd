@@ -8,7 +8,7 @@ import useHashTag from '../../Hooks/posts/useHashTag';
 import { ToastAlert } from '../commons/ToastAlert';
 import { useNavigate } from 'react-router-dom';
 import useCreateRoute from '../../Hooks/routes/useCreateRoute';
-import NextSpotRecommend from "../SpotSearchList/NextSpotRecommend.jsx";
+import NextSpotRecommend from '../SpotSearchList/NextSpotRecommend.jsx';
 import CustomConfirmModal from '../Modal/CustomConfirmModal';
 
 export default function BarRootCreate() {
@@ -121,7 +121,7 @@ export default function BarRootCreate() {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="w-[340px] m-5 h-[calc(100vh-150px)] overflow-y-auto">
+      <div className="w-[360px] m-4 h-[calc(100vh-150px)] overflow-y-auto">
         <p className="text-lg">스팟을 드래그하여 경로를 만들어보세요!</p>
         {routeSpots.map((spot, index) => (
           <SpotDndCard
@@ -133,9 +133,7 @@ export default function BarRootCreate() {
           />
         ))}
         {routeSpots.length > 0 && (
-          <NextSpotRecommend
-            spotId = {routeSpots[routeSpots.length - 1].id}
-          />
+          <NextSpotRecommend spotId={routeSpots[routeSpots.length - 1].id} />
         )}
         <div className="flex justify-end m-4">
           <button

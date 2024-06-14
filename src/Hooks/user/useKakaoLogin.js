@@ -7,9 +7,11 @@ const useKakaoLogin = () => {
     shouldFetch: false,
   });
 
-  const kakaoLogin = async () => {
+  const kakaoLogin = async (redirectUrl) => {
     try {
-      const response = await fetchData();
+      const response = await fetchData({
+        params: { redirecturl: redirectUrl },
+      });
       const kakaoAuthUrl = response.data;
       window.location.href = kakaoAuthUrl;
     } catch (err) {

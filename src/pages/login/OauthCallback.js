@@ -13,7 +13,6 @@ const OauthCallback = () => {
     //   fetch(`YOUR_BACKEND_ENDPOINT?code=${code}`) // 백엔드 엔드포인트 호출
     //     .then((response) => response.json())
     //     .then((data) => {
-    //       console.log(data);
     //       // 토큰 저장 및 사용자 정보 처리
     //       // 예: localStorage.setItem('accessToken', data.access_token);
     //       navigate('/'); // 메인 페이지로 리다이렉트

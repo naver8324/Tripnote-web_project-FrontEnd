@@ -27,10 +27,6 @@ export const PrivateRoute = ({ isSocialOnly }) => {
     if (isSocialOnly && decodedToken.provider !== 'kakao') {
       return <Navigate to="/login" />;
     }
-
-    if (location.pathname === '/mypage/profile' && !isPasswordChecked) {
-      return <Navigate to="/mypage/checkedpassword" />;
-    }
   } catch (error) {
     console.error('Invalid token:', error);
     return <Navigate to="/login" />;

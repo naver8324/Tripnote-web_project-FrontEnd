@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import useAuthStore from '../store/useAuthStore';
-import usePasswordCheckStore from '../store/usePasswordCheckStore';
 import { jwtDecode } from 'jwt-decode';
 
 const useAuth = () => {
@@ -25,48 +24,49 @@ const useAuth = () => {
 
 export const PrivateRoute = ({ isSocialOnly }) => {
   const isAuth = useAuthStore((state) => state.isAuth);
-  const isPasswordChecked = usePasswordCheckStore(
-    (state) => state.isPasswordChecked,
-  );
   const token = localStorage.getItem('accessToken');
   const location = useLocation();
   const navigate = useNavigate();
 
-  if (!isAuth || !token) {
-    return <Navigate to="/login" />;
-  }
+  useEffect(() => {
+    if (!isAuth || !token) {
+      navigate('/login');
+      return;
+    }
 
-  try {
-    const decodedToken = jwtDecode(token);
-    const currentTime = Date.now() / 1000;
+    try {
+      const decodedToken = jwtDecode(token);
+      const currentTime = Date.now() / 1000;
 
-    if (decodedToken.exp < currentTime) {
+      if (decodedToken.exp < currentTime) {
+        navigate('/login');
+        return;
+      }
+
+      if (isSocialOnly && decodedToken.provider !== 'kakao') {
+        navigate('/login');
+        return;
+      }
+    } catch (error) {
+      console.error('Invalid token:', error);
       navigate('/login');
     }
+  }, [isAuth, token, isSocialOnly, location.pathname, navigate]);
 
-    if (isSocialOnly && decodedToken.provider !== 'kakao') {
-      navigate('/login');
-    }
-
-    if (location.pathname === '/mypage/profile' && !isPasswordChecked) {
-      navigate('/mypage/checkedpassword');
-    }
-  } catch (error) {
-    console.error('Invalid token:', error);
-    navigate('/login');
-  }
-
-  return <Outlet />;
+  return isAuth ? <Outlet /> : null;
 };
 
 export const PublicRoute = () => {
   const isAuth = useAuthStore((state) => state.isAuth);
   const navigate = useNavigate();
 
-  if (isAuth) {
-    navigate('/');
-  }
+  useEffect(() => {
+    if (isAuth) {
+      navigate('/');
+    }
+  }, [isAuth, navigate]);
 
-  return <Outlet />;
+  return !isAuth ? <Outlet /> : null;
 };
+
 export default useAuth;

@@ -36,6 +36,7 @@ api.interceptors.response.use(
       isAxiosError(error) &&
       error.response &&
       error.response.status === HttpStatusCode.Unauthorized
+      // || error.response.status === HttpStatusCode.InternalServerError
     ) {
       useAuthStore.getState().logout(); // Zustand store의 로그아웃 함수 호출
     }

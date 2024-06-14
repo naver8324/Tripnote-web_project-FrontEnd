@@ -17,11 +17,11 @@ const HashtagModal = ({
       isOpen={isOpen}
       onRequestClose={onRequestClose}
       contentLabel="해시태그 생성/수정"
-      className="modal-content"
+      className="modal-content min-w-[500px]"
       overlayClassName="modal-overlay"
     >
       <div className="p-6 bg-white rounded-lg shadow-lg">
-        <h2 className="text-xl font-semibold mb-4 w-[320px] h-[100px]">
+        <h2 className="text-xl font-semibold mb-4">
           해시태그 생성/변경할 이름을 입력해주세요.
         </h2>
         <div className="flex items-center justify-center">
@@ -57,14 +57,22 @@ const HashtagModal = ({
               <option value={true}>지역</option>
               <option value={false}>지역 외</option>
             </select>
-          </form>
-        </div>
-        <button
-          onClick={onRequestClose}
-          className="mt-6 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-300"
-        >
-          닫기
-        </button>
+            <div className="flex justify-between">
+              <button
+                onClick={onRequestClose}
+                className="mt-6 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-300"
+              >
+                닫기
+              </button>
+              <button
+                  type="submit"
+                  className="mt-6 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-300"
+              >
+                저장
+              </button>
+             </div>
+            </form>
+          </div>
       </div>
     </Modal>
   );
