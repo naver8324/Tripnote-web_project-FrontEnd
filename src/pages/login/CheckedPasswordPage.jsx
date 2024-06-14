@@ -1,22 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useCheckedPassword from '../../Hooks/user/useCheckedPassword';
+import usePasswordCheckStore from '../../store/usePasswordCheckStore';
 
 export default function CheckedPasswordPage() {
   const navigate = useNavigate();
   const [password, setPassword] = useState('');
   const { checkPassword, loading, isValid } = useCheckedPassword();
+  const setPasswordChecked = usePasswordCheckStore(
+    (state) => state.setPasswordChecked,
+  );
 
   const handleProfileSetClick = async () => {
     await checkPassword(password);
-    console.log(password);
   };
 
   useEffect(() => {
     if (isValid) {
+      setPasswordChecked(true);
       navigate('/mypage/profile');
     }
-  }, [isValid, navigate]);
+  }, [isValid, navigate, setPasswordChecked]);
 
   return (
     <div className="m-40 w-[1200px] min-h-[300px] bg-white rounded-lg p-6 flex flex-col justify-center items-center">
