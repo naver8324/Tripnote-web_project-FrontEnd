@@ -4,7 +4,7 @@ import 'react-quill/dist/quill.snow.css';
 import ImageResize from 'quill-image-resize';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
-
+import 'react-quill/dist/quill.snow.css';
 Quill.register('modules/ImageResize', ImageResize);
 
 export default function Editor({ postTitle, postContent, setPostTitle, setPostContent }) {
@@ -17,9 +17,9 @@ export default function Editor({ postTitle, postContent, setPostTitle, setPostCo
   const handleImageUpload = async (file) => {
     try {
       const token = localStorage.getItem('accessToken');
-
+      const baseURL = import.meta.env.VITE_API_BASE_URL;
       const presignedUrlResponse = await axios.put(
-        'http://34.64.39.102:8080/api/member/images',
+        `${baseURL}api/member/images`,
         {
           fileName: file.name,
           contentType: file.type,

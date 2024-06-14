@@ -68,6 +68,7 @@ export default function BoardPage() {
   const handlePageChange = (event, page) => {
     setCurrentPage(page);
     loadPostByTag(pageState.startsWith('#') ? pageState.substring(1) : null, sortOption, page);
+    window.scrollTo(0, 0); // 페이지 상단으로 스크롤
   };
 
   useEffect(() => {
@@ -89,7 +90,7 @@ export default function BoardPage() {
         {/* <Input variant="searchInput" /> */}
       </nav>
       <div className="flex flex-1 w-full mb-16">
-        <div className="flex-1 pr-4 space-y-8 h-[1000px]">
+        <div className="flex-1 pr-4 space-y-8 h-[1000px] mb-40">
           <Navigation
             routes={['최신순', '인기순']}
             onTabChange={handleChangeTab}
