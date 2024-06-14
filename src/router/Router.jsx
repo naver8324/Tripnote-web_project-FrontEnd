@@ -16,8 +16,9 @@ import PostPage from '../pages/Board/PostPage';
 import { PrivateRoute, PublicRoute } from '../Hooks/useAuth';
 import FindPassword from '../pages/login/FindPasswordPage';
 import KakaoRedirect from '../pages/login/KakaoRedirect';
-import AdminPage from "../pages/AdminPage/AdminPage.jsx";
-import AdminLogin from "../pages/login/AdminLogin.jsx";
+import AdminPage from '../pages/AdminPage/AdminPage.jsx';
+import AdminLogin from '../pages/login/AdminLogin.jsx';
+import SocialProfilePage from '../pages/MyPage/SocialProfilePage.jsx';
 
 // import KakaoCallback from '../Hooks/user/KakaoCallback';
 
@@ -43,6 +44,8 @@ const router = createBrowserRouter([
         children: [
           { path: 'mypage', element: <MyPage /> },
           { path: 'mypage/profile', element: <ProfilePage /> },
+          { path: 'mypage/socialprofile', element: <SocialProfilePage /> },
+
           { path: 'mypage/checkedpassword', element: <CheckedPasswordPage /> },
           { path: 'post/:postId', element: <PostPage /> },
           { path: 'admin', element: <AdminPage /> },

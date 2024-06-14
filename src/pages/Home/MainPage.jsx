@@ -12,7 +12,7 @@ import Button from '../../components/commons/Button';
 import Selector from '../../components/Home/Selector';
 import { ToastAlert } from '../../components/commons/ToastAlert';
 import useRegionSearchStore from '../../store/useRegionSearchStore'; // 추가
-import mainGif from '../../assets/maingif.gif'
+import mainGif from '../../assets/maingif.gif';
 
 const regions = [
   { imgSrc: seoul, name: '서울' },
@@ -24,7 +24,7 @@ const regions = [
 export default function MainPage() {
   const searchRef = useRef();
   const searchQuery = useStore((state) => state.searchQuery);
-  const { setRedirectPath } = useRegionSearchStore(); // 추가
+  const { redirectPath, setRedirectPath } = useRegionSearchStore(); // 추가
 
   const setScrollSmooth = () => {
     if (searchRef.current) {
@@ -80,6 +80,12 @@ export default function MainPage() {
         </div>
       </div>
       <div id="search" ref={searchRef} className="inner flex flex-col gap-8">
+        <p>
+          {redirectPath === '/root/recommend'
+            ? '경로 추천입니다.'
+            : '경로 생성입니다.'}
+        </p>{' '}
+        {/* 경로에 따른 메시지 표시 */}
         <form className="relative flex">
           <Selector />
         </form>
