@@ -1,12 +1,13 @@
+import React from 'react';
 import Tabs from '../../components/Tabs/Tabs';
 import MyRoot from '../../components/Mypage/MyRoot';
 import LoverRoot from '../../components/Mypage/LoverRoot';
 import MyReview from '../../components/Mypage/MyReview';
 import LoverReview from '../../components/Mypage/LoverReview';
 import Profile from '../../components/Profile';
-
 import { useNavigate } from 'react-router-dom';
 import { GoGear } from 'react-icons/go';
+import Button from '../../components/commons/Button';
 
 export default function MyPage() {
   const navigate = useNavigate();
@@ -21,16 +22,9 @@ export default function MyPage() {
   };
 
   return (
-    <>
-      <div className="mt-40 min-h-[1200px] bg-white rounded-lg p-6 flex flex-col items-center">
-        <Profile />
-        <button
-          className="text-lg mb-4 flex items-center"
-          onClick={handleProfileClick}
-        >
-          <GoGear className="mr-2" />
-          프로필 관리
-        </button>
+    <div className="mt-40 min-h-[1200px] bg-white rounded-lg p-6 flex">
+      {/* Left Section */}
+      <div className="flex-grow">
         <Tabs>
           <Tabs.Tab index={0}>내 여행 경로</Tabs.Tab>
           <Tabs.Tab index={1}>북마크 여행 경로</Tabs.Tab>
@@ -51,6 +45,18 @@ export default function MyPage() {
           </Tabs.TabContent>
         </Tabs>
       </div>
-    </>
+
+      {/* Right Sidebar */}
+      <aside className="w-64 ml-6 flex-shrink-0 p-8 flex flex-col items-center bg-subBackground rounded-xl h-[250px]">
+        <Profile />
+        <Button
+          className="text-xl mt-4 flex items-center border-gray-400 bg-white shadow-sm"
+          onClick={handleProfileClick}
+        >
+          <GoGear className="mr-2 text-2xl" />
+          프로필 관리
+        </Button>
+      </aside>
+    </div>
   );
 }

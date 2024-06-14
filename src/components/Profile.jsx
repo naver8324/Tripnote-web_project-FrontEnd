@@ -7,15 +7,17 @@ const Profile = () => {
 
   return (
     <div className="flex space-x-2 flex-col justify-center items-center">
-      <img
-        src={profile}
-        alt="기본 이미지"
-        className="rounded-full w-12 h-12 object-cover mb-4"
-      />
-      <div>
-        <h3 className="text-4xl mb-2">{nickname}</h3>
+      <div className='flex justify-center items-center space-x-2'>
+        <img
+          src={profile}
+          alt="기본 이미지"
+          className="rounded-full w-8 h-8 object-cover"
+        />
+
+          <h3 className="text-2xl mb-2">{nickname}</h3>
+
       </div>
-      <div className="text-2xl mb-2">{email}</div>
+      <div className="text-xl mb-2">{email}</div>
     </div>
   );
 };
