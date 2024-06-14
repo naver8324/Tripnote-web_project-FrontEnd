@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import {Link} from "react-router-dom";
 import Button from '../commons/Button';
 import Pagination from "../commons/Pagination.jsx";
 import useMembers from "../../Hooks/admin/useMembers.js";
@@ -8,6 +7,7 @@ import NoData from "../../pages/Board/NoData.jsx";
 import useDeleteMember from "../../Hooks/admin/useDeleteMember.js";
 import {ToastAlert} from "../commons/ToastAlert.jsx";
 import useRestoreMember from "../../Hooks/admin/useRestoreMember.js";
+import {formmateDate} from "../../utils/date.js";
 
 const UserManagement = () => {
 
@@ -75,11 +75,11 @@ const UserManagement = () => {
     return (
     <div className=" flex flex-col">
       <div className="text-xl font-bold flex flex-wrap border-b border-grey p-2 mt-4 ">
-        <div className="flex-[0.2] text-center">num</div>
-        <div className="flex-1 text-center">email</div>
-        <div className="flex-[0.5] text-center">nickname</div>
-        <div className="flex-1 text-center">deletedAt</div>
-        <div className="flex-1 text-center">status</div>
+        <div className="flex-[0.2] text-center">Num</div>
+        <div className="flex-1 text-center">이메일</div>
+        <div className="flex-[0.5] text-center">닉네임</div>
+        <div className="flex-1 text-center">탈퇴일</div>
+        <div className="flex-1 text-center">탈퇴여부</div>
       </div>
         {localMembers === null ? (
           <Spinner />
@@ -87,10 +87,9 @@ const UserManagement = () => {
           localMembers.map((localMember) => (
           <div key={localMember.id} className="flex flex-wrap items-center justify-around border-b border-grey p-2">
             <div className="flex-[0.2] text-center">{localMember.id}</div>
-            <div className="flex-1 text-center">
-              <Link to={`/:1`}>{localMember.email}</Link></div>
+            <div className="flex-1 text-center">{localMember.email}</div>
             <div className="flex-[0.5] text-center">{localMember.nickname}</div>
-            <div className="flex-1 text-center">{localMember.deletedAt}</div>
+            <div className="flex-1 text-center">{localMember.deletedAt ? formmateDate(localMember.deletedAt) : ''}</div>
             <div className="flex-1 text-center flex justify-between items-center">
             <div className="flex-1 text-center">{localMember.status}</div>
 
@@ -115,6 +114,7 @@ const UserManagement = () => {
       ) : (
         <NoData message="회원이 없습니다." />
       )}
+        <div className="mt-10"></div>
         <Pagination
           currentPage={currentPage}
           totalPage={Math.ceil(
