@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import useRegionSearchStore from '../../store/useRegionSearchStore';
 import useMapCreateStore from '../../store/useMapCreateStore'; // import the updated store
 import useMapSpotStore from '../../store/useMapSpotStore';
+import './Selector.css';
 
 export default function Selector() {
   const mockRegionsTags = [
@@ -31,7 +32,7 @@ export default function Selector() {
   const setRegion = useMapCreateStore((state) => state.setRegion);
   const setSpotRegion = useMapSpotStore((state) => state.setRegion2);
   const [inputValue, setInputValue] = useState('');
-  const [dropdown, setDropdown] = useState(false);
+  const [dropdown, setDropdown] = useState(true);
 
   const handleSelectRegion = (region) => {
     setSelectedRegion(region);
@@ -53,7 +54,7 @@ export default function Selector() {
         <GoChevronDown className={`text-xl ${dropdown && 'rotate-180'}`} />
       </div>
       <ul
-        className={`bg-subBackground mt-2 overflow-y-auto ${dropdown ? 'max-h-40' : 'max-h-0'}`}
+        className={`bg-subBackground mt-2 overflow-y-auto custom-scrollbar ${dropdown ? 'max-h-40' : 'max-h-0'}`}
       >
         <div className="flex items-center px-2 sticky top-0 bg-subBackground">
           <GoSearch className="text-gray-300" />

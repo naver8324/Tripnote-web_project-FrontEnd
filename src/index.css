@@ -58,3 +58,16 @@ body {
 .accordion-content.open {
   max-height: 500px; /* 콘텐츠 높이에 맞게 조정 */
 }
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.slick-slide > div {
+  margin: 0 20px;
+}
