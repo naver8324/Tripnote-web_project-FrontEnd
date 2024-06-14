@@ -28,8 +28,8 @@ const errorHandler = (err) => {
         default:
           message = `예기치 않은 오류가 발생하였습니다.`;
       }
+      ToastAlert('예기치 않은 오류가 발생하였습니다. 다시 로그인 해주세요.');
       err.message = message;
-      ToastAlert(message, 'error');
     } else if (err.request) {
       const message = '응답이 없습니다'; // 요청이 이루어졌으나 응답이 없음
       err.message = message;

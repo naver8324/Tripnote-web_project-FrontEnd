@@ -32,12 +32,13 @@ api.interceptors.response.use(
     return response;
   },
   (error) => {
-    if (
-      isAxiosError(error) &&
-      error.response &&
-      error.response.status === HttpStatusCode.Unauthorized
-    ) {
-      useAuthStore.getState().logout(); // Zustand store의 로그아웃 함수 호출
+    if (isAxiosError(error) && error.response) {
+      if (
+        error.response.status === HttpStatusCode.Unauthorized ||
+        error.response.status === HttpStatusCode.InternalServerError
+      ) {
+        useAuthStore.getState().logout(); // Zustand store의 로그아웃 함수 호출
+      }
     }
     return errorHandler(error); // 기존 에러 핸들러 호출
   },

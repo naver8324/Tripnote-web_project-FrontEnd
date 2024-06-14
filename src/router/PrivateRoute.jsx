@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import useAuthStore from '../store/useAuthStore';
 import usePasswordCheckStore from '../store/usePasswordCheckStore';
 import jwtDecode from 'jwt-decode';
+import useMemberInfo from '../Hooks/user/useMemberInfo';
 
 export const PrivateRoute = ({ isSocialOnly }) => {
   const isAuth = useAuthStore((state) => state.isAuth);
@@ -11,29 +12,47 @@ export const PrivateRoute = ({ isSocialOnly }) => {
   );
   const token = localStorage.getItem('accessToken');
   const location = useLocation();
+  const { memberInfo } = useMemberInfo();
+  const [isValidUser, setIsValidUser] = useState(null);
 
-  if (!isAuth || !token) {
+  useEffect(() => {
+    const validateUser = async () => {
+      try {
+        if (token) {
+          await memberInfo();
+          setIsValidUser(true);
+        } else {
+          setIsValidUser(false);
+        }
+      } catch (error) {
+        setIsValidUser(false);
+      }
+    };
+
+    if (isAuth && token) {
+      validateUser();
+    } else {
+      setIsValidUser(false);
+    }
+  }, [isAuth, token, memberInfo]);
+
+  if (isValidUser === null) {
+    return <div>Loading...</div>;
+  }
+
+  if (!isValidUser) {
     return <Navigate to="/login" />;
   }
 
-  try {
+  if (isSocialOnly && token) {
     const decodedToken = jwtDecode(token);
-    const currentTime = Date.now() / 1000;
-
-    if (decodedToken.exp < currentTime) {
+    if (decodedToken.provider !== 'kakao') {
       return <Navigate to="/login" />;
     }
+  }
 
-    if (isSocialOnly && decodedToken.provider !== 'kakao') {
-      return <Navigate to="/login" />;
-    }
-
-    if (location.pathname === '/mypage/profile' && !isPasswordChecked) {
-      return <Navigate to="/mypage/checkedpassword" />;
-    }
-  } catch (error) {
-    console.error('Invalid token:', error);
-    return <Navigate to="/login" />;
+  if (location.pathname === '/mypage/profile' && !isPasswordChecked) {
+    return <Navigate to="/mypage/checkedpassword" />;
   }
 
   return <Outlet />;

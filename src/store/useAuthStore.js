@@ -5,6 +5,9 @@ const useAuthStore = create((set) => ({
   setIsAuth: (isAuth) => set({ isAuth }),
   logout: () => {
     localStorage.removeItem('accessToken');
+    localStorage.removeItem('userNickname');
+    localStorage.removeItem('userEmail');
+    localStorage.removeItem('provider');
     set({ isAuth: false });
   },
 }));

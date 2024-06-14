@@ -13,7 +13,7 @@ import AgreePage from '../pages/login/AgreePage';
 import LoginPage from '../pages/login/LoginPage';
 import EditBoardPage from '../pages/Board/EditBoardPage';
 import PostPage from '../pages/Board/PostPage';
-import { PrivateRoute, PublicRoute } from '../Hooks/useAuth';
+import { PrivateRoute, PublicRoute } from '../router/PrivateRoute.jsx/';
 import FindPassword from '../pages/login/FindPasswordPage';
 import KakaoRedirect from '../pages/login/KakaoRedirect';
 import AdminPage from '../pages/AdminPage/AdminPage.jsx';

@@ -11,7 +11,7 @@ const useMemberInfo = () => {
   });
   const setEmail = useUserStore((state) => state.setEmail);
   const setNickname = useUserStore((state) => state.setNickname);
-  const { logout } = useLogout(); // useLogout 훅을 호출하여 logout 함수를 가져옴
+  const { logout } = useLogout();
   const navigate = useNavigate();
 
   const memberInfo = async () => {
@@ -27,7 +27,7 @@ const useMemberInfo = () => {
       setNickname(userNickname);
       return response.data;
     } catch (err) {
-      await logout(); // logout 함수를 호출하여 로그아웃 처리
+      await logout();
       navigate('/login');
       console.error(err);
       throw err;
