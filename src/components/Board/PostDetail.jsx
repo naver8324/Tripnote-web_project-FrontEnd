@@ -47,7 +47,7 @@ export default function PostDetail({ postDetail }) {
   const handleEditPost = () => {
     navigate(`/editBoard`, { state: { postDetail } });
   };
-  console.log('postdetail', postDetail);
+
   return (
     <div className="w-[900px] center pb-10 max-lg:px-[5vw]">
       <div className="mt-12">

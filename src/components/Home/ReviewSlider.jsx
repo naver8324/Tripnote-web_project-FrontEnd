@@ -17,7 +17,6 @@ const ReviewSlider = () => {
 
   if (loading) return <Spinner />;
 
-  console.log(postsData);
 
   // 특정 태그를 제거하는 함수
   const removeImgTags = (html) => {

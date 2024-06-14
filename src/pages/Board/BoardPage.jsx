@@ -24,7 +24,6 @@ export default function BoardPage() {
   useEffect(() => {
     if (responseData && responseData.content) {
       setLocalPosts(responseData.content);
-      console.log('localPosts:', responseData.content);
     }
   }, [responseData]);
 
@@ -51,7 +50,6 @@ export default function BoardPage() {
       const data = await searchByTag(tag, sortOptionOverride || sortOption, pageOverride || currentPage, 4);
       setLocalPosts(data.content);
       setPageState(`#${tag.name}`);
-      console.log('sort', sortOptionOverride, 'pagestate', pageState);
     } catch (err) {
       console.error('Failed to load posts by tag:', err);
     }

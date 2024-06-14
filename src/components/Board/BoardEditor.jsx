@@ -29,7 +29,6 @@ export default function BoardEditor() {
 
   // 수정 모드 체크
   const isEditing = Boolean(location.state?.postDetail);
-  console.log(isEditing);
 
   const handleSavePost = async () => {
     if (!title) {
