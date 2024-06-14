@@ -72,9 +72,8 @@ export default function BoardPage() {
   }, [currentPage, sortOption]);
 
   const handleTagClick = (e, tagName) => {
-    setSortOption('최신순');
     setCurrentPage(1);
-    loadPostByTag(tagName, '최신순', 1);
+    loadPostByTag(tagName, sortOption, 1); // 현재 sortOption을 유지
   };
 
   const totalPage = responseData ? Math.ceil(responseData.totalElements / 4) : 0;

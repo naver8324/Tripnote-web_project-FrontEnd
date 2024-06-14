@@ -93,6 +93,7 @@ export default function PostDetail({ postDetail }) {
           <NaverMap routeId={routeId} />
         <PostInteraction
           id={id}
+          nickname={nickname}
           likes={likes}
           likedAt={likedAt}
           markedAt={markedAt}
