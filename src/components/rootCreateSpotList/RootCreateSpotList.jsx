@@ -82,21 +82,23 @@ const RootCreateSpotList = ({ region }) => {
           onChange={handleInputChange}
         />
       </div>
-      {initialLoading && <p>Loading initial spots...</p>}
-      {initialError && <p>Error loading initial spots: {initialError}</p>}
-      {searchLoading && <p>Loading search results...</p>}
-      {searchError && <p>{searchError}</p>}
-      {(searchLocation ? searchedSpots : initialSpots)?.length > 0
-        ? (searchLocation ? searchedSpots : initialSpots).map((spot) => (
-            <SpotPlusCard
-              key={spot.id}
-              spot={spot}
-              onAddClick={() => addSpotToRoute(spot)}
-              onRemoveClick={() => removeSpotFromRoute(spot.id)}
-              isAdded={isSpotAdded(spot)}
-            />
-          ))
-        : !searchLoading && <p>검색 결과가 없습니다.</p>}
+      <div className="w-full mr-2 h-[calc(100vh-150px)] overflow-y-auto">
+        {initialLoading && <p>Loading initial spots...</p>}
+        {initialError && <p>Error loading initial spots: {initialError}</p>}
+        {searchLoading && <p>Loading search results...</p>}
+        {searchError && <p>{searchError}</p>}
+        {(searchLocation ? searchedSpots : initialSpots)?.length > 0
+          ? (searchLocation ? searchedSpots : initialSpots).map((spot) => (
+              <SpotPlusCard
+                key={spot.id}
+                spot={spot}
+                onAddClick={() => addSpotToRoute(spot)}
+                onRemoveClick={() => removeSpotFromRoute(spot.id)}
+                isAdded={isSpotAdded(spot)}
+              />
+            ))
+          : !searchLoading && <p>검색 결과가 없습니다.</p>}
+      </div>
     </form>
   );
 };

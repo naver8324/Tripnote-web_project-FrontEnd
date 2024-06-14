@@ -3,11 +3,8 @@ import { useNavigate, Link, useLocation } from 'react-router-dom';
 import useLogin from '../../Hooks/user/useLogin';
 import logo from '../../assets/logo-green.png';
 import kakao from '../../assets/kakao.png';
-import naver from '../../assets/naver.png';
-import google from '../../assets/google.png';
 import GhostButton from '../../components/commons/GhostButton';
 import InfoInput from '../../components/commons/InfoInput';
-import { kakaoLogin } from './Oauth';
 import { ToastAlert } from '../../components/commons/ToastAlert';
 import useKakaoLogin from './../../Hooks/user/useKakaoLogin';
 
@@ -47,7 +44,7 @@ export default function LoginPage() {
 
   const handleKakaoLoginClick = async () => {
     try {
-      await kakaoLogin();
+      await kakaoLogin(redirectUrl); // redirectUrl을 전달합니다.
       console.log('카카오 로그인 리다이렉트 성공');
     } catch (err) {
       console.log('카카오 리다이렉트 실패', err);
@@ -68,9 +65,7 @@ export default function LoginPage() {
           title="이메일"
           type="email"
           value={email}
-          onChange={(e) => {
-            setEmail(e.target.value);
-          }}
+          onChange={(e) => setEmail(e.target.value)}
         />
         <InfoInput
           title="비밀번호"
@@ -111,20 +106,6 @@ export default function LoginPage() {
               alt="kakao login"
             />
           </Link>
-          {/* <Link to="/">
-            <img
-              className="w-14 h-auto rounded-lg"
-              src={naver}
-              alt="naver login"
-            />
-          </Link>
-          <Link to="/">
-            <img
-              className="w-14 h-auto rounded-lg shadow"
-              src={google}
-              alt="google login"
-            />
-          </Link> */}
         </div>
       </div>
     </div>

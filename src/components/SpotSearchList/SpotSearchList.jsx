@@ -99,8 +99,7 @@ const SpotSearchList = ({ region }) => {
           onChange={handleInputChange}
         />
       </div>
-      <div className="overflow-y-auto h-screen">
-        {' '}
+      <div className="w-full mr-2 h-[calc(100vh-150px)] overflow-y-auto">
         {/* 스크롤 가능한 div */}
         {initialLoading && <p>Loading initial spots...</p>}
         {initialError && <p>Error loading initial spots: {initialError}</p>}

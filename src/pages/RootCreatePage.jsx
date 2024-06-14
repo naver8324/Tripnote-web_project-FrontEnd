@@ -9,8 +9,8 @@ export default function RootCreatePage() {
 
   return (
     <div className="mt-[118px] w-full bg-subTitle flex mx-auto">
-      <div className="w-[360px] bg-white border-e-2">
-        <div className="w-[360px] p-4 flex justify-between items-center">
+      <div className="w-[370px] bg-white border-e-2">
+        <div className="w-[370px] p-4 flex justify-between items-center">
           <RootCreate />
         </div>
       </div>
