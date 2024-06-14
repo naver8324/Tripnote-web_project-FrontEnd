@@ -9,6 +9,7 @@ import { ToastAlert } from '../commons/ToastAlert';
 import Pagination from '../commons/Pagination';
 import { useNavigate } from 'react-router-dom';
 import CustomConfirmModal from '../Modal/CustomConfirmModal';
+import noimage from '../../assets/noimage.png';
 
 const MyRoot = () => {
   const navigate = useNavigate();
@@ -80,7 +81,11 @@ const MyRoot = () => {
                 <div className="relative group w-[100px] h-[100px] mt-4">
                   <img
                     src={spot.imageUrl}
-                    alt={spot.location}
+                    onError={(e) => {
+                      e.target.onerror = null; // 무한 루프 방지
+                      e.target.src = noimage;
+                    }}
+                    alt={noimage}
                     className="w-full h-full object-cover rounded-md"
                   />
                   <div className="absolute inset-0 bg-black bg-opacity-70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">

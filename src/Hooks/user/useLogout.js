@@ -41,6 +41,7 @@ const useLogout = () => {
       // 로그아웃이 성공하든 실패하든, 로컬 스토리지에서 어세스 토큰 제거 및 인증 상태 업데이트
       localStorage.removeItem('accessToken');
       localStorage.removeItem('userNickname');
+      localStorage.removeItem('userEmail');
       setIsAuth(false);
       setLoading(false);
       navigate('/');

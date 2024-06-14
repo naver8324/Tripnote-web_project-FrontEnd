@@ -1,18 +1,42 @@
+import React, { useEffect } from 'react';
+
 import './App.css';
 import Footer from './components/ui/Footer';
 import Header from './components/ui/Header';
 import './index.css';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import ScrollToTop from './components/ScrollToTop';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import useMemberInfo from './Hooks/user/useMemberInfo';
+import useAuthStore from './store/useAuthStore';
 
 function App() {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { memberInfo, loading, error } = useMemberInfo();
+  const { setIsAuth } = useAuthStore();
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        await memberInfo();
+        setIsAuth(true);
+      } catch (error) {
+        setIsAuth(false);
+        navigate('/login');
+      }
+    };
+
+    checkAuth();
+  }, [location.pathname]);
+
   const hideHeader = location.pathname.startsWith('/admin');
-  const hideFooter = ['/root/', '/admin'].some(prefix => location.pathname.startsWith(prefix));
+  const hideFooter = ['/root/', '/admin'].some((prefix) =>
+    location.pathname.startsWith(prefix),
+  );
 
   return (
     <>
