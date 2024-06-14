@@ -3,15 +3,14 @@ import Pagination from '../commons/Pagination';
 import NoData from '../../pages/Board/NoData';
 import Spinner from '../commons/Spinner';
 import Button from '../commons/Button';
-import InfoInput from '../commons/InfoInput';
 import { formmateDate } from '../../utils/date';
 import useComments from '../../Hooks/admin/useComments';
 import useDeletingComment from '../../Hooks/admin/useDeletingComment';
+import {ToastAlert} from "../commons/ToastAlert.jsx";
 
 const CommentManagement = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [commentId, setCommentId] = useState(null);
-  const [deletedCommentId, setDeletedCommentId] = useState(null);
   const [nickname, setNickname] = useState(null);
   const [typedNickname, setTypedNickname] = useState('');
   const { initialComments, refetch: refetchComments } = useComments(
@@ -20,8 +19,7 @@ const CommentManagement = () => {
     currentPage,
     10,
   );
-  const { refetch: refetchDeleteComment } =
-    useDeletingComment(deletedCommentId);
+  const { DeletingComment } = useDeletingComment();
 
   const [comments, setComments] = useState(null);
 
@@ -35,121 +33,97 @@ const CommentManagement = () => {
     refetchComments();
   }, [commentId, nickname]);
 
-  useEffect(() => {
-    if (deletedCommentId !== null) {
-      refetchDeleteComment();
+    const handleDeletingComment = async (comment) => {
 
-      setComments((prevComments) =>
-        prevComments.map((comment) =>
-          comment.id === deletedCommentId
-            ? {
-                ...comment,
-                deleted: !comment.deleted,
-              }
-            : comment,
-        ),
-      );
-      setDeletedCommentId(null);
+        try {
+            await DeletingComment(comment);
+            console.log("delete post success");
+            refetchComments();
+            const deleteComment = comments.find((fetchComment) => fetchComment.id === comment.id).deleted;
+            if(!deleteComment){
+                ToastAlert(`${comment.id}번 댓글이 삭제되었습니다.`, 'success');
+                return;
+            }
+            ToastAlert(`${comment.id}번 댓글이 복구되었습니다.`, 'success');
+        } catch (error) {
+            console.error('delete post failed:', error);
+        }
     }
-  }, [deletedCommentId]);
-
-  const renderComments = () => {
-    return comments.map((comment) => (
-      <tr>
-        <th>{comment.id}</th>
-        <th
-          className="cursor-pointer"
-          onClick={() => {
-            setNickname(null);
-            setCommentId(comment.id);
-          }}
-        >
-          {comment.nickname}
-        </th>
-        <th>{comment.content}</th>
-        <th>{formmateDate(comment.createdAt)}</th>
-        <th>{comment.deleted ? 'Yes' : 'No'}</th>
-        <th>
-          <Button
-            variant={'nomalButton'}
-            size={'medium'}
-            onClick={() => {
-              setDeletedCommentId(comment.id);
-            }}
-          >
-            {!comment.delete ? '삭제' : '복원'}
-          </Button>
-        </th>
-      </tr>
-    ));
-  };
-
   const handlePageChange = (event, page) => {
     setCurrentPage(page);
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setCommentId(null);
+    setNickname(typedNickname);
+    setTypedNickname('');
+  };
+
   return (
-    <div>
-      <h2 className="text-2xl font-bold mt-10 mb-10">
-        댓글 관리 (member ={' '}
-        {commentId !== null
-          ? comments.find((comment) => comment.id === commentId)?.nickname || ''
-          : nickname !== null
-            ? nickname
-            : '전체'}
-        )
-      </h2>
-      <Button
-        className="mb-10"
-        variant={'nomalButton'}
-        size={'large'}
-        onClick={() => {
-          setCommentId(null);
-          setNickname(null);
-        }}
-      >
-        전체 보기
-      </Button>
-      <form
-        className={'w-1/3 mb-10'}
-        onSubmit={(e) => {
-          e.preventDefault();
-          setNickname(typedNickname);
-          setTypedNickname('');
-        }}
-      >
-        {' '}
-        <InfoInput
-          title="유저 닉네임"
+  <>
+    <div className="flex justify-between">
+      <form onSubmit={handleSubmit}>
+        <input
+          className="w-[250px] h-[40px] p-2 border border-gray-300 rounded-lg"
           type="text"
+          placeholder="유저 닉네임을 입력하세요"
           value={typedNickname}
           onChange={(e) => {
             setTypedNickname(e.target.value);
           }}
         />
       </form>
+      <Button
+        variant={'nomalButton'}
+        size={'large'}
+        onClick={() => {
+          setCommentId(null);
+          setNickname(null);
+          setTypedNickname('');
+        }}
+      >
+        전체 보기
+      </Button>
+    </div>
+      <div className=" flex flex-col">
+        <div className="text-xl font-bold flex flex-wrap border-b border-grey p-2 mt-4 ">
+          <div className="flex-[0.2] text-center">Num</div>
+          <div className="flex-[0.5] text-center">작성자</div>
+          <div className="flex-[1.2] text-center">내용</div>
+          <div className="flex-[0.8] text-center">생성일</div>
+          <div className="flex-1 text-center">삭제 여부</div>
+        </div>
 
-      <table className="mb-10" style={{ width: '100%' }}>
-        <thead style={{ width: '100%' }}>
-          <tr>
-            <th>댓글 id</th>
-            <th>작성자</th>
-            <th>내용</th>
-            <th>생성일</th>
-            <th>삭제 여부</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {comments === null ? (
-            <Spinner />
-          ) : comments.length > 0 ? (
-            renderComments()
-          ) : (
-            <NoData message="게시글이 없습니다." />
-          )}
-        </tbody>
-      </table>
+        {comments === null ? (
+          <Spinner />
+        ) : comments.length ? (
+            comments.map((comment) => (
+            <div key={comment.id} className="flex flex-wrap items-center justify-around border-b border-grey p-2">
+              <div className="flex-[0.2] text-center">{comment.id}</div>
+              <div className="flex-[0.5] text-center cursor-pointer"
+                onClick={() => {
+                  setTypedNickname(comment.nickname);
+                  setNickname(null);
+                    setCommentId(comment.id);
+                }}>{comment.nickname}</div>
+              <div className="flex-[1.2] text-center">{comment.content}</div>
+              <div className="flex-[0.8] text-center">{formmateDate(comment.createdAt)}</div>
+              <div className="flex-1 text-center flex justify-between items-center">
+                <div className="flex-1 text-center">{comment.deleted ? 'Yes' : 'No'}</div>
+                <Button
+                  variant={'nomalButton'}
+                  size={'medium'}
+                  onClick={() => handleDeletingComment(comment)}
+                >{!comment.deleted ? '삭제' : '복원'}
+                </Button>
+              </div>
+            </div>
+          ))
+      ) : (
+          <NoData message="댓글이 없습니다." />
+      )}
+      <div className="mt-10"></div>
       <Pagination
         currentPage={currentPage}
         totalPage={Math.ceil(
@@ -160,6 +134,7 @@ const CommentManagement = () => {
         onPageChange={handlePageChange}
       />
     </div>
+  </>
   );
 };
 
