@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import useSendEmail from '../../Hooks/email/useSendEmail';
 import useCheckedEmail from '../../Hooks/email/useCheckedEmail';
 import { ToastAlert } from '../commons/ToastAlert';
-import useDuplicateCheckEmail from "../../Hooks/user/useDuplicateCheckEmail.js";
+import useDuplicateCheckEmail from '../../Hooks/user/useDuplicateCheckEmail.js';
 
 const EmailVerification = ({ email, setEmail, isVerified, setIsVerified }) => {
   const [verificationCode, setVerificationCode] = useState('');
@@ -10,9 +10,17 @@ const EmailVerification = ({ email, setEmail, isVerified, setIsVerified }) => {
   const [timer, setTimer] = useState(0);
   const [emailError, setEmailError] = useState('');
   const [emailErrorColor, setEmailErrorColor] = useState('red-500');
-  const { duplicateCheckEmail, loading: duplicateCheckEmailLoading, error: duplicateCheckEmailError } = useDuplicateCheckEmail();
+  const {
+    duplicateCheckEmail,
+    loading: duplicateCheckEmailLoading,
+    error: duplicateCheckEmailError,
+  } = useDuplicateCheckEmail();
   const { SendEmail, loading: sendLoading, error: sendError } = useSendEmail();
-  const { checkEmail, loading: checkLoading, error: checkError } = useCheckedEmail();
+  const {
+    checkEmail,
+    loading: checkLoading,
+    error: checkError,
+  } = useCheckedEmail();
 
   useEffect(() => {
     let countdown;
@@ -49,6 +57,7 @@ const EmailVerification = ({ email, setEmail, isVerified, setIsVerified }) => {
 
         setVerificationSent(true);
         setTimer(180); // 3분 카운트다운
+        setVerificationCode(''); // 인증번호 입력란 초기화
       }
     } catch (error) {
       console.error('Error while checking email:', error);
@@ -89,17 +98,11 @@ const EmailVerification = ({ email, setEmail, isVerified, setIsVerified }) => {
             type="email"
             className="w-full h-14 p-2 border border-gray-300 rounded-lg"
             value={email}
-            disabled={emailError === '이메일 인증이 완료되었습니다.'}
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
         <button
-          className={`w-1/4 h-14 bg-prime text-white p-2 rounded-lg ${
-            emailError === '이메일 인증이 완료되었습니다.'
-              ? 'bg-gray-500 text-white'
-              : 'bg-prime text-white'
-          }`}
-          disabled={emailError === '이메일 인증이 완료되었습니다.'}
+          className={`w-1/4 h-14 bg-prime text-white p-2 rounded-lg`}
           onClick={handleCheckEmail}
         >
           {verificationSent ? '재전송' : '인증번호 전송'}

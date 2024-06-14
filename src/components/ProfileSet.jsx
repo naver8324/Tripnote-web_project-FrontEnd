@@ -56,7 +56,7 @@ const ProfileSet = () => {
 
   const handleCheckNickname = async () => {
     setNicknameLoading(true);
-    setNicknameError('');
+    setNicknameError(' ');
     try {
       if (nickname.length < 2 || nickname.length > 10) {
         setNicknameError('닉네임은 2글자 이상 10글자 이하이어야 합니다.');
@@ -157,7 +157,7 @@ const ProfileSet = () => {
         </div>
         <div>
           <label className="block text-subTitle">닉네임</label>
-          <div className="flex items-center mb-8">
+          <div className="flex items-center ">
             <input
               type="text"
               value={nickname}
@@ -167,8 +167,10 @@ const ProfileSet = () => {
             <button
               type="button"
               onClick={handleCheckNickname}
-              disabled={nicknameLoading}
-              className="w-1/4 h-14 px-4 py-2 ml-2 bg-prime text-white rounded-lg"
+              disabled={nicknameLoading || isNicknameChecked}
+              className={`w-1/4 h-14 px-4 py-2 ml-2 ${
+                isNicknameChecked ? 'bg-gray-400' : 'bg-prime'
+              } text-white rounded-lg`}
             >
               확인
             </button>
@@ -209,7 +211,7 @@ const ProfileSet = () => {
             type="button"
             onClick={handleSave}
             disabled={!isFormValid()}
-            className={`w-full h-14 px-4 py-2 rounded-lg text-white ${isFormValid() ? 'bg-prime' : 'bg-gray-300'}`}
+            className={`w-full h-14 px-4 py-2 rounded-lg text-white ${isFormValid() ? 'bg-prime' : 'bg-gray-400'}`}
           >
             저장
           </button>
@@ -217,7 +219,7 @@ const ProfileSet = () => {
             <button
               type="button"
               onClick={handleGoBack}
-              className="w-1/2 h-14 px-4 py-2 bg-gray-300 text-gray-700 rounded-lg"
+              className="w-1/2 h-14 px-4 py-2 bg-gray-400 text-white rounded-lg"
             >
               돌아가기
             </button>

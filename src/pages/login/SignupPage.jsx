@@ -5,7 +5,7 @@ import GhostButton from '../../components/commons/GhostButton';
 import useSignup from '../../Hooks/user/useSignup';
 import { ToastAlert } from '../../components/commons/ToastAlert';
 import EmailVerification from '../../components/Email/EmailVerification';
-import useCheckNickname from "../../Hooks/user/useCheckNickname.js";
+import useCheckNickname from '../../Hooks/user/useCheckNickname.js';
 
 export default function SignupPage() {
   const navigate = useNavigate();
@@ -19,8 +19,13 @@ export default function SignupPage() {
   const [emailError, setEmailError] = useState('');
   const [emailErrorColor, setEmailErrorColor] = useState('red-500');
   const [isVerified, setIsVerified] = useState(false); // 이메일 인증 상태 추가
+  const [isNicknameChecked, setIsNicknameChecked] = useState(false); // 닉네임 확인 상태 추가
   const { signup, loading, error } = useSignup();
-  const { checkNickname, loading: CheckNicknameLoading, error: CheckNicknameError } = useCheckNickname();
+  const {
+    checkNickname,
+    loading: CheckNicknameLoading,
+    error: CheckNicknameError,
+  } = useCheckNickname();
 
   const [nicknameLoading, setNicknameLoading] = useState(false);
   const [nicknameCheckError, setNicknameCheckError] = useState('');
@@ -36,6 +41,7 @@ export default function SignupPage() {
         setNicknameError('닉네임은 2글자 이상 10글자 이하이어야 합니다.');
         setNicknameErrorColor('red-500');
         setNicknameLoading(false);
+        setIsNicknameChecked(false);
         return false;
       }
 
@@ -45,11 +51,13 @@ export default function SignupPage() {
         setNicknameError('이미 사용 중인 닉네임입니다.');
         setNicknameErrorColor('red-500');
         setNicknameLoading(false);
+        setIsNicknameChecked(false);
         return false;
       } else {
         setNicknameError('사용 가능한 닉네임입니다.');
         setNicknameErrorColor('prime');
         setNicknameLoading(false);
+        setIsNicknameChecked(true); // 닉네임 확인 완료
         return true;
       }
     } catch (error) {
@@ -58,8 +66,14 @@ export default function SignupPage() {
       setNicknameErrorColor('red-500');
       setNicknameLoading(false);
       setNicknameCheckError(error.message);
+      setIsNicknameChecked(false);
       return false;
     }
+  };
+
+  const handleNicknameChange = (e) => {
+    setNickname(e.target.value);
+    setIsNicknameChecked(false); // 닉네임 변경 시 확인 상태 초기화
   };
 
   const handleSignup = async () => {
@@ -124,13 +138,13 @@ export default function SignupPage() {
               type="text"
               className="w-full h-14 p-2 border border-gray-300 rounded-lg"
               value={nickname}
-              onChange={(e) => setNickname(e.target.value)}
+              onChange={handleNicknameChange}
             />
           </div>
           <button
-            className="w-1/4 h-14 bg-prime text-white p-2 rounded-lg"
+            className={`w-1/4 h-14 ${isNicknameChecked ? 'bg-gray-400' : 'bg-prime'} text-white p-2 rounded-lg`}
             onClick={handleCheckNickname}
-            disabled={nicknameLoading}
+            disabled={nicknameLoading || isNicknameChecked}
           >
             확인
           </button>
@@ -169,7 +183,7 @@ export default function SignupPage() {
           title="가입하기"
           className={'mt-6'}
           onClick={handleSignup}
-          disabled={!isVerified || nicknameLoading} // 이메일 인증 완료되기 전까지 비활성화
+          disabled={!isVerified || nicknameLoading || !isNicknameChecked} // 이메일 인증 완료되기 전까지 비활성화
         />
         <div className="text-center">
           <Link
