@@ -122,7 +122,9 @@ export default function BarRootCreate() {
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="w-[340px] m-2 h-auto">
-        <p className="text-lg">스팟을 드래그하여 경로를 만들어보세요!</p>
+        <p className="text-lg flex justify-center">
+          스팟을 드래그하여 경로를 만들어보세요!
+        </p>
         {routeSpots.map((spot, index) => (
           <SpotDndCard
             key={spot.id}
