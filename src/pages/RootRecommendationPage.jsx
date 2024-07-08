@@ -43,10 +43,10 @@ export default function RootRecommendationPage() {
 
   return (
     <div className="mt-[118px] w-full bg-subTitle flex mx-auto">
-      <div className="w-[370px] bg-white border-e-2">
-        <div className="w-[370px] p-4 flex justify-between items-center">
+      <div className="w-[370px] h-[calc(100vh-118px)] bg-white border-r-2 overflow-y-auto">
+        <div className="w-full flex flex-col justify-between items-center">
           <Tabs>
-            <Tabs.Tab className="ml-4" index={0}>
+            <Tabs.Tab className="ml-8" index={0}>
               스팟 중심 추천
             </Tabs.Tab>
             <Tabs.Tab index={1}>지역 추천 Best 5</Tabs.Tab>
@@ -60,33 +60,34 @@ export default function RootRecommendationPage() {
           </Tabs>
         </div>
       </div>
-      <div className="w-[360px] bg-white">
+      <div className="w-[360px] h-[calc(100vh-118px)] bg-white border-r-2 overflow-y-auto">
         {activeIndex === 0 ? (
           <BarRootSpot />
         ) : (
           <BarRootArea selectedRegion={selectedRegion} />
         )}
       </div>
-
-      {activeIndex === 0 ? (
-        <NaverSpotMap
-          markers={markers}
-          className={'w-screen'}
-          polylineColors={polylineColors}
-          routes={routes}
-          selectedRouteIndex={selectedRouteIndex}
-          center={center}
-        />
-      ) : (
-        <NaverRegionMap
-          markers={regionMarkers}
-          className={'w-screen'}
-          polylineColors={regionPolylineColors}
-          routes={regionRoutes}
-          selectedRouteIndex={regionSelectedRouteIndex}
-          center={regionCenter}
-        />
-      )}
+      <div className="flex-grow h-full">
+        {activeIndex === 0 ? (
+          <NaverSpotMap
+            markers={markers}
+            className={'w-full h-full'}
+            polylineColors={polylineColors}
+            routes={routes}
+            selectedRouteIndex={selectedRouteIndex}
+            center={center}
+          />
+        ) : (
+          <NaverRegionMap
+            markers={regionMarkers}
+            className={'w-full h-full'}
+            polylineColors={regionPolylineColors}
+            routes={regionRoutes}
+            selectedRouteIndex={regionSelectedRouteIndex}
+            center={regionCenter}
+          />
+        )}
+      </div>
     </div>
   );
 }

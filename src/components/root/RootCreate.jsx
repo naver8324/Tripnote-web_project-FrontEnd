@@ -87,8 +87,9 @@ export default function RootCreate() {
   };
 
   return (
-    <div className="p-4 w-full h-auto">
-      <div className="flex">
+    <div className="pl-4 w-full h-auto">
+      <p className="p-2 text-xl font-bold flex justify-center">경로 생성</p>
+      <div className="flex justify-center">
         <Button
           onClick={toggleDropdown}
           variant="roundButton"
@@ -98,7 +99,7 @@ export default function RootCreate() {
           {isDropdownOpen ? '지역 선택 닫기' : `${selectedRegionName}`}
         </Button>
         <p className="flex items-center">
-          {isDropdownOpen ? '' : `다른 지역도 보고싶다면 눌러주세요!`}
+          {isDropdownOpen ? '' : `지역 클릭!`}
         </p>
       </div>
       {isDropdownOpen && (

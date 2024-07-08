@@ -70,10 +70,7 @@ const RootCreateSpotList = ({ region }) => {
   };
 
   return (
-    <form
-      className="relative mt-4 flex-col justify-center"
-      onSubmit={handleSearch}
-    >
+    <form className="relative flex-col justify-center" onSubmit={handleSearch}>
       <div className="pt-4 pb-4 pl-3 flex">
         <Input
           variant="searchInput"

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import Button from '../../components/commons/Button';
 import useHashTag from '../../Hooks/posts/useHashTag';
 import SpotSearchList from '../SpotSearchList/SpotSearchList';
-import useRegionSearchStore from '../../store/useRegionSearchStore';
 import useMapSpotStore from '../../store/useMapSpotStore';
 
 const regionMap = {
@@ -46,7 +45,6 @@ const regionCenters = {
 };
 
 const RootSpot = () => {
-  const selectedRegion = useRegionSearchStore((state) => state.selectedRegion);
   const setCenter = useMapSpotStore((state) => state.setCenter);
   const { Hashtags: regionTags } = useHashTag(true);
   const [localRegionTags, setLocalRegionTags] = useState([]);
@@ -89,9 +87,8 @@ const RootSpot = () => {
   };
 
   return (
-    <div className="p-4 w-full">
-      <div className="flex">
-        {/* <h1 className="text-lg font-medium mb-8 mt-5">지역을 선택해주세요</h1> */}
+    <div className="p-4 pl-4 pr-0 w-full">
+      <div className="flex justify-center">
         <Button
           onClick={toggleDropdown}
           variant="roundButton"
@@ -101,7 +98,7 @@ const RootSpot = () => {
           {isDropdownOpen ? '지역 선택 닫기' : `${selectedRegionName}`}
         </Button>
         <p className="flex items-center">
-          {isDropdownOpen ? '' : `다른 지역도 보고싶다면 눌러주세요!`}
+          {isDropdownOpen ? '' : `지역 클릭!`}
         </p>
       </div>
       {isDropdownOpen && (
