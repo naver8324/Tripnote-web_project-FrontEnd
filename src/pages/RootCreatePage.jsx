@@ -17,8 +17,8 @@ export default function RootCreatePage() {
       <div className="w-[380px] h-[calc(100vh-118px)] bg-white border-r-2 overflow-y-auto">
         <BarRootCreate />
       </div>
-      <div className="flex-grow">
-        <NaverCreateMap markers={markers} className={'w-full'} />
+      <div className="flex-grow h-full">
+        <NaverCreateMap markers={markers} className={'w-full h-full'} />
       </div>
     </div>
   );
