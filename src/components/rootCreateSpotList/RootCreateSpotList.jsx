@@ -82,7 +82,7 @@ const RootCreateSpotList = ({ region }) => {
           onChange={handleInputChange}
         />
       </div>
-      <div className="w-full mr-2 h-[calc(100vh-150px)] overflow-y-auto">
+      <div className="w-full mr-2 h-auto">
         {initialLoading && <p>Loading initial spots...</p>}
         {initialError && <p>Error loading initial spots: {initialError}</p>}
         {searchLoading && <p>Loading search results...</p>}

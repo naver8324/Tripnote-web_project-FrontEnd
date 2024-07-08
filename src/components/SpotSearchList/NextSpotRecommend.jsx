@@ -11,7 +11,6 @@ function NextSpotRecommend({ spotId }) {
     try {
       const response = await NextSpot(spotId);
 
-
       const nextSpots = response.data.nextSpots;
       const nextSpotsLocations = nextSpots
         ? Object.entries(nextSpots).map(([spotDTOString, ratio]) => {
@@ -24,7 +23,6 @@ function NextSpotRecommend({ spotId }) {
             return { location, percentage };
           })
         : [];
-
 
       setLastSpot(response.data.spot.location);
       setNextSpotsLocations(nextSpotsLocations);
@@ -43,7 +41,7 @@ function NextSpotRecommend({ spotId }) {
         {lastSpot} <br></br>다음 추천 여행지
       </h2>
       {nextSpotsLocations.length > 0 ? (
-        <div className="space-y-4">
+        <div className="space-y-4 w-full">
           {nextSpotsLocations.map((spot, index) => (
             <div key={index} className="p-4 border rounded-lg bg-gray-100">
               <div className="flex justify-between items-center mb-2">

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import RootCreate from '../components/root/RootCreate';
 import BarRootCreate from '../components/root/BarRootCreate';
 import useMapCreateStore from '../store/useMapCreateStore';
@@ -9,15 +9,17 @@ export default function RootCreatePage() {
 
   return (
     <div className="mt-[118px] w-full bg-subTitle flex mx-auto">
-      <div className="w-[370px] bg-white border-e-2">
-        <div className="w-[370px] p-4 flex justify-between items-center">
+      <div className="w-[370px] h-[calc(100vh-118px)] bg-white border-r-2 overflow-y-auto">
+        <div className="w-full flex flex-col justify-between items-center">
           <RootCreate />
         </div>
       </div>
-      <div className="w-[360px] bg-white">
+      <div className="w-[380px] h-[calc(100vh-118px)] bg-white border-r-2 overflow-y-auto">
         <BarRootCreate />
       </div>
-      <NaverCreateMap markers={markers} className={'w-screen'} />
+      <div className="flex-grow">
+        <NaverCreateMap markers={markers} className={'w-full'} />
+      </div>
     </div>
   );
 }

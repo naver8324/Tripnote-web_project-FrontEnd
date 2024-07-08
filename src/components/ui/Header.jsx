@@ -1,19 +1,15 @@
 import React from 'react';
 import logo from '../../assets/logo-green.png';
 import { Link, useNavigate } from 'react-router-dom';
-import useStore from '../../store/store';
 import useAuthStore from '../../store/useAuthStore';
 import useLogout from '../../Hooks/user/useLogout';
 import Button from '../commons/Button';
 import { ToastAlert } from '../commons/ToastAlert';
-import useRegionSearchStore from '../../store/useRegionSearchStore'; // Import 상태 관리
 
 export default function Header() {
-  const setSearchQuery = useStore((state) => state.setSearchQuery);
   const navigate = useNavigate();
   const isAuth = useAuthStore((state) => state.isAuth);
   const { logout, loading } = useLogout();
-  const { setRedirectPath } = useRegionSearchStore(); // Add redirect path state
 
   const handleLoginClick = () => {
     navigate('/login');
@@ -34,27 +30,11 @@ export default function Header() {
   };
 
   const handleSearchClick = () => {
-    setSearchQuery('');
-    setRedirectPath('/root/recommend'); // Set redirect path for route recommendation
-    navigate('/');
-    setTimeout(() => {
-      const searchElement = document.getElementById('search');
-      if (searchElement) {
-        searchElement.scrollIntoView({ behavior: 'smooth' });
-      }
-    }, 100);
+    navigate('/root/recommend');
   };
 
   const handleCreateClick = () => {
-    setSearchQuery('');
-    setRedirectPath('/root/create'); // Set redirect path for route creation
-    navigate('/');
-    setTimeout(() => {
-      const searchElement = document.getElementById('search');
-      if (searchElement) {
-        searchElement.scrollIntoView({ behavior: 'smooth' });
-      }
-    }, 100);
+    navigate('/root/create');
   };
 
   return (
