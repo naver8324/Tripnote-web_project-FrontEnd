@@ -46,10 +46,15 @@ export default function Header() {
   };
 
   const handleCreateClick = () => {
-    navigate('/root/create');
-  };
-  const handleRecommendClick = () => {
-    navigate('/root/recommend');
+    setSearchQuery('');
+    setRedirectPath('/root/create'); // Set redirect path for route creation
+    navigate('/');
+    setTimeout(() => {
+      const searchElement = document.getElementById('search');
+      if (searchElement) {
+        searchElement.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100);
   };
 
   return (
@@ -59,7 +64,7 @@ export default function Header() {
           <img className="w-36 h-auto" src={logo} alt="trip note logo" />
         </Link>
         <nav className="flex items-center gap-4 font-medium">
-          <button onClick={handleRecommendClick} className="hover:text-prime">
+          <button onClick={handleSearchClick} className="hover:text-prime">
             경로 추천
           </button>
           <button onClick={handleCreateClick} className="hover:text-prime">

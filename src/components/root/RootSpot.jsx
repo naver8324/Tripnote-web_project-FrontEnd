@@ -1,4 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import Button from '../../components/commons/Button';
+import useHashTag from '../../Hooks/posts/useHashTag';
 import SpotSearchList from '../SpotSearchList/SpotSearchList';
 import useRegionSearchStore from '../../store/useRegionSearchStore';
 import useMapSpotStore from '../../store/useMapSpotStore';
@@ -46,7 +48,12 @@ const regionCenters = {
 const RootSpot = () => {
   const selectedRegion = useRegionSearchStore((state) => state.selectedRegion);
   const setCenter = useMapSpotStore((state) => state.setCenter);
-  const regionCode = regionMap[selectedRegion] || 'SEOUL';
+  const { Hashtags: regionTags } = useHashTag(true);
+  const [localRegionTags, setLocalRegionTags] = useState([]);
+  const [selectedRegionName, setSelectedRegionName] = useState('서울');
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const regionCode = regionMap[selectedRegionName] || 'SEOUL';
 
   useEffect(() => {
     const center = regionCenters[regionCode];
@@ -55,10 +62,69 @@ const RootSpot = () => {
     }
   }, [regionCode, setCenter]);
 
+  useEffect(() => {
+    if (regionTags) {
+      const filteredTags = regionTags.filter(
+        (region) => region.name !== '전체',
+      );
+      const testTag = filteredTags.find((region) => region.name === 'test1');
+      const otherTags = filteredTags.filter(
+        (region) => region.name !== 'test1',
+      );
+      if (testTag) {
+        setLocalRegionTags([...otherTags, testTag]);
+      } else {
+        setLocalRegionTags(otherTags);
+      }
+    }
+  }, [regionTags]);
+
+  const handleRegionClick = (region) => {
+    setSelectedRegionName(region.name);
+    setIsDropdownOpen(false); // 해시태그를 선택하면 드롭다운을 닫습니다.
+  };
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
   return (
-    <>
+    <div className="p-4 w-full">
+      <div className="flex">
+        {/* <h1 className="text-lg font-medium mb-8 mt-5">지역을 선택해주세요</h1> */}
+        <Button
+          onClick={toggleDropdown}
+          variant="roundButton"
+          size="small"
+          className="text-xl px-3 mr-4 font-bold hover:bg-gray-300"
+        >
+          {isDropdownOpen ? '지역 선택 닫기' : `${selectedRegionName}`}
+        </Button>
+        <p className="flex items-center">
+          {isDropdownOpen ? '' : `다른 지역도 보고싶다면 눌러주세요!`}
+        </p>
+      </div>
+      {isDropdownOpen && (
+        <div className="flex gap-3 flex-wrap mt-4">
+          {localRegionTags.map((region) => (
+            <Button
+              variant="roundButton"
+              size="small"
+              key={region.id}
+              className={`text-lg px-3 ${
+                selectedRegionName === region.name
+                  ? 'bg-gray-200'
+                  : 'hover:bg-gray-300'
+              }`}
+              onClick={() => handleRegionClick(region)}
+            >
+              {region.name}
+            </Button>
+          ))}
+        </div>
+      )}
       <SpotSearchList region={regionCode} />
-    </>
+    </div>
   );
 };
 

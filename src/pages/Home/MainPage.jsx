@@ -29,7 +29,7 @@ const regions = [
 export default function MainPage() {
   const searchRef = useRef();
   const searchQuery = useStore((state) => state.searchQuery);
-  const { redirectPath, setRedirectPath } = useRegionSearchStore(); // 추가
+  const { redirectPath, setRedirectPath } = useRegionSearchStore();
 
   const setScrollSmooth = () => {
     if (searchRef.current) {
@@ -44,7 +44,7 @@ export default function MainPage() {
   }, [searchQuery]);
 
   const handleButtonClick = () => {
-    setRedirectPath('/root/recommend'); // 추가
+    setRedirectPath('/root/recommend');
     setScrollSmooth();
   };
 

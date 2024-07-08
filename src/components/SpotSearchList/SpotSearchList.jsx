@@ -88,7 +88,7 @@ const SpotSearchList = ({ region }) => {
 
   return (
     <form
-      className="relative mt-4 flex-col justify-center h-full"
+      className="relative flex-col justify-center h-full"
       onSubmit={handleSearch}
     >
       <div className="pt-4 pb-4 pl-3 flex">

@@ -46,7 +46,9 @@ export default function RootRecommendationPage() {
       <div className="w-[370px] bg-white border-e-2">
         <div className="w-[370px] p-4 flex justify-between items-center">
           <Tabs>
-            <Tabs.Tab index={0}>스팟 중심 추천</Tabs.Tab>
+            <Tabs.Tab className="ml-4" index={0}>
+              스팟 중심 추천
+            </Tabs.Tab>
             <Tabs.Tab index={1}>지역 추천 Best 5</Tabs.Tab>
 
             <Tabs.TabContent index={1}>
