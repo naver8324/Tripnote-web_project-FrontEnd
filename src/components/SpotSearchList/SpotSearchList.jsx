@@ -22,23 +22,23 @@ const SpotSearchList = ({ region }) => {
   const [searchLocation, setSearchLocation] = useState('');
 
   const {
-    spots: initialSpots,
+    spots: initialSpots = [],
     error: initialError,
     loading: initialLoading,
   } = useSpots(region);
   const {
-    spots: searchedSpots,
+    spots: searchedSpots = [],
     error: searchError,
     loading: searchLoading,
   } = useSpots(region, searchLocation);
   const {
-    responseData: routes,
+    responseData: routes = [],
     error: routeError,
     loading: routeLoading,
   } = useConditionalSpotRoutes(selectedSpotId);
 
   useEffect(() => {
-    if (routes && routes.length > 0) {
+    if (routes.length > 0) {
       const routeMarkers = routes.flatMap((route) =>
         route.spots.map((spot) => ({
           latitude: spot.lat,
@@ -64,12 +64,9 @@ const SpotSearchList = ({ region }) => {
   }, [routes, setMarkers, setRoutes, setCenter, selectedSpotId, initialSpots]);
 
   const handleSpotClick = (spot) => {
-    const validRoutes = routes || [];
-
-    // 우선 순서를 변경하여 경로와 중심을 먼저 설정
     setSelectedSpotId(spot.id);
     setClickedSpotName(spot.location);
-    setSelectedRouteIndex(validRoutes.length > 0 ? 0 : null);
+    setSelectedRouteIndex(routes.length > 0 ? 0 : null);
     setCenter({
       latitude: spot.lat,
       longitude: spot.lng,
@@ -81,7 +78,7 @@ const SpotSearchList = ({ region }) => {
     setSearchInput(event.target.value);
   };
 
-  const handleSearch = async (event) => {
+  const handleSearch = (event) => {
     event.preventDefault();
     setSearchLocation(searchInput);
   };
@@ -100,11 +97,13 @@ const SpotSearchList = ({ region }) => {
         />
       </div>
       <div className="w-full h-auto">
-        {initialLoading && <p>Loading initial spots...</p>}
-        {initialError && <p>Error loading initial spots: {initialError}</p>}
-        {searchLoading && <p>Loading search results...</p>}
+        {initialLoading && <p>초기 장소를 불러오는 중...</p>}
+        {initialError && (
+          <p>초기 장소를 불러오는 중 오류 발생: {initialError}</p>
+        )}
+        {searchLoading && <p>검색 결과를 불러오는 중...</p>}
         {searchError && <p>{searchError}</p>}
-        {(searchLocation ? searchedSpots : initialSpots)?.length > 0
+        {(searchLocation ? searchedSpots : initialSpots).length > 0
           ? (searchLocation ? searchedSpots : initialSpots).map((spot) => (
               <SpotCard
                 key={spot.id}
