@@ -10,7 +10,7 @@ import ImageCard from '../../components/Home/ImageCard';
 import useStore from '../../store/store';
 import Button from '../../components/commons/Button';
 import Selector from '../../components/Home/Selector';
-import useRegionSearchStore from '../../store/useRegionSearchStore'; // 추가
+import useRegionSearchStore from '../../store/useRegionSearchStore';
 import mainGif from '../../assets/maingif.gif';
 import logo from '../../assets/logo-green.png';
 import ReviewSlider from '../../components/Home/ReviewSlider';
@@ -74,89 +74,20 @@ export default function MainPage() {
           </div>
         </div>
         <div className="overflow-hidden">
-        <div className="whitespace-nowrap animate-slide">
-          <p>
-            <img
-              src={logo}
-              alt="logo"
-              className="inline-block h-10 mr-8"
-              loading="lazy"
-            />
-            <img
-              src={logo}
-              alt="logo"
-              className="inline-block h-10 mr-8"
-              loading="lazy"
-            />
-            <img
-              src={logo}
-              alt="logo"
-              className="inline-block h-10 mr-8"
-              loading="lazy"
-            />
-            <img
-              src={logo}
-              alt="logo"
-              className="inline-block h-10 mr-8"
-              loading="lazy"
-            />
-            <img
-              src={logo}
-              alt="logo"
-              className="inline-block h-10 mr-8"
-              loading="lazy"
-            />
-            <img
-              src={logo}
-              alt="logo"
-              className="inline-block h-10 mr-8"
-              loading="lazy"
-            />
-            <img
-              src={logo}
-              alt="logo"
-              className="inline-block h-10 mr-8"
-              loading="lazy"
-            />
-            <img
-              src={logo}
-              alt="logo"
-              className="inline-block h-10 mr-8"
-              loading="lazy"
-            />
-            <img
-              src={logo}
-              alt="logo"
-              className="inline-block h-10 mr-8"
-              loading="lazy"
-            />
-            <img
-              src={logo}
-              alt="logo"
-              className="inline-block h-10 mr-8"
-              loading="lazy"
-            />
-            <img
-              src={logo}
-              alt="logo"
-              className="inline-block h-10 mr-8"
-              loading="lazy"
-            />
-            <img
-              src={logo}
-              alt="logo"
-              className="inline-block h-10 mr-8"
-              loading="lazy"
-            />
-            <img
-              src={logo}
-              alt="logo"
-              className="inline-block h-10 mr-8"
-              loading="lazy"
-            />
-          </p>
+          <div className="whitespace-nowrap animate-slide">
+            <p>
+              {[...Array(14)].map((_, index) => (
+                <img
+                  key={index}
+                  src={logo}
+                  alt="logo"
+                  className="inline-block h-10 mr-8"
+                  loading="lazy"
+                />
+              ))}
+            </p>
+          </div>
         </div>
-      </div>
         <div
           id="search"
           ref={searchRef}
@@ -187,9 +118,8 @@ export default function MainPage() {
             </div>
           </div>
         </div>
-        
         <div className="inner bg-gray-100">
-          <ReviewSlider/>
+          <ReviewSlider />
         </div>
         <div className="h-96 flex flex-col justify-center items-center gap-16">
           <h1 className="text-title text-3xl font-semibold">PARTNERS</h1>

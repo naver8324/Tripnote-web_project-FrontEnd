@@ -19,13 +19,13 @@ const RootCreateSpotList = ({ region }) => {
 
   // 초기 로드 시 region 값만으로 스팟 데이터를 가져오는 useSpots 훅 사용
   const {
-    spots: initialSpots,
+    spots: initialSpots = [], // 기본값 설정
     error: initialError,
     loading: initialLoading,
   } = useSpots(region);
   // 검색 시 사용될 스팟 데이터를 가져오는 useSpots 훅 사용
   const {
-    spots: searchedSpots,
+    spots: searchedSpots = [], // 기본값 설정
     error: searchError,
     loading: searchLoading,
   } = useSpots(region, searchLocation);
@@ -84,7 +84,7 @@ const RootCreateSpotList = ({ region }) => {
         {initialError && <p>Error loading initial spots: {initialError}</p>}
         {searchLoading && <p>Loading search results...</p>}
         {searchError && <p>{searchError}</p>}
-        {(searchLocation ? searchedSpots : initialSpots)?.length > 0
+        {(searchLocation ? searchedSpots : initialSpots).length > 0
           ? (searchLocation ? searchedSpots : initialSpots).map((spot) => (
               <SpotPlusCard
                 key={spot.id}
